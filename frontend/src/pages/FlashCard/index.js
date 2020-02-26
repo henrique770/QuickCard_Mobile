@@ -1,103 +1,110 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import {
   AppRegistry,
   StyleSheet,
   Text,
   View,
   TouchableOpacity,
-  Animated
+  Animated,
 } from 'react-native';
 import Background from '~/components/Background';
-import { Title } from './styles';
+import {Title} from './styles';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
 export default class FlashCard extends Component {
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     this.animatedValue = new Animated.Value(0);
     this.value = 0;
-    this.animatedValue.addListener(({ value }) => {
+    this.animatedValue.addListener(({value}) => {
       this.value = value;
-    })
+    });
     this.frontInterpolate = this.animatedValue.interpolate({
       inputRange: [0, 180],
       outputRange: ['0deg', '180deg'],
-    })
+    });
     this.backInterpolate = this.animatedValue.interpolate({
       inputRange: [0, 180],
-      outputRange: ['180deg', '360deg']
-    })
+      outputRange: ['180deg', '360deg'],
+    });
     this.frontOpacity = this.animatedValue.interpolate({
       inputRange: [89, 90],
-      outputRange: [1, 0]
-    })
+      outputRange: [1, 0],
+    });
     this.backOpacity = this.animatedValue.interpolate({
       inputRange: [89, 90],
-      outputRange: [0, 1]
-    })
+      outputRange: [0, 1],
+    });
   }
 
   flipCard() {
     if (this.value >= 90) {
-      Animated.spring(this.animatedValue,{
+      Animated.spring(this.animatedValue, {
         toValue: 0,
         friction: 8,
-        tension: 10
+        tension: 10,
       }).start();
     } else {
-      Animated.spring(this.animatedValue,{
+      Animated.spring(this.animatedValue, {
         toValue: 180,
         friction: 8,
-        tension: 10
+        tension: 10,
       }).start();
     }
-
   }
 
   render() {
     const frontAnimatedStyle = {
-      transform: [
-        { rotateY: this.frontInterpolate }
-      ]
-    }
+      transform: [{rotateY: this.frontInterpolate}],
+    };
     const backAnimatedStyle = {
-      transform: [
-        { rotateY: this.backInterpolate }
-      ]
-    }
+      transform: [{rotateY: this.backInterpolate}],
+    };
 
     return (
       <Background>
         {/* back */}
-         <View style={styles.back_icon}>
-       <TouchableOpacity onPress={() => this.props.navigation.navigate('Decks')}>
-       <Icon name="arrow-back" size={30} color="#FFF" />
-       </TouchableOpacity>
-       </View>
-       {/* edit */}
-       <View style={styles.edit_icon}>
-       <TouchableOpacity onPress={() => this.props.navigation.navigate('EditCard')}>
-       <Icon name="settings" size={30} color="#FFF" />
-       </TouchableOpacity>
-       </View>
-      <Title>FlashCard</Title>
-      <View style={styles.container}>
-        <TouchableOpacity onPress={() => this.flipCard()}>
-        <View>
-          <Animated.View style={[styles.flipCard, frontAnimatedStyle, {opacity: this.frontOpacity}]}>
-            <Text style={styles.flipText}>
-              Oque é o elemento "Text View"?
-            </Text>
-          </Animated.View>
-          <Animated.View style={[styles.flipCard, styles.flipCardBack, backAnimatedStyle, {opacity: this.backOpacity}]}>
-            <Text style={styles.flipText}>
-            Um elemento da interface do usuário que é responsável por exibir textos
-            </Text>
-          </Animated.View>
+        <View style={styles.back_icon}>
+          <TouchableOpacity
+            onPress={() => this.props.navigation.navigate('Decks')}>
+            <Icon name="arrow-back" size={30} color="#FFF" />
+          </TouchableOpacity>
         </View>
-
-
-        </TouchableOpacity>
-      </View>
+        {/* edit */}
+        <View style={styles.edit_icon}>
+          <TouchableOpacity
+            onPress={() => this.props.navigation.navigate('EditCard')}>
+            <Icon name="settings" size={30} color="#FFF" />
+          </TouchableOpacity>
+        </View>
+        <Title>FlashCard</Title>
+        <View style={styles.container}>
+          <TouchableOpacity onPress={() => this.flipCard()}>
+            <View>
+              <Animated.View
+                style={[
+                  styles.flipCard,
+                  frontAnimatedStyle,
+                  {opacity: this.frontOpacity},
+                ]}>
+                <Text style={styles.flipText}>
+                  Oque é o elemento "Text View"?
+                </Text>
+              </Animated.View>
+              <Animated.View
+                style={[
+                  styles.flipCard,
+                  styles.flipCardBack,
+                  backAnimatedStyle,
+                  {opacity: this.backOpacity},
+                ]}>
+                <Text style={styles.flipText}>
+                  Um elemento da interface do usuário que é responsável por
+                  exibir textos
+                </Text>
+              </Animated.View>
+            </View>
+          </TouchableOpacity>
+        </View>
       </Background>
     );
   }
@@ -106,8 +113,8 @@ export default class FlashCard extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   flipCard: {
     width: 300,
@@ -119,8 +126,8 @@ const styles = StyleSheet.create({
     backfaceVisibility: 'hidden',
   },
   flipCardBack: {
-    backgroundColor: "white",
-    position: "absolute",
+    backgroundColor: 'white',
+    position: 'absolute',
     top: 0,
   },
   flipText: {
@@ -131,12 +138,12 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   back_icon: {
-    position: "absolute",
+    position: 'absolute',
     left: 30,
     top: 30,
   },
   edit_icon: {
-    position: "absolute",
+    position: 'absolute',
     right: 30,
     top: 30,
   },
