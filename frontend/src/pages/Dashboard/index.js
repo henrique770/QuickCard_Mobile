@@ -30,7 +30,11 @@ export default function Dashboard({navigation}) {
         <List
           data={data}
           keyExtractor={item => String(item)}
-          renderItem={({item}) => <Notes data={item} />}
+          renderItem={({item}) => (
+            <TouchableOpacity onPress={() => navigation.navigate('Notes')}>
+              <Notes data={item} />
+            </TouchableOpacity>
+          )}
         />
       </Container>
     </Background>
