@@ -14,7 +14,7 @@ export default function Dashboard({navigation}) {
     <Background>
       <Container>
         <View style={styles.header_add}>
-          <TouchableOpacity onPress={() => navigation.navigate('Notes')}>
+          <TouchableOpacity onPress={() => navigation.navigate('Annotation')}>
             <IconF name="plus" size={30} color="#FFF" />
           </TouchableOpacity>
         </View>
@@ -31,7 +31,7 @@ export default function Dashboard({navigation}) {
           data={data}
           keyExtractor={item => String(item)}
           renderItem={({item}) => (
-            <TouchableOpacity onPress={() => navigation.navigate('Notes')}>
+            <TouchableOpacity onPress={() => navigation.navigate('Annotation')}>
               <Notes data={item} />
             </TouchableOpacity>
           )}
