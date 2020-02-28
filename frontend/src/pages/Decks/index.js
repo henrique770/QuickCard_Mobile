@@ -1,11 +1,12 @@
 import React, {useState, useEffect} from 'react';
 import Background from '~/components/Background';
-import BoxDeck from '~/components/BoxDeck';
+import Box from '~/components/Box';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import IconF from 'react-native-vector-icons/MaterialCommunityIcons';
 import {StyleSheet, TouchableOpacity, View} from 'react-native';
 import {DrawerActions} from 'react-navigation-drawer';
 import {Container, Title, List} from './styles';
+import * as S from '~/styles/utilities';
 // import api from '~/services/api';
 
 const data = [1, 2, 3, 4, 5, 6, 7, 8];
@@ -41,7 +42,15 @@ export default function Dashboard({navigation}) {
           keyExtractor={item => String(item)}
           renderItem={({item}) => (
             <TouchableOpacity onPress={() => navigation.navigate('FlashCard')}>
-              <BoxDeck data={item} />
+              <Box data={item}>
+                <S.Title>Expressões em inglês / frases / palavras</S.Title>
+                <S.Preview>
+                  Novos: <S.BlueText>20</S.BlueText>
+                </S.Preview>
+                <S.Preview>
+                  A revisar: <S.RedText>50</S.RedText>
+                </S.Preview>
+              </Box>
             </TouchableOpacity>
           )}
         />

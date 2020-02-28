@@ -1,11 +1,13 @@
 import React from 'react';
 import Background from '~/components/Background';
-import Notes from '~/components/Notes';
+import Box from '~/components/Box';
 import {StyleSheet, TouchableOpacity, View} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import IconF from 'react-native-vector-icons/MaterialCommunityIcons';
 import {Container, Title, List} from './styles';
 import {DrawerActions} from 'react-navigation-drawer';
+
+import * as S from '~/styles/utilities';
 
 const data = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14];
 
@@ -32,7 +34,14 @@ export default function Dashboard({navigation}) {
           keyExtractor={item => String(item)}
           renderItem={({item}) => (
             <TouchableOpacity onPress={() => navigation.navigate('Annotation')}>
-              <Notes data={item} />
+              <Box data={item}>
+                <S.Title>QuickCard</S.Title>
+                <S.Preview>
+                  QuickCard é um software de estudo que tem como principais
+                  caracteristicas
+                </S.Preview>
+                <S.Time>Primeiro Caderno</S.Time>
+              </Box>
             </TouchableOpacity>
           )}
         />
