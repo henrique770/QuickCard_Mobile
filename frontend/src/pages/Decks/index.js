@@ -8,7 +8,7 @@ import {Container, Title, List} from './styles';
 import * as S from '~/styles/utilities';
 // import api from '~/services/api';
 
-const data = [1, 2, 3, 4, 5, 6, 7, 8];
+const data = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16];
 
 export default function Dashboard({navigation}) {
   return (
@@ -38,11 +38,23 @@ export default function Dashboard({navigation}) {
 
         <List
           data={data}
+          numColumns={2}
           keyExtractor={item => String(item)}
           renderItem={({item}) => (
-            <TouchableOpacity onPress={() => navigation.navigate('FlashCard')}>
+            <TouchableOpacity
+              style={{
+                elevation: 5,
+                width: 136,
+                flex: 1,
+                marginRight: 7,
+                marginLeft: 7,
+              }}
+              onPress={() => navigation.navigate('FlashCard')}>
               <S.Box data={item}>
-                <S.Title>Expressões em inglês / frases / palavras</S.Title>
+                <S.Title>
+                  Expressões em inglês Expressões em inglêsExpressões em inglês
+                  Expressões em inglês Expressões em inglês Expressões em inglês
+                </S.Title>
                 <S.Preview>
                   Novos: <S.BlueText>20</S.BlueText>
                 </S.Preview>

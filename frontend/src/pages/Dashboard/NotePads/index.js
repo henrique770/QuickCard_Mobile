@@ -22,14 +22,25 @@ export default function NotePads({navigation}) {
         <Title>Blocos de anotações</Title>
         <List
           data={data}
+          numColumns={2}
           keyExtractor={item => String(item)}
           renderItem={({item}) => (
-            <S.Box data={item}>
-              <S.Title onPress={() => navigation.navigate('Decks')}>
-                Função javascript ocultar e mostrar elementos na tela
-              </S.Title>
-              <S.Preview>5 Notas</S.Preview>
-            </S.Box>
+            <TouchableOpacity
+              style={{
+                elevation: 5,
+                width: 136,
+                flex: 1,
+                marginRight: 7,
+                marginLeft: 7,
+              }}
+              onPress={() => navigation.navigate('Dashboard')}>
+              <S.Box data={item}>
+                <S.Title>
+                  Função javascript ocultar e mostrar elementos na tela
+                </S.Title>
+                <S.Preview>5 Notas</S.Preview>
+              </S.Box>
+            </TouchableOpacity>
           )}
         />
       </Container>
