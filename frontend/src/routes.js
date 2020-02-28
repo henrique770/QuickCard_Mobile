@@ -7,7 +7,7 @@ import IconF from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import Dashboard from './pages/Dashboard';
 import NotePads from './pages/Dashboard/NotePads';
-import Notes from './pages/Dashboard/Notes';
+import Annotation from './pages/Dashboard/Annotation';
 
 import SignIn from './pages/Auth/SignIn';
 import SignUp from './pages/Auth/SignUp';
@@ -104,7 +104,7 @@ export default (isSigned = false) =>
           AddDeck,
           FlashCard,
           EditCard,
-          Notes,
+          Annotation,
           Dashboard,
         }),
       },

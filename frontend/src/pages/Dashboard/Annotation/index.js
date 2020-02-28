@@ -5,7 +5,7 @@ import IconF from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import {Container, Title, ContainerTag, TagInput} from './styles';
 
-export default function Notes({navigation}) {
+export default function Annotation({navigation}) {
   return (
     <>
       <Container>
@@ -43,6 +43,6 @@ const styles = StyleSheet.create({
     position: 'absolute',
     right: 30,
     width: '50%',
-    top: 20,
+    top: 22,
   },
 });
