@@ -1,9 +1,8 @@
 import React from 'react';
 // import Icon from 'react-native-vector-icons/MaterialIcons';
 import Background from '~/components/Background';
-import Box from '~/components/Box';
 import {StyleSheet, TouchableOpacity, View} from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialIcons';
+import IconMi from 'react-native-vector-icons/MaterialIcons';
 import {DrawerActions} from 'react-navigation-drawer';
 import {Container, Title, List} from './styles';
 import * as S from '~/styles/utilities';
@@ -17,20 +16,31 @@ export default function NotePads({navigation}) {
         <View style={styles.header}>
           <TouchableOpacity
             onPress={() => navigation.dispatch(DrawerActions.openDrawer())}>
-            <Icon name="menu" size={30} color="#FFF" />
+            <IconMi name="menu" size={30} color="#FFF" />
           </TouchableOpacity>
         </View>
         <Title>Blocos de anotações</Title>
         <List
           data={data}
+          numColumns={2}
           keyExtractor={item => String(item)}
           renderItem={({item}) => (
-            <Box data={item}>
-              <S.Title onPress={() => navigation.navigate('Decks')}>
-                Função javascript ocultar e mostrar elementos na tela
-              </S.Title>
-              <S.Preview>5 Notas</S.Preview>
-            </Box>
+            <TouchableOpacity
+              style={{
+                elevation: 5,
+                width: 136,
+                flex: 1,
+                marginRight: 7,
+                marginLeft: 7,
+              }}
+              onPress={() => navigation.navigate('Dashboard')}>
+              <S.Box data={item}>
+                <S.Title>
+                  Função javascript ocultar e mostrar elementos na tela
+                </S.Title>
+                <S.Preview>5 Notas</S.Preview>
+              </S.Box>
+            </TouchableOpacity>
           )}
         />
       </Container>

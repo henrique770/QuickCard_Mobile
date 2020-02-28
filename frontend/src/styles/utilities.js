@@ -1,9 +1,19 @@
 import styled from 'styled-components/native';
 
+export const Box = styled.View`
+  margin-bottom: 15px;
+  padding: 20px;
+  max-height: 160px;
+  border-radius: 12px;
+  background: #fff;
+`;
+
 export const Title = styled.Text`
   color: #333;
   font-weight: bold;
   font-size: 16px;
+  overflow: hidden;
+  max-height: 80px;
 `;
 
 export const Preview = styled.Text`
