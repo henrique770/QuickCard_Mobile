@@ -1,9 +1,8 @@
 import React from 'react';
 import Background from '~/components/Background';
-import Box from '~/components/Box';
 import {StyleSheet, TouchableOpacity, View} from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialIcons';
-import IconF from 'react-native-vector-icons/MaterialCommunityIcons';
+import IconMi from 'react-native-vector-icons/MaterialIcons';
+import IconMc from 'react-native-vector-icons/MaterialCommunityIcons';
 import {Container, Title, List} from './styles';
 import {DrawerActions} from 'react-navigation-drawer';
 
@@ -17,14 +16,14 @@ export default function Dashboard({navigation}) {
       <Container>
         <View style={styles.header_add}>
           <TouchableOpacity onPress={() => navigation.navigate('Annotation')}>
-            <IconF name="plus" size={30} color="#FFF" />
+            <IconMc name="plus" size={30} color="#FFF" />
           </TouchableOpacity>
         </View>
 
         <View style={styles.header}>
           <TouchableOpacity
             onPress={() => navigation.dispatch(DrawerActions.openDrawer())}>
-            <Icon name="menu" size={30} color="#FFF" />
+            <IconMi name="menu" size={30} color="#FFF" />
           </TouchableOpacity>
         </View>
 
@@ -34,14 +33,14 @@ export default function Dashboard({navigation}) {
           keyExtractor={item => String(item)}
           renderItem={({item}) => (
             <TouchableOpacity onPress={() => navigation.navigate('Annotation')}>
-              <Box data={item}>
+              <S.Box data={item}>
                 <S.Title>QuickCard</S.Title>
                 <S.Preview>
                   QuickCard é um software de estudo que tem como principais
                   caracteristicas
                 </S.Preview>
                 <S.Time>Primeiro Caderno</S.Time>
-              </Box>
+              </S.Box>
             </TouchableOpacity>
           )}
         />

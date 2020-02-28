@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import Background from '~/components/Background';
 import {Title} from './styles';
-import Icon from 'react-native-vector-icons/MaterialIcons';
+import IconMi from 'react-native-vector-icons/MaterialIcons';
 
 export default class FlashCard extends Component {
   UNSAFE_componentWillMount() {
@@ -66,14 +66,14 @@ export default class FlashCard extends Component {
         <View style={styles.back_icon}>
           <TouchableOpacity
             onPress={() => this.props.navigation.navigate('Decks')}>
-            <Icon name="arrow-back" size={30} color="#FFF" />
+            <IconMi name="arrow-back" size={30} color="#FFF" />
           </TouchableOpacity>
         </View>
         {/* edit */}
         <View style={styles.edit_icon}>
           <TouchableOpacity
             onPress={() => this.props.navigation.navigate('EditCard')}>
-            <Icon name="settings" size={30} color="#FFF" />
+            <IconMi name="settings" size={30} color="#FFF" />
           </TouchableOpacity>
         </View>
         <Title>FlashCard</Title>

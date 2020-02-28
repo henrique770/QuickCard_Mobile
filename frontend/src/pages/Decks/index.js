@@ -1,8 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import Background from '~/components/Background';
-import Box from '~/components/Box';
-import Icon from 'react-native-vector-icons/MaterialIcons';
-import IconF from 'react-native-vector-icons/MaterialCommunityIcons';
+import IconMi from 'react-native-vector-icons/MaterialIcons';
+import IconMc from 'react-native-vector-icons/MaterialCommunityIcons';
 import {StyleSheet, TouchableOpacity, View} from 'react-native';
 import {DrawerActions} from 'react-navigation-drawer';
 import {Container, Title, List} from './styles';
@@ -18,20 +17,20 @@ export default function Dashboard({navigation}) {
         {/* add card */}
         <View style={styles.header_add_card}>
           <TouchableOpacity onPress={() => navigation.navigate('AddCard')}>
-            <IconF name="cards" size={30} color="#FFF" />
+            <IconMc name="cards" size={30} color="#FFF" />
           </TouchableOpacity>
         </View>
         {/* add deck */}
         <View style={styles.header_add}>
           <TouchableOpacity onPress={() => navigation.navigate('AddDeck')}>
-            <IconF name="plus" size={30} color="#FFF" />
+            <IconMc name="plus" size={30} color="#FFF" />
           </TouchableOpacity>
         </View>
         {/* menu */}
         <View style={styles.header}>
           <TouchableOpacity
             onPress={() => navigation.dispatch(DrawerActions.openDrawer())}>
-            <Icon name="menu" size={30} color="#FFF" />
+            <IconMi name="menu" size={30} color="#FFF" />
           </TouchableOpacity>
         </View>
 
@@ -42,7 +41,7 @@ export default function Dashboard({navigation}) {
           keyExtractor={item => String(item)}
           renderItem={({item}) => (
             <TouchableOpacity onPress={() => navigation.navigate('FlashCard')}>
-              <Box data={item}>
+              <S.Box data={item}>
                 <S.Title>Expressões em inglês / frases / palavras</S.Title>
                 <S.Preview>
                   Novos: <S.BlueText>20</S.BlueText>
@@ -50,7 +49,7 @@ export default function Dashboard({navigation}) {
                 <S.Preview>
                   A revisar: <S.RedText>50</S.RedText>
                 </S.Preview>
-              </Box>
+              </S.Box>
             </TouchableOpacity>
           )}
         />
