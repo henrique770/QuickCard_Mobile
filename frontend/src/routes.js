@@ -19,7 +19,6 @@ import AddCard from './pages/Decks/AddCard';
 import EditCard from './pages/Decks/EditCard';
 
 import Profile from './pages/Profile';
-import Logout from './pages/Logout';
 
 Icon.loadFont();
 export default (isSigned = false) =>
@@ -69,14 +68,14 @@ export default (isSigned = false) =>
                   drawerIcon: <Icon name="user" size={20} color="#f93b10" />,
                 }),
               },
-              Logout: {
-                screen: Logout,
-                navigationOptions: () => ({
-                  drawerIcon: (
-                    <Icon name="sign-out" size={20} color="#f93b10" />
-                  ),
-                }),
-              },
+              // Logout: {
+              //   screen: Logout,
+              //   navigationOptions: () => ({
+              //     drawerIcon: (
+              //       <Icon name="sign-out" size={20} color="#f93b10" />
+              //     ),
+              //   }),
+              // },
             },
 
             {
