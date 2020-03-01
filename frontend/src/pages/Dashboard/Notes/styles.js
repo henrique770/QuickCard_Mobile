@@ -1,20 +1,10 @@
 import styled from 'styled-components/native';
 
 import Input from '~/components/Input';
-import Button from '~/components/Button';
 
 export const Container = styled.SafeAreaView`
   background-color: #fff;
   flex: 1;
-`;
-
-export const Title = styled.Text`
-  font-size: 20px;
-  color: #656565;
-  font-weight: bold;
-  align-self: flex-start;
-  margin-top: 30px;
-  margin-bottom: 20px;
 `;
 
 export const TextNote = styled.Text`

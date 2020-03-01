@@ -1,28 +1,30 @@
 import React from 'react';
 // import Icon from 'react-native-vector-icons/MaterialIcons';
 import Background from '~/components/Background';
+import Typography from '~/components/Typography';
+import Spacing from '~/components/Spacing';
+
 import {TouchableOpacity, View} from 'react-native';
 import IconMi from 'react-native-vector-icons/MaterialIcons';
 import {DrawerActions} from 'react-navigation-drawer';
-import {Container, Title, List} from './styles';
 
-var gs = require('~/styles/global');
-import * as S from '~/styles/utilities';
+import * as S from '~/styles/global';
 
 const data = [1, 2, 3, 4, 5, 6, 7, 8];
+const Text = Typography;
 
 export default function NotePads({navigation}) {
   return (
     <Background>
-      <Container>
-        <View style={gs.header}>
+      <S.Container>
+        <Spacing position="absolute" top="30" right="30">
           <TouchableOpacity
             onPress={() => navigation.dispatch(DrawerActions.openDrawer())}>
             <IconMi name="menu" size={30} color="#FFF" />
           </TouchableOpacity>
-        </View>
-        <Title>Blocos de anotações</Title>
-        <List
+        </Spacing>
+        <S.Title>Blocos de notas</S.Title>
+        <S.List
           data={data}
           numColumns={2}
           keyExtractor={item => String(item)}
@@ -37,15 +39,16 @@ export default function NotePads({navigation}) {
               }}
               onPress={() => navigation.navigate('Dashboard')}>
               <S.Box data={item}>
-                <S.Title>
+                <Text weight="bold" size="16" maxHeight="80">
                   Função javascript ocultar e mostrar elementos na tela
-                </S.Title>
-                <S.Preview>5 Notas</S.Preview>
+                </Text>
+                <Spacing mt="4" />
+                <Text>5 Notas</Text>
               </S.Box>
             </TouchableOpacity>
           )}
         />
-      </Container>
+      </S.Container>
     </Background>
   );
 }

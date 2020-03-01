@@ -1,8 +1,9 @@
 import React, {useRef, useState, useEffect} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
-import {StyleSheet, TouchableOpacity, View} from 'react-native';
+import {TouchableOpacity} from 'react-native';
 import IconMi from 'react-native-vector-icons/MaterialIcons';
 import Background from '~/components/Background';
+import Spacing from '~/components/Spacing';
 // import { updateProfileRequest } from '~/store/modules/user/actions';
 
 import {
@@ -46,11 +47,11 @@ export default function EditCard({navigation}) {
   return (
     <Background>
       <Container>
-        <View style={styles.back_icon}>
-          <TouchableOpacity onPress={() => navigation.navigate('FlashCard')}>
+        <Spacing position="absolute" top="30" left="30">
+          <TouchableOpacity onPress={() => navigation.navigate('Card')}>
             <IconMi name="arrow-back" size={30} color="#FFF" />
           </TouchableOpacity>
-        </View>
+        </Spacing>
         <Title>Editar Cartão</Title>
 
         <Form>
@@ -84,11 +85,3 @@ export default function EditCard({navigation}) {
     </Background>
   );
 }
-
-const styles = StyleSheet.create({
-  back_icon: {
-    position: 'absolute',
-    left: 30,
-    top: 30,
-  },
-});
