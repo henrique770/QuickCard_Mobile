@@ -5,7 +5,7 @@ import IconMc from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import {Container, Title, ContainerTag, TagInput, TextNote} from './styles';
 
-export default function Annotation({navigation}) {
+export default function Notes({navigation}) {
   return (
     <>
       <Container>

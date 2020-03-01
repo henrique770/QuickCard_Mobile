@@ -26,6 +26,7 @@ export default function Dashboard({navigation}) {
             <IconMc name="plus" size={30} color="#FFF" />
           </TouchableOpacity>
         </View>
+
         {/* menu */}
         <View style={styles.header}>
           <TouchableOpacity

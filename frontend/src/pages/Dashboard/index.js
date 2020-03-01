@@ -18,7 +18,7 @@ export default function Dashboard({navigation}) {
     <Background>
       <Container>
         <View style={gs.header_add}>
-          <TouchableOpacity onPress={() => navigation.navigate('Annotation')}>
+          <TouchableOpacity onPress={() => navigation.navigate('Notes')}>
             <IconMc name="plus" size={30} color="#FFF" />
           </TouchableOpacity>
         </View>
