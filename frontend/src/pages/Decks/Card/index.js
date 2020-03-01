@@ -130,11 +130,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'center',
   },
   flipCard: {
     width: 300,
     height: 400,
+    marginTop: 100,
     borderRadius: 10,
     alignItems: 'center',
     justifyContent: 'center',
