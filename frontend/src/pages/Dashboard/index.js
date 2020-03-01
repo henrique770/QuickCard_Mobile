@@ -17,8 +17,10 @@ import * as S from '~/styles/global';
 const data = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14];
 const Text = Typography;
 
+console.disableYellowBox = true;
+
 export default function Dashboard({navigation}) {
-  const leftContent = <Text>Pull to activate</Text>;
+  const leftContent = <Text>Deslize para ativar</Text>;
 
   const rightButtons = [
     <S.Box

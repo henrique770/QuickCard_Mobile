@@ -4,7 +4,7 @@ import Background from '~/components/Background';
 import Typography from '~/components/Typography';
 import Spacing from '~/components/Spacing';
 
-import {TouchableOpacity} from 'react-native';
+import {TouchableOpacity, Alert} from 'react-native';
 import IconMi from 'react-native-vector-icons/MaterialIcons';
 import {DrawerActions} from 'react-navigation-drawer';
 
@@ -14,6 +14,25 @@ const data = [1, 2, 3, 4, 5, 6, 7, 8];
 const Text = Typography;
 
 export default function NotePads({navigation}) {
+  function deleteNotePad() {
+    Alert.alert(
+      'Alerta',
+      `Você tem certeza que quer excluir?`,
+      [
+        {
+          text: 'Não',
+          onPress: () => console.log('Excluir'),
+          style: 'Cancelar',
+        },
+        {
+          text: 'Sim',
+          onPress: () => {},
+        },
+      ],
+      {cancelable: true},
+    );
+  }
+
   return (
     <Background>
       <S.Container>
@@ -37,7 +56,8 @@ export default function NotePads({navigation}) {
                 marginRight: 7,
                 marginLeft: 7,
               }}
-              onPress={() => navigation.navigate('Dashboard')}>
+              onPress={() => navigation.navigate('Dashboard')}
+              onLongPress={() => deleteNotePad()}>
               <S.Box data={item}>
                 <Text weight="bold" size="16" maxHeight="80">
                   Função javascript ocultar e mostrar elementos na tela
