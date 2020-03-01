@@ -1,15 +1,21 @@
 import React, {Component} from 'react';
+
+import Background from '~/components/Background';
+import Typography from '~/components/Typography';
+import Spacing from '~/components/Spacing';
+
 import {
   AppRegistry,
   StyleSheet,
-  Text,
   View,
   TouchableOpacity,
   Animated,
 } from 'react-native';
-import Background from '~/components/Background';
-import {Title} from './styles';
+
 import IconMi from 'react-native-vector-icons/MaterialIcons';
+import * as S from '~/styles/global';
+
+const Text = Typography;
 
 export default class Card extends Component {
   UNSAFE_componentWillMount() {
@@ -62,47 +68,57 @@ export default class Card extends Component {
 
     return (
       <Background>
-        {/* back */}
-        <View style={styles.back_icon}>
+        <Spacing position="absolute" top="30" left="30">
           <TouchableOpacity
             onPress={() => this.props.navigation.navigate('Decks')}>
             <IconMi name="arrow-back" size={30} color="#FFF" />
           </TouchableOpacity>
-        </View>
-        {/* edit */}
-        <View style={styles.edit_icon}>
+        </Spacing>
+
+        <Spacing position="absolute" top="30" right="30">
           <TouchableOpacity
             onPress={() => this.props.navigation.navigate('EditCard')}>
             <IconMi name="settings" size={30} color="#FFF" />
           </TouchableOpacity>
-        </View>
-        <Title>Card</Title>
+        </Spacing>
+        <S.Title>Card</S.Title>
         <View style={styles.container}>
           <TouchableOpacity onPress={() => this.flipCard()}>
-            <View>
-              <Animated.View
-                style={[
-                  styles.flipCard,
-                  frontAnimatedStyle,
-                  {opacity: this.frontOpacity},
-                ]}>
-                <Text style={styles.flipText}>
-                  Oque é o elemento "Text View"?
-                </Text>
-              </Animated.View>
-              <Animated.View
-                style={[
-                  styles.flipCard,
-                  styles.flipCardBack,
-                  backAnimatedStyle,
-                  {opacity: this.backOpacity},
-                ]}>
-                <Text style={styles.flipText}>
-                  Um elemento da interface do usuário que é responsável por
-                  exibir textos
-                </Text>
-              </Animated.View>
-            </View>
+            <Animated.View
+              style={[
+                styles.flipCard,
+                frontAnimatedStyle,
+                {opacity: this.frontOpacity},
+              ]}>
+              <Text
+                width="260"
+                size="30"
+                textAlign="center"
+                weight="bold"
+                overflow="hidden"
+                maxHeight="250">
+                Oque é o elemento "Text View"?
+              </Text>
+            </Animated.View>
+
+            <Animated.View
+              style={[
+                styles.flipCard,
+                styles.flipCardBack,
+                backAnimatedStyle,
+                {opacity: this.backOpacity},
+              ]}>
+              <Text
+                width="260"
+                size="30"
+                textAlign="center"
+                weight="bold"
+                overflow="hidden"
+                maxHeight="250">
+                Um elemento da interface do usuário que é responsável por exibir
+                textos
+              </Text>
+            </Animated.View>
           </TouchableOpacity>
         </View>
       </Background>
@@ -129,23 +145,6 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     position: 'absolute',
     top: 0,
-  },
-  flipText: {
-    width: 200,
-    textAlign: 'center',
-    fontSize: 30,
-    color: '#333',
-    fontWeight: 'bold',
-  },
-  back_icon: {
-    position: 'absolute',
-    left: 30,
-    top: 30,
-  },
-  edit_icon: {
-    position: 'absolute',
-    right: 30,
-    top: 30,
   },
 });
 

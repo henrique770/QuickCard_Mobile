@@ -1,43 +1,46 @@
 import React, {useState, useEffect} from 'react';
+
 import Background from '~/components/Background';
+import Typography from '~/components/Typography';
+import Spacing from '~/components/Spacing';
+
 import IconMi from 'react-native-vector-icons/MaterialIcons';
 import IconMc from 'react-native-vector-icons/MaterialCommunityIcons';
-import {StyleSheet, TouchableOpacity, View} from 'react-native';
+import {TouchableOpacity} from 'react-native';
 import {DrawerActions} from 'react-navigation-drawer';
-import {Container, Title, List} from './styles';
-import * as S from '~/styles/utilities';
+
+import * as S from '~/styles/global';
 // import api from '~/services/api';
 
 const data = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16];
+const Text = Typography;
 
 export default function Dashboard({navigation}) {
   return (
     <Background>
-      <Container>
-        {/* add card */}
-        <View style={styles.header_add_card}>
+      <S.Container>
+        <Spacing position="absolute" top="30" left="30">
           <TouchableOpacity onPress={() => navigation.navigate('AddCard')}>
             <IconMc name="cards" size={30} color="#FFF" />
           </TouchableOpacity>
-        </View>
-        {/* add deck */}
-        <View style={styles.header_add}>
+        </Spacing>
+
+        <Spacing position="absolute" top="30" right="90">
           <TouchableOpacity onPress={() => navigation.navigate('AddDeck')}>
             <IconMc name="plus" size={30} color="#FFF" />
           </TouchableOpacity>
-        </View>
+        </Spacing>
 
-        {/* menu */}
-        <View style={styles.header}>
+        <Spacing position="absolute" top="30" right="30">
           <TouchableOpacity
             onPress={() => navigation.dispatch(DrawerActions.openDrawer())}>
             <IconMi name="menu" size={30} color="#FFF" />
           </TouchableOpacity>
-        </View>
+        </Spacing>
 
-        <Title>Baralhos</Title>
+        <S.Title>Baralhos</S.Title>
 
-        <List
+        <S.List
           data={data}
           numColumns={2}
           keyExtractor={item => String(item)}
@@ -50,40 +53,30 @@ export default function Dashboard({navigation}) {
                 marginRight: 7,
                 marginLeft: 7,
               }}
-              onPress={() => navigation.navigate('FlashCard')}>
+              onPress={() => navigation.navigate('Card')}>
               <S.Box data={item}>
-                <S.Title>
-                  Expressões em inglês Expressões em inglêsExpressões em inglês
-                  Expressões em inglês Expressões em inglês Expressões em inglês
-                </S.Title>
-                <S.Preview>
-                  Novos: <S.BlueText>20</S.BlueText>
-                </S.Preview>
-                <S.Preview>
-                  A revisar: <S.RedText>50</S.RedText>
-                </S.Preview>
+                <Text weight="bold" size="16" maxHeight="80">
+                  Bash e terminal linux / lista de comandos
+                </Text>
+                <Spacing mt="4" />
+                <Text size="14">
+                  Novos:{' '}
+                  <Text color="#0654e5" weight="bold">
+                    20
+                  </Text>
+                </Text>
+                <Spacing mb="4" />
+                <Text size="14">
+                  A revisar:{' '}
+                  <Text color="#ff0039" weight="bold">
+                    50
+                  </Text>
+                </Text>
               </S.Box>
             </TouchableOpacity>
           )}
         />
-      </Container>
+      </S.Container>
     </Background>
   );
 }
-const styles = StyleSheet.create({
-  header: {
-    position: 'absolute',
-    right: 30,
-    top: 30,
-  },
-  header_add: {
-    position: 'absolute',
-    right: 90,
-    top: 30,
-  },
-  header_add_card: {
-    position: 'absolute',
-    left: 30,
-    top: 30,
-  },
-});

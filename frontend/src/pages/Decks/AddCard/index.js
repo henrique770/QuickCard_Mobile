@@ -1,7 +1,9 @@
 import React, {useRef, useState, useEffect} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 import Background from '~/components/Background';
-import {StyleSheet, TouchableOpacity, View} from 'react-native';
+import Spacing from '~/components/Spacing';
+
+import {TouchableOpacity} from 'react-native';
 import IconMi from 'react-native-vector-icons/MaterialIcons';
 // import { updateProfileRequest } from '~/store/modules/user/actions';
 
@@ -48,11 +50,11 @@ export default function AddCard({navigation}) {
   return (
     <Background>
       <Container>
-        <View style={styles.back_icon}>
+        <Spacing position="absolute" top="30" left="30">
           <TouchableOpacity onPress={() => navigation.navigate('Decks')}>
             <IconMi name="arrow-back" size={30} color="#FFF" />
           </TouchableOpacity>
-        </View>
+        </Spacing>
         <Title>Adicionar Cartão</Title>
 
         <Form>
@@ -98,10 +100,3 @@ export default function AddCard({navigation}) {
     </Background>
   );
 }
-const styles = StyleSheet.create({
-  back_icon: {
-    position: 'absolute',
-    left: 30,
-    top: 30,
-  },
-});

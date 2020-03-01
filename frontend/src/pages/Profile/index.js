@@ -1,8 +1,11 @@
 import React, {useRef, useState, useEffect} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
+
 import Background from '~/components/Background';
+import Spacing from '~/components/Spacing';
+
 import IconMi from 'react-native-vector-icons/MaterialIcons';
-import {StyleSheet, TouchableOpacity, View} from 'react-native';
+import {TouchableOpacity} from 'react-native';
 import {DrawerActions} from 'react-navigation-drawer';
 // import { updateProfileRequest } from '~/store/modules/user/actions';
 import {signOut} from '~/store/modules/auth/actions';
@@ -59,12 +62,12 @@ export default function Profile({navigation}) {
   return (
     <Background>
       <Container>
-        <View style={styles.header}>
+        <Spacing position="absolute" top="30" right="30">
           <TouchableOpacity
             onPress={() => navigation.dispatch(DrawerActions.openDrawer())}>
             <IconMi name="menu" size={30} color="#FFF" />
           </TouchableOpacity>
-        </View>
+        </Spacing>
         <Title>Meu perfil</Title>
 
         <Form>
@@ -133,11 +136,3 @@ export default function Profile({navigation}) {
     </Background>
   );
 }
-
-const styles = StyleSheet.create({
-  header: {
-    position: 'absolute',
-    right: 30,
-    top: 30,
-  },
-});

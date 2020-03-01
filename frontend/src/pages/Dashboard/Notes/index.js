@@ -1,21 +1,25 @@
 import React from 'react';
-import {StyleSheet, TouchableOpacity, View} from 'react-native';
+
+import Spacing from '~/components/Spacing';
+import {TouchableOpacity, View} from 'react-native';
 import IconMi from 'react-native-vector-icons/MaterialIcons';
 import IconMc from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import {Container, Title, ContainerTag, TagInput, TextNote} from './styles';
 
+import * as S from '~/styles/global';
+
 export default function Notes({navigation}) {
   return (
     <>
       <Container>
-        <View style={{marginBottom: 40}}>
-          <View style={styles.back_icon}>
+        <Spacing mb="40">
+          <Spacing position="absolute" top="30" left="30">
             <TouchableOpacity onPress={() => navigation.navigate('Dashboard')}>
               <IconMi name="arrow-back" size={30} color="#f93b10" />
             </TouchableOpacity>
-          </View>
-          <View style={styles.tag}>
+          </Spacing>
+          <Spacing position="absolute" top="22" right="30" width="50">
             <ContainerTag>
               <IconMc name="tag" size={20} color="#f93b10" />
               <TagInput
@@ -24,10 +28,10 @@ export default function Notes({navigation}) {
                 placeholder="Tag Baralho"
               />
             </ContainerTag>
-          </View>
-        </View>
+          </Spacing>
+        </Spacing>
         <View style={{padding: 16}}>
-          <Title>Título</Title>
+          <S.Title>Título</S.Title>
 
           <TextNote>
             Lorem ipsum dolor sit amet consectetur, adipisicing elit. Pariatur
@@ -57,18 +61,3 @@ export default function Notes({navigation}) {
     </>
   );
 }
-
-const styles = StyleSheet.create({
-  back_icon: {
-    position: 'absolute',
-    left: 30,
-    top: 30,
-  },
-
-  tag: {
-    position: 'absolute',
-    right: 30,
-    width: '50%',
-    top: 22,
-  },
-});
