@@ -6,7 +6,7 @@ import Spacing from '~/components/Spacing';
 
 import IconMi from 'react-native-vector-icons/MaterialIcons';
 import IconMc from 'react-native-vector-icons/MaterialCommunityIcons';
-import {TouchableOpacity} from 'react-native';
+import {TouchableOpacity, Alert} from 'react-native';
 import {DrawerActions} from 'react-navigation-drawer';
 
 import * as S from '~/styles/global';
@@ -16,6 +16,25 @@ const data = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16];
 const Text = Typography;
 
 export default function Dashboard({navigation}) {
+  function deleteDeck() {
+    Alert.alert(
+      'Alerta',
+      `Você tem certeza que quer excluir?`,
+      [
+        {
+          text: 'Não',
+          onPress: () => console.log('Excluir'),
+          style: 'Cancelar',
+        },
+        {
+          text: 'Sim',
+          onPress: () => {},
+        },
+      ],
+      {cancelable: true},
+    );
+  }
+
   return (
     <Background>
       <S.Container>
@@ -53,7 +72,8 @@ export default function Dashboard({navigation}) {
                 marginRight: 7,
                 marginLeft: 7,
               }}
-              onPress={() => navigation.navigate('Card')}>
+              onPress={() => navigation.navigate('Card')}
+              onLongPress={() => deleteDeck()}>
               <S.Box data={item}>
                 <Text weight="bold" size="16" maxHeight="80">
                   Bash e terminal linux / lista de comandos

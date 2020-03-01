@@ -1,6 +1,6 @@
 import React, {useRef, useState, useEffect} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
-import {TouchableOpacity} from 'react-native';
+import {TouchableOpacity, Alert} from 'react-native';
 import IconMi from 'react-native-vector-icons/MaterialIcons';
 import Background from '~/components/Background';
 import Spacing from '~/components/Spacing';
@@ -44,6 +44,27 @@ export default function EditCard({navigation}) {
     // );
   }
 
+  function handleDelete() {
+    Alert.alert(
+      'Alerta',
+      `Você tem certeza que quer excluir?`,
+      [
+        {
+          text: 'Não',
+          onPress: () => console.log('Excluir'),
+          style: 'Cancelar',
+        },
+        {
+          text: 'Sim',
+          onPress: () => {
+            navigation.navigate('Card');
+          },
+        },
+      ],
+      {cancelable: true},
+    );
+  }
+
   return (
     <Background>
       <Container>
@@ -80,6 +101,7 @@ export default function EditCard({navigation}) {
           <Separator />
 
           <SubmitButton onPress={handleSubmit}>Salvar</SubmitButton>
+          <SubmitButton onPress={handleDelete}>Excluir</SubmitButton>
         </Form>
       </Container>
     </Background>
