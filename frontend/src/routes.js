@@ -7,19 +7,18 @@ import IconF from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import Dashboard from './pages/Dashboard';
 import NotePads from './pages/Dashboard/NotePads';
-import Annotation from './pages/Dashboard/Annotation';
+import Notes from './pages/Dashboard/Notes';
 
 import SignIn from './pages/Auth/SignIn';
 import SignUp from './pages/Auth/SignUp';
 
 import Decks from './pages/Decks';
 import AddDeck from './pages/Decks/AddDeck';
-import FlashCard from './pages/Decks/FlashCard';
+import Card from './pages/Decks/Card';
 import AddCard from './pages/Decks/AddCard';
 import EditCard from './pages/Decks/EditCard';
 
 import Profile from './pages/Profile';
-import Logout from './pages/Logout';
 
 Icon.loadFont();
 export default (isSigned = false) =>
@@ -69,14 +68,14 @@ export default (isSigned = false) =>
                   drawerIcon: <Icon name="user" size={20} color="#f93b10" />,
                 }),
               },
-              Logout: {
-                screen: Logout,
-                navigationOptions: () => ({
-                  drawerIcon: (
-                    <Icon name="sign-out" size={20} color="#f93b10" />
-                  ),
-                }),
-              },
+              // Logout: {
+              //   screen: Logout,
+              //   navigationOptions: () => ({
+              //     drawerIcon: (
+              //       <Icon name="sign-out" size={20} color="#f93b10" />
+              //     ),
+              //   }),
+              // },
             },
 
             {
@@ -102,9 +101,9 @@ export default (isSigned = false) =>
           Decks,
           AddCard,
           AddDeck,
-          FlashCard,
+          Card,
           EditCard,
-          Annotation,
+          Notes,
           Dashboard,
         }),
       },

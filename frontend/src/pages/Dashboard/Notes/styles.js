@@ -12,7 +12,15 @@ export const Title = styled.Text`
   font-size: 20px;
   color: #656565;
   font-weight: bold;
-  align-self: center;
+  align-self: flex-start;
+  margin-top: 30px;
+  margin-bottom: 20px;
+`;
+
+export const TextNote = styled.Text`
+  font-size: 16px;
+  color: #656565;
+  align-self: flex-start;
   margin-top: 30px;
   margin-bottom: 20px;
 `;

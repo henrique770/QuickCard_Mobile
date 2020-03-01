@@ -11,7 +11,7 @@ import Background from '~/components/Background';
 import {Title} from './styles';
 import IconMi from 'react-native-vector-icons/MaterialIcons';
 
-export default class FlashCard extends Component {
+export default class Card extends Component {
   UNSAFE_componentWillMount() {
     this.animatedValue = new Animated.Value(0);
     this.value = 0;
@@ -76,7 +76,7 @@ export default class FlashCard extends Component {
             <IconMi name="settings" size={30} color="#FFF" />
           </TouchableOpacity>
         </View>
-        <Title>FlashCard</Title>
+        <Title>Card</Title>
         <View style={styles.container}>
           <TouchableOpacity onPress={() => this.flipCard()}>
             <View>
@@ -149,4 +149,4 @@ const styles = StyleSheet.create({
   },
 });
 
-AppRegistry.registerComponent('FlashCard', () => FlashCard);
+AppRegistry.registerComponent('Card', () => Card);
