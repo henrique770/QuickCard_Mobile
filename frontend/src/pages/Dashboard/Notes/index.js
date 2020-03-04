@@ -1,13 +1,14 @@
 import React from 'react';
 
 import Spacing from '~/components/Spacing';
-import {TouchableOpacity, View} from 'react-native';
+import {TouchableOpacity} from 'react-native';
+// import WebView from 'react-native-webview';
+
 import IconMi from 'react-native-vector-icons/MaterialIcons';
 import IconMc from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import {Container, Title, ContainerTag, TagInput, TextNote} from './styles';
 
-import * as S from '~/styles/global';
 
 export default function Notes({navigation}) {
   return (
@@ -30,10 +31,15 @@ export default function Notes({navigation}) {
             </ContainerTag>
           </Spacing>
         </Spacing>
-        <View style={{padding: 16}}>
-          <S.Title>Título</S.Title>
 
-          <TextNote>
+
+
+
+          <Spacing ml="20" mr="20">
+          <Title>Título</Title>
+
+
+          <TextNote >
             Lorem ipsum dolor sit amet consectetur, adipisicing elit. Pariatur
             porro adipisci molestiae nemo quaerat nobis, alias eum voluptas
             modi, voluptates dicta deserunt at eaque incidunt hic, repudiandae
@@ -56,7 +62,8 @@ export default function Notes({navigation}) {
             eum voluptas modi, voluptates dicta deserunt at eaque incidunt hic,
             repudiandae iure odio cum.
           </TextNote>
-        </View>
+          </Spacing>
+
       </Container>
     </>
   );
