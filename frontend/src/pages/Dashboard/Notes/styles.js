@@ -1,6 +1,7 @@
 import styled from 'styled-components/native';
 
 import Input from '~/components/Input';
+import * as S from '~/styles/global'
 
 export const Container = styled.SafeAreaView`
   background-color: #fff;
@@ -13,6 +14,11 @@ export const TextNote = styled.Text`
   align-self: flex-start;
   margin-top: 30px;
   margin-bottom: 20px;
+`;
+
+export const Title = styled(S.Title)`
+  color: #656565;
+  align-self: flex-start;
 `;
 
 export const TagDeckInput = styled(Input)`
