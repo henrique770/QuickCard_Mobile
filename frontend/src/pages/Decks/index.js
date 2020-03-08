@@ -6,6 +6,7 @@ import Spacing from '~/components/Spacing';
 
 import IconMi from 'react-native-vector-icons/MaterialIcons';
 import IconMc from 'react-native-vector-icons/MaterialCommunityIcons';
+import ActionButton from 'react-native-action-button';
 import {TouchableOpacity, Alert} from 'react-native';
 import {DrawerActions} from 'react-navigation-drawer';
 
@@ -38,18 +39,6 @@ export default function Dashboard({navigation}) {
   return (
     <Background>
       <S.Container>
-        <Spacing position="absolute" top="30" left="30">
-          <TouchableOpacity onPress={() => navigation.navigate('AddCard')}>
-            <IconMc name="cards" size={30} color="#FFF" />
-          </TouchableOpacity>
-        </Spacing>
-
-        <Spacing position="absolute" top="30" right="90">
-          <TouchableOpacity onPress={() => navigation.navigate('AddDeck')}>
-            <IconMc name="plus" size={30} color="#FFF" />
-          </TouchableOpacity>
-        </Spacing>
-
         <Spacing position="absolute" top="30" right="30">
           <TouchableOpacity
             onPress={() => navigation.dispatch(DrawerActions.openDrawer())}>
@@ -97,6 +86,33 @@ export default function Dashboard({navigation}) {
           )}
         />
       </S.Container>
+
+      <ActionButton buttonColor="#333">
+        <ActionButton.Item
+          buttonColor="#333"
+          title="Adicionar Cartão"
+          textContainerStyle={{
+            height: 25,
+          }}
+          textStyle={{
+            fontSize: 13,
+          }}
+          onPress={() => navigation.navigate('AddCard')}>
+          <IconMc name="cards-outline" size={30} color="#FFF" />
+        </ActionButton.Item>
+        <ActionButton.Item
+          buttonColor="#333"
+          title="Adicionar Baralho"
+          textContainerStyle={{
+            height: 25,
+          }}
+          textStyle={{
+            fontSize: 13,
+          }}
+          onPress={() => navigation.navigate('AddDeck')}>
+          <IconMc name="cards" size={30} color="#FFF" />
+        </ActionButton.Item>
+      </ActionButton>
     </Background>
   );
 }
