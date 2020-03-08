@@ -37,6 +37,8 @@ target 'Mquickcard' do
 
 
 
+  pod 'react-native-webview', :path => '../node_modules/react-native-webview'
+
   target 'MquickcardTests' do
     inherit! :search_paths
     # Pods for testing
