@@ -101,6 +101,7 @@ export default function EditCard({navigation}) {
           <Separator />
 
           <SubmitButton onPress={handleSubmit}>Salvar</SubmitButton>
+          <Spacing mt="5" />
           <SubmitButton onPress={handleDelete}>Excluir</SubmitButton>
         </Form>
       </Container>

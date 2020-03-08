@@ -5,13 +5,8 @@ import Typography from '~/components/Typography';
 import Spacing from '~/components/Spacing';
 
 import {TouchableOpacity, Alert, StyleSheet, View} from 'react-native';
-import Icon from 'react-native-vector-icons/Ionicons';
-
 import IconMi from 'react-native-vector-icons/MaterialIcons';
-import IconMc from 'react-native-vector-icons/MaterialCommunityIcons';
-
 import ActionButton from 'react-native-action-button';
-
 import {DrawerActions} from 'react-navigation-drawer';
 import Swipeable from 'react-native-swipeable-row';
 
@@ -91,11 +86,16 @@ export default function Dashboard({navigation}) {
         />
       </S.Container>
 
-      <ActionButton buttonColor="#f93b10">
+      <ActionButton buttonColor="#333">
         <ActionButton.Item
           buttonColor="#333"
           title="Adicionar nota"
-          textStyle
+          textContainerStyle={{
+            height: 25,
+          }}
+          textStyle={{
+            fontSize: 13,
+          }}
           onPress={() => navigation.navigate('Notes')}>
           <IconMi name="note-add" color="#fff" size={30} />
         </ActionButton.Item>
