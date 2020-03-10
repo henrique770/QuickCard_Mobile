@@ -1,7 +1,9 @@
 import React from 'react';
 import {YellowBox, StyleSheet, Dimensions} from 'react-native';
 import {createAppContainer, createSwitchNavigator} from 'react-navigation';
+import Typography from '~/components/Typography';
 import {createDrawerNavigator} from 'react-navigation-drawer';
+import {createStackNavigator} from 'react-navigation-stack';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import IconF from 'react-native-vector-icons/MaterialCommunityIcons';
 
@@ -19,6 +21,8 @@ import AddCard from './pages/Decks/AddCard';
 import EditCard from './pages/Decks/EditCard';
 
 import Profile from './pages/Profile';
+
+import CustomDrawer from '~/components/CustomDrawer';
 
 Icon.loadFont();
 export default (isSigned = false) =>
@@ -68,19 +72,12 @@ export default (isSigned = false) =>
                   drawerIcon: <Icon name="user" size={20} color="#f93b10" />,
                 }),
               },
-              // Logout: {
-              //   screen: Logout,
-              //   navigationOptions: () => ({
-              //     drawerIcon: (
-              //       <Icon name="sign-out" size={20} color="#f93b10" />
-              //     ),
-              //   }),
-              // },
             },
 
             {
-              drawerWidth: Dimensions.get('window').width * 0.65,
-              // hideStatusBar: true,
+              drawerWidth: Dimensions.get('window').width * 0.75,
+              initialRouteName: 'Notas',
+              contentComponent: CustomDrawer,
               drawerPosition: 'left',
               drawerBackgroundColor: '#fff',
               disableOpenGesture: true,
@@ -98,13 +95,26 @@ export default (isSigned = false) =>
               },
             },
           ),
-          Decks,
-          AddCard,
-          AddDeck,
-          Card,
-          EditCard,
+          Stack: createStackNavigator(
+            {
+              Decks,
+              AddCard,
+              AddDeck,
+              Card,
+              EditCard,
+            },
+            {
+              defaultNavigationOptions: {
+                headerTransparent: true,
+                headerTintColor: '#fff',
+                headerLeftContainerStyle: {marginLeft: 20},
+              },
+            },
+          ),
+
           Notes,
           Dashboard,
+          Profile,
         }),
       },
 

@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
+import PropTypes from 'prop-types';
 import {TouchableOpacity} from 'react-native';
 import IconMi from 'react-native-vector-icons/MaterialIcons';
 
@@ -43,11 +44,6 @@ export default function AddDeck({navigation}) {
   return (
     <Background>
       <Container>
-        <Spacing position="absolute" top="30" left="30">
-          <TouchableOpacity onPress={() => navigation.navigate('Decks')}>
-            <IconMi name="arrow-back" size={30} color="#FFF" />
-          </TouchableOpacity>
-        </Spacing>
         <Title>Adicionar Baralho</Title>
 
         <Form>
@@ -74,4 +70,22 @@ AddDeck.navigationOptions = {
   tabBarIcon: ({tintColor}) => (
     <IconMi name="event" size={20} color={tintColor} />
   ),
+};
+
+AddDeck.navigationOptions = ({navigation}) => ({
+  headerLeft: () => (
+    <TouchableOpacity
+      style={{marginTop: 30}}
+      onPress={() => {
+        navigation.navigate('Decks');
+      }}>
+      <IconMi name="arrow-back" size={30} color="#fff" />
+    </TouchableOpacity>
+  ),
+});
+
+AddDeck.propTypes = {
+  navigation: PropTypes.shape({
+    navigate: PropTypes.func.isRequired,
+  }).isRequired,
 };

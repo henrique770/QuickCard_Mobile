@@ -58,7 +58,7 @@ export default function Dashboard({navigation}) {
           </TouchableOpacity>
         </Spacing>
 
-        <S.Title>Notas</S.Title>
+        <S.Title>Todas as notas</S.Title>
         <S.List
           data={data}
           keyExtractor={item => String(item)}

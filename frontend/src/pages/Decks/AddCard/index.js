@@ -1,4 +1,5 @@
 import React, {useRef, useState, useEffect} from 'react';
+import PropTypes from 'prop-types';
 import {useSelector, useDispatch} from 'react-redux';
 import Background from '~/components/Background';
 import Spacing from '~/components/Spacing';
@@ -50,11 +51,11 @@ export default function AddCard({navigation}) {
   return (
     <Background>
       <Container>
-        <Spacing position="absolute" top="30" left="30">
+        {/* <Spacing position="absolute" top="30" left="30">
           <TouchableOpacity onPress={() => navigation.navigate('Decks')}>
             <IconMi name="arrow-back" size={30} color="#FFF" />
           </TouchableOpacity>
-        </Spacing>
+        </Spacing> */}
         <Title>Adicionar Cartão</Title>
 
         <Form>
@@ -100,3 +101,21 @@ export default function AddCard({navigation}) {
     </Background>
   );
 }
+
+AddCard.navigationOptions = ({navigation}) => ({
+  headerLeft: () => (
+    <TouchableOpacity
+      style={{marginTop: 30}}
+      onPress={() => {
+        navigation.navigate('Decks');
+      }}>
+      <IconMi name="arrow-back" size={30} color="#fff" />
+    </TouchableOpacity>
+  ),
+});
+
+AddCard.propTypes = {
+  navigation: PropTypes.shape({
+    navigate: PropTypes.func.isRequired,
+  }).isRequired,
+};

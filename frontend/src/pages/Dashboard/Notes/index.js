@@ -12,7 +12,7 @@ import CNEditor, {
   CNToolbar,
   getDefaultStyles,
 } from 'react-native-cn-richtext-editor';
-import ActionButton from 'react-native-action-button';
+// import ActionButton from 'react-native-action-button';
 
 import IconMi from 'react-native-vector-icons/MaterialIcons';
 import IconMc from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -196,7 +196,7 @@ export default class Notes extends Component {
             </View>
           </KeyboardAvoidingView>
 
-          <ActionButton
+          {/* <ActionButton
             style={{
               marginBottom: 30,
             }}
@@ -213,7 +213,7 @@ export default class Notes extends Component {
               onPress={() => this.props.navigation.navigate('AddCard')}>
               <IconMc name="cards-outline" size={30} color="#FFF" />
             </ActionButton.Item>
-          </ActionButton>
+          </ActionButton> */}
         </Container>
       </>
     );

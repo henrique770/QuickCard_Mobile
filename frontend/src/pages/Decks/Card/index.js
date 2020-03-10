@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-
+import PropTypes from 'prop-types';
 import Background from '~/components/Background';
 import Typography from '~/components/Typography';
 import Spacing from '~/components/Spacing';
@@ -68,13 +68,6 @@ export default class Card extends Component {
 
     return (
       <Background>
-        <Spacing position="absolute" top="30" left="30">
-          <TouchableOpacity
-            onPress={() => this.props.navigation.navigate('Decks')}>
-            <IconMi name="arrow-back" size={30} color="#FFF" />
-          </TouchableOpacity>
-        </Spacing>
-
         <Spacing position="absolute" top="30" right="30">
           <TouchableOpacity
             onPress={() => this.props.navigation.navigate('EditCard')}>
@@ -149,3 +142,21 @@ const styles = StyleSheet.create({
 });
 
 AppRegistry.registerComponent('Card', () => Card);
+
+Card.navigationOptions = ({navigation}) => ({
+  headerLeft: () => (
+    <TouchableOpacity
+      style={{marginTop: 30}}
+      onPress={() => {
+        navigation.navigate('Decks');
+      }}>
+      <IconMi name="arrow-back" size={30} color="#fff" />
+    </TouchableOpacity>
+  ),
+});
+
+Card.propTypes = {
+  navigation: PropTypes.shape({
+    navigate: PropTypes.func.isRequired,
+  }).isRequired,
+};

@@ -1,6 +1,7 @@
 import React, {useRef, useState, useEffect} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 import {TouchableOpacity, Alert} from 'react-native';
+import PropTypes from 'prop-types';
 import IconMi from 'react-native-vector-icons/MaterialIcons';
 import Background from '~/components/Background';
 import Spacing from '~/components/Spacing';
@@ -68,11 +69,6 @@ export default function EditCard({navigation}) {
   return (
     <Background>
       <Container>
-        <Spacing position="absolute" top="30" left="30">
-          <TouchableOpacity onPress={() => navigation.navigate('Card')}>
-            <IconMi name="arrow-back" size={30} color="#FFF" />
-          </TouchableOpacity>
-        </Spacing>
         <Title>Editar Cartão</Title>
 
         <Form>
@@ -108,3 +104,21 @@ export default function EditCard({navigation}) {
     </Background>
   );
 }
+
+EditCard.navigationOptions = ({navigation}) => ({
+  headerLeft: () => (
+    <TouchableOpacity
+      style={{marginTop: 30}}
+      onPress={() => {
+        navigation.navigate('Card');
+      }}>
+      <IconMi name="arrow-back" size={30} color="#fff" />
+    </TouchableOpacity>
+  ),
+});
+
+EditCard.propTypes = {
+  navigation: PropTypes.shape({
+    navigate: PropTypes.func.isRequired,
+  }).isRequired,
+};

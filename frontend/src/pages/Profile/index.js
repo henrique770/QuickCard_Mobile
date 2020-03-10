@@ -1,5 +1,6 @@
 import React, {useRef, useState, useEffect} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
+import {Image, View} from 'react-native';
 
 import Background from '~/components/Background';
 import Spacing from '~/components/Spacing';
@@ -69,6 +70,18 @@ export default function Profile({navigation}) {
           </TouchableOpacity>
         </Spacing>
         <Title>Meu perfil</Title>
+        <View
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            marginTop: 10,
+            marginBottom: 10,
+          }}>
+          <Image
+            style={{height: 100, width: 100, borderRadius: 100 / 2}}
+            source={require('~/assets/profile.png')}
+          />
+        </View>
 
         <Form>
           <FormInput
