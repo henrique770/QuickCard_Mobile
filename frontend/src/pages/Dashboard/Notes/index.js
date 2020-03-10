@@ -13,7 +13,7 @@ import CNEditor, {
   getDefaultStyles,
 } from 'react-native-cn-richtext-editor';
 // import ActionButton from 'react-native-action-button';
-
+import PropTypes from 'prop-types';
 import IconMi from 'react-native-vector-icons/MaterialIcons';
 import IconMc from 'react-native-vector-icons/MaterialCommunityIcons';
 import {Container, Title, ContainerTag, TagInput} from './styles';
@@ -53,12 +53,6 @@ export default class Notes extends Component {
       <>
         <Container>
           <Spacing mb="40">
-            <Spacing position="absolute" top="30" left="30">
-              <TouchableOpacity
-                onPress={() => this.props.navigation.navigate('Dashboard')}>
-                <IconMi name="arrow-back" size={30} color="#f93b10" />
-              </TouchableOpacity>
-            </Spacing>
             <Spacing position="absolute" top="22" right="30" width="50">
               <ContainerTag>
                 <IconMc name="tag" size={20} color="#f93b10" />
@@ -246,3 +240,21 @@ var styles = StyleSheet.create({
     textDecorationLine: 'line-through',
   },
 });
+
+Notes.navigationOptions = ({navigation}) => ({
+  headerLeft: () => (
+    <TouchableOpacity
+      style={{marginTop: 30}}
+      onPress={() => {
+        navigation.navigate('Dashboard');
+      }}>
+      <IconMi name="arrow-back" size={30} color="#f93b10" />
+    </TouchableOpacity>
+  ),
+});
+
+Notes.propTypes = {
+  navigation: PropTypes.shape({
+    navigate: PropTypes.func.isRequired,
+  }).isRequired,
+};

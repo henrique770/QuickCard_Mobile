@@ -95,7 +95,20 @@ export default (isSigned = false) =>
               },
             },
           ),
-          Stack: createStackNavigator(
+          StackNotes: createStackNavigator(
+            {
+              Dashboard,
+              Notes,
+            },
+            {
+              defaultNavigationOptions: {
+                headerTransparent: true,
+                headerTintColor: '#fff',
+                headerLeftContainerStyle: {marginLeft: 20},
+              },
+            },
+          ),
+          StackDeck: createStackNavigator(
             {
               Decks,
               AddCard,
@@ -112,8 +125,6 @@ export default (isSigned = false) =>
             },
           ),
 
-          Notes,
-          Dashboard,
           Profile,
         }),
       },

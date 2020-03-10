@@ -42,7 +42,7 @@ export default function NotePads({navigation}) {
             <IconMi name="menu" size={30} color="#FFF" />
           </TouchableOpacity>
         </Spacing>
-        <S.Title>Blocos de notas</S.Title>
+        <S.Title>Cadernos</S.Title>
         <S.List
           data={data}
           numColumns={2}
