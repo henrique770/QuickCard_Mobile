@@ -3,7 +3,7 @@ import {useSelector, useDispatch} from 'react-redux';
 import {TouchableOpacity, Alert} from 'react-native';
 import PropTypes from 'prop-types';
 import IconMi from 'react-native-vector-icons/MaterialIcons';
-import Background from '~/components/Background';
+import * as S from '~/styles/global';
 import Spacing from '~/components/Spacing';
 // import { updateProfileRequest } from '~/store/modules/user/actions';
 
@@ -67,8 +67,8 @@ export default function EditCard({navigation}) {
   }
 
   return (
-    <Background>
-      <Container>
+    <>
+      <S.Container>
         <Title>Editar Cartão</Title>
 
         <Form>
@@ -100,8 +100,8 @@ export default function EditCard({navigation}) {
           <Spacing mt="5" />
           <SubmitButton onPress={handleDelete}>Excluir</SubmitButton>
         </Form>
-      </Container>
-    </Background>
+      </S.Container>
+    </>
   );
 }
 

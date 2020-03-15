@@ -2,7 +2,7 @@ import React, {useRef, useState, useEffect} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 import {Image, View} from 'react-native';
 
-import Background from '~/components/Background';
+import * as S from '~/styles/global';
 import Spacing from '~/components/Spacing';
 
 import IconMi from 'react-native-vector-icons/MaterialIcons';
@@ -61,8 +61,8 @@ export default function Profile({navigation}) {
   }
 
   return (
-    <Background>
-      <Container>
+    <>
+      <S.Container>
         <Spacing position="absolute" top="30" right="30">
           <TouchableOpacity
             onPress={() => navigation.dispatch(DrawerActions.openDrawer())}>
@@ -145,7 +145,7 @@ export default function Profile({navigation}) {
           <SubmitButton onPress={handleSubmit}>Atualizar perfil</SubmitButton>
           <LogoutButton onPress={handleLogout}>Sair do QuickCard</LogoutButton>
         </Form>
-      </Container>
-    </Background>
+      </S.Container>
+    </>
   );
 }

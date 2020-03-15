@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import Background from '~/components/Background';
+
 import Typography from '~/components/Typography';
 import Spacing from '~/components/Spacing';
 
@@ -67,54 +67,56 @@ export default class Card extends Component {
     };
 
     return (
-      <Background>
-        <Spacing position="absolute" top="30" right="30">
-          <TouchableOpacity
-            onPress={() => this.props.navigation.navigate('EditCard')}>
-            <IconMi name="settings" size={30} color="#FFF" />
-          </TouchableOpacity>
-        </Spacing>
-        <S.Title>Card</S.Title>
-        <View style={styles.container}>
-          <TouchableOpacity onPress={() => this.flipCard()}>
-            <Animated.View
-              style={[
-                styles.flipCard,
-                frontAnimatedStyle,
-                {opacity: this.frontOpacity},
-              ]}>
-              <Text
-                width="260"
-                size="30"
-                textAlign="center"
-                weight="bold"
-                overflow="hidden"
-                maxHeight="250">
-                Oque é o elemento "Text View"?
-              </Text>
-            </Animated.View>
+      <>
+        <S.Container>
+          <Spacing position="absolute" top="30" right="30">
+            <TouchableOpacity
+              onPress={() => this.props.navigation.navigate('EditCard')}>
+              <IconMi name="settings" size={30} color="#FFF" />
+            </TouchableOpacity>
+          </Spacing>
+          <S.Title>Card</S.Title>
+          <View style={styles.container}>
+            <TouchableOpacity onPress={() => this.flipCard()}>
+              <Animated.View
+                style={[
+                  styles.flipCard,
+                  frontAnimatedStyle,
+                  {opacity: this.frontOpacity},
+                ]}>
+                <Text
+                  width="260"
+                  size="30"
+                  textAlign="center"
+                  weight="bold"
+                  overflow="hidden"
+                  maxHeight="250">
+                  Oque é o elemento "Text View"?
+                </Text>
+              </Animated.View>
 
-            <Animated.View
-              style={[
-                styles.flipCard,
-                styles.flipCardBack,
-                backAnimatedStyle,
-                {opacity: this.backOpacity},
-              ]}>
-              <Text
-                width="260"
-                size="30"
-                textAlign="center"
-                weight="bold"
-                overflow="hidden"
-                maxHeight="250">
-                Um elemento da interface do usuário que é responsável por exibir
-                textos
-              </Text>
-            </Animated.View>
-          </TouchableOpacity>
-        </View>
-      </Background>
+              <Animated.View
+                style={[
+                  styles.flipCard,
+                  styles.flipCardBack,
+                  backAnimatedStyle,
+                  {opacity: this.backOpacity},
+                ]}>
+                <Text
+                  width="260"
+                  size="30"
+                  textAlign="center"
+                  weight="bold"
+                  overflow="hidden"
+                  maxHeight="250">
+                  Um elemento da interface do usuário que é responsável por
+                  exibir textos
+                </Text>
+              </Animated.View>
+            </TouchableOpacity>
+          </View>
+        </S.Container>
+      </>
     );
   }
 }

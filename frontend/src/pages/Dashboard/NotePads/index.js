@@ -1,6 +1,4 @@
 import React from 'react';
-// import Icon from 'react-native-vector-icons/MaterialIcons';
-import Background from '~/components/Background';
 import Typography from '~/components/Typography';
 import Spacing from '~/components/Spacing';
 
@@ -34,7 +32,7 @@ export default function NotePads({navigation}) {
   }
 
   return (
-    <Background>
+    <>
       <S.Container>
         <Spacing position="absolute" top="30" right="30">
           <TouchableOpacity
@@ -59,16 +57,16 @@ export default function NotePads({navigation}) {
               onPress={() => navigation.navigate('Dashboard')}
               onLongPress={() => deleteNotePad()}>
               <S.Box data={item}>
-                <Text weight="bold" size="16" maxHeight="80">
+                <S.Text weight="bold" size="16" maxHeight="80">
                   Função javascript ocultar e mostrar elementos na tela
-                </Text>
+                </S.Text>
                 <Spacing mt="4" />
-                <Text>5 Notas</Text>
+                <Text color="#656565">5 Notas</Text>
               </S.Box>
             </TouchableOpacity>
           )}
         />
       </S.Container>
-    </Background>
+    </>
   );
 }

@@ -1,9 +1,8 @@
 import React, {useRef, useState, useEffect} from 'react';
 import PropTypes from 'prop-types';
 import {useSelector, useDispatch} from 'react-redux';
-import Background from '~/components/Background';
 import Spacing from '~/components/Spacing';
-
+import * as S from '~/styles/global';
 import {TouchableOpacity} from 'react-native';
 import IconMi from 'react-native-vector-icons/MaterialIcons';
 // import { updateProfileRequest } from '~/store/modules/user/actions';
@@ -49,8 +48,8 @@ export default function AddCard({navigation}) {
   }
 
   return (
-    <Background>
-      <Container>
+    <>
+      <S.Container>
         {/* <Spacing position="absolute" top="30" left="30">
           <TouchableOpacity onPress={() => navigation.navigate('Decks')}>
             <IconMi name="arrow-back" size={30} color="#FFF" />
@@ -97,8 +96,8 @@ export default function AddCard({navigation}) {
 
           <SubmitButton onPress={handleSubmit}>Salvar</SubmitButton>
         </Form>
-      </Container>
-    </Background>
+      </S.Container>
+    </>
   );
 }
 

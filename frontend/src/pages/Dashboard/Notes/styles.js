@@ -1,7 +1,7 @@
 import styled from 'styled-components/native';
 
 import Input from '~/components/Input';
-import * as S from '~/styles/global'
+import * as S from '~/styles/global';
 
 export const Container = styled.SafeAreaView`
   background-color: #fff;

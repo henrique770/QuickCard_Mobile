@@ -1,7 +1,6 @@
 import React from 'react';
-import {YellowBox, StyleSheet, Dimensions} from 'react-native';
+import {YellowBox, Dimensions} from 'react-native';
 import {createAppContainer, createSwitchNavigator} from 'react-navigation';
-import Typography from '~/components/Typography';
 import {createDrawerNavigator} from 'react-navigation-drawer';
 import {createStackNavigator} from 'react-navigation-stack';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -47,14 +46,7 @@ export default (isSigned = false) =>
               Cadernos: {
                 screen: NotePads,
                 navigationOptions: () => ({
-                  drawerIcon: (
-                    <Icon
-                      style={styles.backicon}
-                      name="book"
-                      size={20}
-                      color="#f93b10"
-                    />
-                  ),
+                  drawerIcon: <Icon name="book" size={20} color="#f93b10" />,
                 }),
               },
               Baralhos: {
@@ -136,7 +128,3 @@ export default (isSigned = false) =>
       },
     ),
   );
-
-const styles = StyleSheet.create({
-  backicon: {},
-});

@@ -1,11 +1,11 @@
 import React from 'react';
 
-import Background from '~/components/Background';
 import Typography from '~/components/Typography';
 import Spacing from '~/components/Spacing';
 
 import {TouchableOpacity, Alert, StyleSheet, View} from 'react-native';
 import IconMi from 'react-native-vector-icons/MaterialIcons';
+import {withTheme} from 'styled-components';
 import ActionButton from 'react-native-action-button';
 import {DrawerActions} from 'react-navigation-drawer';
 import Swipeable from 'react-native-swipeable-row';
@@ -17,7 +17,7 @@ const Text = Typography;
 
 console.disableYellowBox = true;
 
-export default function Dashboard({navigation}) {
+function Dashboard({navigation, ...props}) {
   const leftContent = <Text>Deslize para ativar</Text>;
 
   const rightButtons = [
@@ -49,7 +49,7 @@ export default function Dashboard({navigation}) {
     </S.Box>,
   ];
   return (
-    <Background>
+    <>
       <S.Container>
         <Spacing position="absolute" right="30" top="30">
           <TouchableOpacity
@@ -69,11 +69,11 @@ export default function Dashboard({navigation}) {
               rightButtons={rightButtons}>
               <TouchableOpacity onPress={() => navigation.navigate('Notes')}>
                 <S.Box data={item}>
-                  <Text weight="bold" size="16">
+                  <S.Text weight="bold" size="16">
                     QuickCard
-                  </Text>
+                  </S.Text>
                   <Spacing mt="4" mb="4">
-                    <Text size="14">
+                    <Text size="14" color="#656565">
                       QuickCard é um software de estudo que tem como principais
                       caracteristicas
                     </Text>
@@ -86,7 +86,7 @@ export default function Dashboard({navigation}) {
         />
       </S.Container>
 
-      <ActionButton buttonColor="#333">
+      <ActionButton buttonColor={props.theme.floatButton}>
         <ActionButton.Item
           buttonColor="#333"
           title="Adicionar nota"
@@ -100,6 +100,8 @@ export default function Dashboard({navigation}) {
           <IconMi name="note-add" color="#fff" size={30} />
         </ActionButton.Item>
       </ActionButton>
-    </Background>
+    </>
   );
 }
+
+export default withTheme(Dashboard);

@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import {TouchableOpacity} from 'react-native';
 import IconMi from 'react-native-vector-icons/MaterialIcons';
 
-import Background from '~/components/Background';
+import * as S from '~/styles/global';
 import Spacing from '~/components/Spacing';
 // import { updateProfileRequest } from '~/store/modules/user/actions';
 
@@ -42,8 +42,8 @@ export default function AddDeck({navigation}) {
   }
 
   return (
-    <Background>
-      <Container>
+    <>
+      <S.Container>
         <Title>Adicionar Baralho</Title>
 
         <Form>
@@ -61,8 +61,8 @@ export default function AddDeck({navigation}) {
 
           <SubmitButton onPress={handleSubmit}>Salvar</SubmitButton>
         </Form>
-      </Container>
-    </Background>
+      </S.Container>
+    </>
   );
 }
 AddDeck.navigationOptions = {

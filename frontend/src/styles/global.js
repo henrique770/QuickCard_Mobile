@@ -1,15 +1,17 @@
 import styled from 'styled-components/native';
+import Typography from '~/components/Typography';
 
 export const Box = styled.View`
   margin-bottom: 15px;
   padding: 20px;
   max-height: 160px;
   border-radius: 12px;
-  background: #fff;
+  background: ${props => props.theme.backgroundbox};
 `;
 
 export const Container = styled.SafeAreaView`
   flex: 1;
+  background: ${props => props.theme.background};
 `;
 
 export const Title = styled.Text`
@@ -19,6 +21,10 @@ export const Title = styled.Text`
   align-self: center;
   margin-top: 30px;
   margin-bottom: 20px;
+`;
+
+export const Text = styled(Typography)`
+  color: ${props => props.theme.primaryText};
 `;
 
 export const List = styled.FlatList.attrs({
