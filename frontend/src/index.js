@@ -12,7 +12,7 @@ import {store, persistor} from './store';
 import App from './App';
 
 export default function Index() {
-  const [dark, setDark] = useState(false);
+  const [dark, setDark] = useState(true);
   return (
     <ThemeProvider theme={dark ? darkTheme : lightTheme}>
       <Provider store={store}>

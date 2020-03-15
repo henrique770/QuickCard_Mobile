@@ -1,5 +1,7 @@
 import styled from 'styled-components/native';
 import Typography from '~/components/Typography';
+import Button from '~/components/Button';
+import Input from '~/components/Input';
 
 export const Box = styled.View`
   margin-bottom: 15px;
@@ -27,9 +29,23 @@ export const Text = styled(Typography)`
   color: ${props => props.theme.primaryText};
 `;
 
+export const TextButton = styled(Typography)`
+  color: ${props => props.theme.textButtonColor};
+`;
+
 export const List = styled.FlatList.attrs({
   showsVerticalScrollIndicator: false,
   contentContainerStyle: {
     padding: 15,
   },
 })``;
+
+export const FormInput = styled(Input)`
+  background: ${props => props.theme.inputColor};
+  margin-bottom: 10px;
+`;
+
+export const ButtonTheme = styled(Button)`
+  background: ${props => props.theme.backgroundbox};
+  border-radius: 15px;
+`;

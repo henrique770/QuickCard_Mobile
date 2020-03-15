@@ -7,14 +7,7 @@ import {TouchableOpacity} from 'react-native';
 import IconMi from 'react-native-vector-icons/MaterialIcons';
 // import { updateProfileRequest } from '~/store/modules/user/actions';
 
-import {
-  Container,
-  Title,
-  Separator,
-  Form,
-  FormInput,
-  SubmitButton,
-} from './styles';
+import {Title, Separator, Form} from './styles';
 
 export default function AddCard({navigation}) {
   // const dispatch = useDispatch();
@@ -58,7 +51,7 @@ export default function AddCard({navigation}) {
         <Title>Adicionar Cartão</Title>
 
         <Form>
-          <FormInput
+          <S.FormInput
             icon="cards"
             autoCorrect={false}
             autoCapitalize="none"
@@ -69,7 +62,7 @@ export default function AddCard({navigation}) {
             onChangeText={setDeck}
           />
 
-          <FormInput
+          <S.FormInput
             icon="cards-outline"
             autoCorrect={false}
             autoCapitalize="none"
@@ -81,7 +74,7 @@ export default function AddCard({navigation}) {
             onChangeText={setFront}
           />
 
-          <FormInput
+          <S.FormInput
             icon="cards-playing-outline"
             autoCorrect={false}
             autoCapitalize="none"
@@ -94,7 +87,9 @@ export default function AddCard({navigation}) {
 
           <Separator />
 
-          <SubmitButton onPress={handleSubmit}>Salvar</SubmitButton>
+          <S.ButtonTheme onPress={handleSubmit}>
+            <S.TextButton>Salvar</S.TextButton>
+          </S.ButtonTheme>
         </Form>
       </S.Container>
     </>

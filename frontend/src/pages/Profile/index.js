@@ -11,15 +11,7 @@ import {DrawerActions} from 'react-navigation-drawer';
 // import { updateProfileRequest } from '~/store/modules/user/actions';
 import {signOut} from '~/store/modules/auth/actions';
 
-import {
-  Container,
-  Title,
-  Separator,
-  Form,
-  FormInput,
-  SubmitButton,
-  LogoutButton,
-} from './styles';
+import {Separator, Form} from './styles';
 
 export default function Profile({navigation}) {
   const dispatch = useDispatch();
@@ -69,7 +61,7 @@ export default function Profile({navigation}) {
             <IconMi name="menu" size={30} color="#FFF" />
           </TouchableOpacity>
         </Spacing>
-        <Title>Meu perfil</Title>
+        <S.Title>Meu perfil</S.Title>
         <View
           style={{
             display: 'flex',
@@ -84,7 +76,7 @@ export default function Profile({navigation}) {
         </View>
 
         <Form>
-          <FormInput
+          <S.FormInput
             icon="account-outline"
             autoCorrect={false}
             autoCapitalize="none"
@@ -95,7 +87,7 @@ export default function Profile({navigation}) {
             onChangeText={setName}
           />
 
-          <FormInput
+          <S.FormInput
             icon="email-outline"
             keyboardType="email-address"
             autoCorrect={false}
@@ -110,7 +102,7 @@ export default function Profile({navigation}) {
 
           <Separator />
 
-          <FormInput
+          <S.FormInput
             icon="lock-outline"
             secureTextEntry
             placeholder="Sua senha atual"
@@ -121,7 +113,7 @@ export default function Profile({navigation}) {
             onChangeText={setOldPassword}
           />
 
-          <FormInput
+          <S.FormInput
             icon="lock-outline"
             secureTextEntry
             placeholder="Sua nova senha"
@@ -132,7 +124,7 @@ export default function Profile({navigation}) {
             onChangeText={setPassword}
           />
 
-          <FormInput
+          <S.FormInput
             icon="lock-outline"
             secureTextEntry
             placeholder="Confirmação de senha"
@@ -141,9 +133,15 @@ export default function Profile({navigation}) {
             value={confirmPassword}
             onChangeText={setConfirmPassword}
           />
+          <Separator />
 
-          <SubmitButton onPress={handleSubmit}>Atualizar perfil</SubmitButton>
-          <LogoutButton onPress={handleLogout}>Sair do QuickCard</LogoutButton>
+          <S.ButtonTheme onPress={handleSubmit}>
+            <S.TextButton>Atualizar perfil</S.TextButton>
+          </S.ButtonTheme>
+          <Spacing mt="10" />
+          <S.ButtonTheme onPress={handleLogout}>
+            <S.TextButton>Sair do QuickCard</S.TextButton>
+          </S.ButtonTheme>
         </Form>
       </S.Container>
     </>

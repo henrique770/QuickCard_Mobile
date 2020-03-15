@@ -8,14 +8,7 @@ import * as S from '~/styles/global';
 import Spacing from '~/components/Spacing';
 // import { updateProfileRequest } from '~/store/modules/user/actions';
 
-import {
-  Container,
-  Title,
-  Separator,
-  Form,
-  FormInput,
-  SubmitButton,
-} from './styles';
+import {Container, Title, Separator, Form, SubmitButton} from './styles';
 
 export default function AddDeck({navigation}) {
   // const dispatch = useDispatch();
@@ -47,7 +40,7 @@ export default function AddDeck({navigation}) {
         <Title>Adicionar Baralho</Title>
 
         <Form>
-          <FormInput
+          <S.FormInput
             icon="cards"
             autoCorrect={false}
             autoCapitalize="none"
@@ -59,7 +52,9 @@ export default function AddDeck({navigation}) {
 
           <Separator />
 
-          <SubmitButton onPress={handleSubmit}>Salvar</SubmitButton>
+          <S.ButtonTheme onPress={handleSubmit}>
+            <S.TextButton>Salvar</S.TextButton>
+          </S.ButtonTheme>
         </Form>
       </S.Container>
     </>

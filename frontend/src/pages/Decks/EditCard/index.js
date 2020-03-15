@@ -7,14 +7,7 @@ import * as S from '~/styles/global';
 import Spacing from '~/components/Spacing';
 // import { updateProfileRequest } from '~/store/modules/user/actions';
 
-import {
-  Container,
-  Title,
-  Separator,
-  Form,
-  FormInput,
-  SubmitButton,
-} from './styles';
+import {Container, Title, Separator, Form, SubmitButton} from './styles';
 
 export default function EditCard({navigation}) {
   // const dispatch = useDispatch();
@@ -72,7 +65,7 @@ export default function EditCard({navigation}) {
         <Title>Editar Cartão</Title>
 
         <Form>
-          <FormInput
+          <S.FormInput
             icon="cards-outline"
             autoCorrect={false}
             autoCapitalize="none"
@@ -83,7 +76,7 @@ export default function EditCard({navigation}) {
             onChangeText={setFront}
           />
 
-          <FormInput
+          <S.FormInput
             icon="cards-playing-outline"
             autoCorrect={false}
             autoCapitalize="none"
@@ -96,9 +89,13 @@ export default function EditCard({navigation}) {
 
           <Separator />
 
-          <SubmitButton onPress={handleSubmit}>Salvar</SubmitButton>
-          <Spacing mt="5" />
-          <SubmitButton onPress={handleDelete}>Excluir</SubmitButton>
+          <S.ButtonTheme onPress={handleSubmit}>
+            <S.TextButton>Salvar</S.TextButton>
+          </S.ButtonTheme>
+          <Spacing mt="10" />
+          <S.ButtonTheme onPress={handleDelete}>
+            <S.TextButton>Excluir</S.TextButton>
+          </S.ButtonTheme>
         </Form>
       </S.Container>
     </>
