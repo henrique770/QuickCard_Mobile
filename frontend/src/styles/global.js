@@ -4,9 +4,11 @@ import Button from '~/components/Button';
 import Input from '~/components/Input';
 
 export const Box = styled.View`
-  margin-bottom: 15px;
+  margin-bottom: 12px;
+  margin-right: 7px;
+  margin-left: 7px;
   padding: 20px;
-  max-height: 160px;
+  max-height: 180px;
   border-radius: 12px;
   background: ${props => props.theme.backgroundbox};
 `;
@@ -14,6 +16,7 @@ export const Box = styled.View`
 export const Container = styled.SafeAreaView`
   flex: 1;
   background: ${props => props.theme.background};
+  ${({align}) => (align ? `align-items: ${align};` : ``)}
 `;
 
 export const Title = styled.Text`
@@ -30,13 +33,14 @@ export const Text = styled(Typography)`
 `;
 
 export const TextButton = styled(Typography)`
+  font-size: 17px;
   color: ${props => props.theme.textButtonColor};
 `;
 
 export const List = styled.FlatList.attrs({
   showsVerticalScrollIndicator: false,
   contentContainerStyle: {
-    padding: 15,
+    padding: 5,
   },
 })``;
 
@@ -46,6 +50,6 @@ export const FormInput = styled(Input)`
 `;
 
 export const ButtonTheme = styled(Button)`
-  background: ${props => props.theme.backgroundbox};
-  border-radius: 15px;
+  background: ${props => props.theme.colorButton};
+  border-radius: 10px;
 `;

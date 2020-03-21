@@ -3,7 +3,13 @@ import React from 'react';
 import Typography from '~/components/Typography';
 import Spacing from '~/components/Spacing';
 
-import {TouchableOpacity, Alert, StyleSheet, View} from 'react-native';
+import {
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+  Alert,
+  StyleSheet,
+  View,
+} from 'react-native';
 import IconMi from 'react-native-vector-icons/MaterialIcons';
 import {withTheme} from 'styled-components';
 import ActionButton from 'react-native-action-button';
@@ -67,7 +73,8 @@ function Dashboard({navigation, ...props}) {
               autoClose={true}
               leftContent={leftContent}
               rightButtons={rightButtons}>
-              <TouchableOpacity onPress={() => navigation.navigate('Notes')}>
+              <TouchableWithoutFeedback
+                onPress={() => navigation.navigate('Notes')}>
                 <S.Box data={item}>
                   <S.Text weight="bold" size="16">
                     QuickCard
@@ -78,9 +85,9 @@ function Dashboard({navigation, ...props}) {
                       caracteristicas
                     </Text>
                   </Spacing>
-                  <Text color="#f93b10">Primeiro Caderno</Text>
+                  <Text color="#fe650e">Primeiro Caderno</Text>
                 </S.Box>
-              </TouchableOpacity>
+              </TouchableWithoutFeedback>
             </Swipeable>
           )}
         />

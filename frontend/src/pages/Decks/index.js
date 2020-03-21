@@ -2,7 +2,6 @@ import React, {useState, useEffect} from 'react';
 
 import Typography from '~/components/Typography';
 import Spacing from '~/components/Spacing';
-import {Overlay} from 'react-native-elements';
 
 import IconMi from 'react-native-vector-icons/MaterialIcons';
 import IconMc from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -54,36 +53,31 @@ function Decks({navigation, ...props}) {
           numColumns={2}
           keyExtractor={item => String(item)}
           renderItem={({item}) => (
-            <TouchableOpacity
-              style={{
-                elevation: 5,
-                width: 136,
-                flex: 1,
-                marginRight: 7,
-                marginLeft: 7,
-              }}
-              onPress={() => navigation.navigate('Card')}
-              onLongPress={() => deleteDeck()}>
-              <S.Box data={item}>
-                <S.Text weight="bold" size="16" maxHeight="80">
-                  Bash e terminal linux / lista de comandos
-                </S.Text>
-                <Spacing mt="4" />
-                <Text color="#656565" size="14">
-                  Novos:{' '}
-                  <Text color="#0654e5" weight="bold">
-                    20
+            <S.Container>
+              <TouchableOpacity
+                onPress={() => navigation.navigate('Card')}
+                onLongPress={() => deleteDeck()}>
+                <S.Box data={item}>
+                  <S.Text weight="bold" size="16" maxHeight="95">
+                    Bash e terminal linux / lista de comandos
+                  </S.Text>
+                  <Spacing mt="4" />
+                  <Text color="#656565" size="14">
+                    Novos:{' '}
+                    <Text color="#fe650e" weight="bold">
+                      20
+                    </Text>
                   </Text>
-                </Text>
-                <Spacing mb="4" />
-                <Text color="#656565" size="14">
-                  A revisar:{' '}
-                  <Text color="#ff0039" weight="bold">
-                    50
+                  <Spacing mb="4" />
+                  <Text color="#656565" size="14">
+                    A revisar:{' '}
+                    <Text color="#f93b10" weight="bold">
+                      50
+                    </Text>
                   </Text>
-                </Text>
-              </S.Box>
-            </TouchableOpacity>
+                </S.Box>
+              </TouchableOpacity>
+            </S.Container>
           )}
         />
       </S.Container>

@@ -7,7 +7,7 @@ import * as S from '~/styles/global';
 import Spacing from '~/components/Spacing';
 // import { updateProfileRequest } from '~/store/modules/user/actions';
 
-import {Container, Title, Separator, Form, SubmitButton} from './styles';
+import {Container, Title, Separator, Form} from './styles';
 
 export default function EditCard({navigation}) {
   // const dispatch = useDispatch();
