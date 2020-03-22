@@ -1,20 +1,13 @@
 import React, {useRef, useState, useEffect} from 'react';
+import PropTypes from 'prop-types';
 import {useSelector, useDispatch} from 'react-redux';
-import Background from '~/components/Background';
 import Spacing from '~/components/Spacing';
-
+import * as S from '~/styles/global';
 import {TouchableOpacity} from 'react-native';
 import IconMi from 'react-native-vector-icons/MaterialIcons';
 // import { updateProfileRequest } from '~/store/modules/user/actions';
 
-import {
-  Container,
-  Title,
-  Separator,
-  Form,
-  FormInput,
-  SubmitButton,
-} from './styles';
+import {Title, Separator, Form} from './styles';
 
 export default function AddCard({navigation}) {
   // const dispatch = useDispatch();
@@ -48,17 +41,17 @@ export default function AddCard({navigation}) {
   }
 
   return (
-    <Background>
-      <Container>
-        <Spacing position="absolute" top="30" left="30">
+    <>
+      <S.Container>
+        {/* <Spacing position="absolute" top="30" left="30">
           <TouchableOpacity onPress={() => navigation.navigate('Decks')}>
             <IconMi name="arrow-back" size={30} color="#FFF" />
           </TouchableOpacity>
-        </Spacing>
+        </Spacing> */}
         <Title>Adicionar Cartão</Title>
 
         <Form>
-          <FormInput
+          <S.FormInput
             icon="cards"
             autoCorrect={false}
             autoCapitalize="none"
@@ -69,7 +62,7 @@ export default function AddCard({navigation}) {
             onChangeText={setDeck}
           />
 
-          <FormInput
+          <S.FormInput
             icon="cards-outline"
             autoCorrect={false}
             autoCapitalize="none"
@@ -81,7 +74,7 @@ export default function AddCard({navigation}) {
             onChangeText={setFront}
           />
 
-          <FormInput
+          <S.FormInput
             icon="cards-playing-outline"
             autoCorrect={false}
             autoCapitalize="none"
@@ -94,9 +87,29 @@ export default function AddCard({navigation}) {
 
           <Separator />
 
-          <SubmitButton onPress={handleSubmit}>Salvar</SubmitButton>
+          <S.ButtonTheme onPress={handleSubmit}>
+            <S.TextButton>Salvar</S.TextButton>
+          </S.ButtonTheme>
         </Form>
-      </Container>
-    </Background>
+      </S.Container>
+    </>
   );
 }
+
+AddCard.navigationOptions = ({navigation}) => ({
+  headerLeft: () => (
+    <TouchableOpacity
+      style={{marginTop: 30}}
+      onPress={() => {
+        navigation.navigate('Decks');
+      }}>
+      <IconMi name="arrow-back" size={30} color="#fff" />
+    </TouchableOpacity>
+  ),
+});
+
+AddCard.propTypes = {
+  navigation: PropTypes.shape({
+    navigate: PropTypes.func.isRequired,
+  }).isRequired,
+};

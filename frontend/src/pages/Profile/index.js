@@ -1,7 +1,8 @@
 import React, {useRef, useState, useEffect} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
+import {Image, View} from 'react-native';
 
-import Background from '~/components/Background';
+import * as S from '~/styles/global';
 import Spacing from '~/components/Spacing';
 
 import IconMi from 'react-native-vector-icons/MaterialIcons';
@@ -10,15 +11,7 @@ import {DrawerActions} from 'react-navigation-drawer';
 // import { updateProfileRequest } from '~/store/modules/user/actions';
 import {signOut} from '~/store/modules/auth/actions';
 
-import {
-  Container,
-  Title,
-  Separator,
-  Form,
-  FormInput,
-  SubmitButton,
-  LogoutButton,
-} from './styles';
+import {Separator, Form} from './styles';
 
 export default function Profile({navigation}) {
   const dispatch = useDispatch();
@@ -60,18 +53,30 @@ export default function Profile({navigation}) {
   }
 
   return (
-    <Background>
-      <Container>
+    <>
+      <S.Container>
         <Spacing position="absolute" top="30" right="30">
           <TouchableOpacity
             onPress={() => navigation.dispatch(DrawerActions.openDrawer())}>
             <IconMi name="menu" size={30} color="#FFF" />
           </TouchableOpacity>
         </Spacing>
-        <Title>Meu perfil</Title>
+        <S.Title>Meu perfil</S.Title>
+        <View
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            marginTop: 10,
+            marginBottom: 10,
+          }}>
+          <Image
+            style={{height: 100, width: 100, borderRadius: 100 / 2}}
+            source={require('~/assets/profile.png')}
+          />
+        </View>
 
         <Form>
-          <FormInput
+          <S.FormInput
             icon="account-outline"
             autoCorrect={false}
             autoCapitalize="none"
@@ -82,7 +87,7 @@ export default function Profile({navigation}) {
             onChangeText={setName}
           />
 
-          <FormInput
+          <S.FormInput
             icon="email-outline"
             keyboardType="email-address"
             autoCorrect={false}
@@ -97,7 +102,7 @@ export default function Profile({navigation}) {
 
           <Separator />
 
-          <FormInput
+          <S.FormInput
             icon="lock-outline"
             secureTextEntry
             placeholder="Sua senha atual"
@@ -108,7 +113,7 @@ export default function Profile({navigation}) {
             onChangeText={setOldPassword}
           />
 
-          <FormInput
+          <S.FormInput
             icon="lock-outline"
             secureTextEntry
             placeholder="Sua nova senha"
@@ -119,7 +124,7 @@ export default function Profile({navigation}) {
             onChangeText={setPassword}
           />
 
-          <FormInput
+          <S.FormInput
             icon="lock-outline"
             secureTextEntry
             placeholder="Confirmação de senha"
@@ -128,11 +133,17 @@ export default function Profile({navigation}) {
             value={confirmPassword}
             onChangeText={setConfirmPassword}
           />
+          <Separator />
 
-          <SubmitButton onPress={handleSubmit}>Atualizar perfil</SubmitButton>
-          <LogoutButton onPress={handleLogout}>Sair do QuickCard</LogoutButton>
+          <S.ButtonTheme onPress={handleSubmit}>
+            <S.TextButton>Atualizar perfil</S.TextButton>
+          </S.ButtonTheme>
+          <Spacing mt="10" />
+          <S.ButtonTheme onPress={handleLogout}>
+            <S.TextButton>Sair do QuickCard</S.TextButton>
+          </S.ButtonTheme>
         </Form>
-      </Container>
-    </Background>
+      </S.Container>
+    </>
   );
 }

@@ -1,6 +1,5 @@
 import React, {useState, useEffect} from 'react';
 
-import Background from '~/components/Background';
 import Typography from '~/components/Typography';
 import Spacing from '~/components/Spacing';
 
@@ -9,6 +8,7 @@ import IconMc from 'react-native-vector-icons/MaterialCommunityIcons';
 import ActionButton from 'react-native-action-button';
 import {TouchableOpacity, Alert} from 'react-native';
 import {DrawerActions} from 'react-navigation-drawer';
+import {withTheme} from 'styled-components';
 
 import * as S from '~/styles/global';
 // import api from '~/services/api';
@@ -16,7 +16,7 @@ import * as S from '~/styles/global';
 const data = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16];
 const Text = Typography;
 
-export default function Dashboard({navigation}) {
+function Decks({navigation, ...props}) {
   function deleteDeck() {
     Alert.alert(
       'Alerta',
@@ -37,7 +37,7 @@ export default function Dashboard({navigation}) {
   }
 
   return (
-    <Background>
+    <>
       <S.Container>
         <Spacing position="absolute" top="30" right="30">
           <TouchableOpacity
@@ -53,41 +53,36 @@ export default function Dashboard({navigation}) {
           numColumns={2}
           keyExtractor={item => String(item)}
           renderItem={({item}) => (
-            <TouchableOpacity
-              style={{
-                elevation: 5,
-                width: 136,
-                flex: 1,
-                marginRight: 7,
-                marginLeft: 7,
-              }}
-              onPress={() => navigation.navigate('Card')}
-              onLongPress={() => deleteDeck()}>
-              <S.Box data={item}>
-                <Text weight="bold" size="16" maxHeight="80">
-                  Bash e terminal linux / lista de comandos
-                </Text>
-                <Spacing mt="4" />
-                <Text size="14">
-                  Novos:{' '}
-                  <Text color="#0654e5" weight="bold">
-                    20
+            <S.Container>
+              <TouchableOpacity
+                onPress={() => navigation.navigate('Card')}
+                onLongPress={() => deleteDeck()}>
+                <S.Box data={item}>
+                  <S.Text weight="bold" size="16" maxHeight="95">
+                    Bash e terminal linux / lista de comandos
+                  </S.Text>
+                  <Spacing mt="4" />
+                  <Text color="#656565" size="14">
+                    Novos:{' '}
+                    <Text color="#fe650e" weight="bold">
+                      20
+                    </Text>
                   </Text>
-                </Text>
-                <Spacing mb="4" />
-                <Text size="14">
-                  A revisar:{' '}
-                  <Text color="#ff0039" weight="bold">
-                    50
+                  <Spacing mb="4" />
+                  <Text color="#656565" size="14">
+                    A revisar:{' '}
+                    <Text color="#f93b10" weight="bold">
+                      50
+                    </Text>
                   </Text>
-                </Text>
-              </S.Box>
-            </TouchableOpacity>
+                </S.Box>
+              </TouchableOpacity>
+            </S.Container>
           )}
         />
       </S.Container>
 
-      <ActionButton buttonColor="#333">
+      <ActionButton buttonColor={props.theme.floatButton}>
         <ActionButton.Item
           buttonColor="#333"
           title="Adicionar Cartão"
@@ -105,14 +100,18 @@ export default function Dashboard({navigation}) {
           title="Adicionar Baralho"
           textContainerStyle={{
             height: 25,
+            // backgroundColor: '#000',
           }}
           textStyle={{
             fontSize: 13,
+            // color: '#fff',
           }}
           onPress={() => navigation.navigate('AddDeck')}>
           <IconMc name="cards" size={30} color="#FFF" />
         </ActionButton.Item>
       </ActionButton>
-    </Background>
+    </>
   );
 }
+
+export default withTheme(Decks);

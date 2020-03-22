@@ -1,19 +1,13 @@
 import React, {useRef, useState, useEffect} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 import {TouchableOpacity, Alert} from 'react-native';
+import PropTypes from 'prop-types';
 import IconMi from 'react-native-vector-icons/MaterialIcons';
-import Background from '~/components/Background';
+import * as S from '~/styles/global';
 import Spacing from '~/components/Spacing';
 // import { updateProfileRequest } from '~/store/modules/user/actions';
 
-import {
-  Container,
-  Title,
-  Separator,
-  Form,
-  FormInput,
-  SubmitButton,
-} from './styles';
+import {Container, Title, Separator, Form} from './styles';
 
 export default function EditCard({navigation}) {
   // const dispatch = useDispatch();
@@ -66,17 +60,12 @@ export default function EditCard({navigation}) {
   }
 
   return (
-    <Background>
-      <Container>
-        <Spacing position="absolute" top="30" left="30">
-          <TouchableOpacity onPress={() => navigation.navigate('Card')}>
-            <IconMi name="arrow-back" size={30} color="#FFF" />
-          </TouchableOpacity>
-        </Spacing>
+    <>
+      <S.Container>
         <Title>Editar Cartão</Title>
 
         <Form>
-          <FormInput
+          <S.FormInput
             icon="cards-outline"
             autoCorrect={false}
             autoCapitalize="none"
@@ -87,7 +76,7 @@ export default function EditCard({navigation}) {
             onChangeText={setFront}
           />
 
-          <FormInput
+          <S.FormInput
             icon="cards-playing-outline"
             autoCorrect={false}
             autoCapitalize="none"
@@ -100,11 +89,33 @@ export default function EditCard({navigation}) {
 
           <Separator />
 
-          <SubmitButton onPress={handleSubmit}>Salvar</SubmitButton>
-          <Spacing mt="5" />
-          <SubmitButton onPress={handleDelete}>Excluir</SubmitButton>
+          <S.ButtonTheme onPress={handleSubmit}>
+            <S.TextButton>Salvar</S.TextButton>
+          </S.ButtonTheme>
+          <Spacing mt="10" />
+          <S.ButtonTheme onPress={handleDelete}>
+            <S.TextButton>Excluir</S.TextButton>
+          </S.ButtonTheme>
         </Form>
-      </Container>
-    </Background>
+      </S.Container>
+    </>
   );
 }
+
+EditCard.navigationOptions = ({navigation}) => ({
+  headerLeft: () => (
+    <TouchableOpacity
+      style={{marginTop: 30}}
+      onPress={() => {
+        navigation.navigate('Card');
+      }}>
+      <IconMi name="arrow-back" size={30} color="#fff" />
+    </TouchableOpacity>
+  ),
+});
+
+EditCard.propTypes = {
+  navigation: PropTypes.shape({
+    navigate: PropTypes.func.isRequired,
+  }).isRequired,
+};

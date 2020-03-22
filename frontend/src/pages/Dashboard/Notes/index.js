@@ -12,8 +12,8 @@ import CNEditor, {
   CNToolbar,
   getDefaultStyles,
 } from 'react-native-cn-richtext-editor';
-import ActionButton from 'react-native-action-button';
-
+// import ActionButton from 'react-native-action-button';
+import PropTypes from 'prop-types';
 import IconMi from 'react-native-vector-icons/MaterialIcons';
 import IconMc from 'react-native-vector-icons/MaterialCommunityIcons';
 import {Container, Title, ContainerTag, TagInput} from './styles';
@@ -53,12 +53,6 @@ export default class Notes extends Component {
       <>
         <Container>
           <Spacing mb="40">
-            <Spacing position="absolute" top="30" left="30">
-              <TouchableOpacity
-                onPress={() => this.props.navigation.navigate('Dashboard')}>
-                <IconMi name="arrow-back" size={30} color="#f93b10" />
-              </TouchableOpacity>
-            </Spacing>
             <Spacing position="absolute" top="22" right="30" width="50">
               <ContainerTag>
                 <IconMc name="tag" size={20} color="#f93b10" />
@@ -95,11 +89,9 @@ export default class Notes extends Component {
                   onSelectedStyleChanged={this.onSelectedStyleChanged}
                   style={{backgroundColor: '#fff'}}
                   styleList={defaultStyles}
-                  initialHtml={`
-                          <h1>HTML Ipsum Presents</h1>
-                            <p><strong>Pellentesque habitant morbi tristique</strong> senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas semper. <em>Aenean ultricies mi vitae est.</em> Mauris placerat eleifend leo. Quisque sit amet est et sapien ullamcorper pharetra. Vestibulum erat wisi, condimentum sed, <code>commodo vitae</code>, ornare sit amet, wisi. Aenean fermentum, elit eget tincidunt condimentum, eros ipsum rutrum orci, sagittis tempus lacus enim ac dui. <a href="#">Donec non enim</a> in turpis pulvinar facilisis. Ut felis.</p>
-                            `}
+                  initialHtml={`  `}
                 />
+                {/* <p><strong>Pellentesque habitant morbi tristique</strong> senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas semper. <em>Aenean ultricies mi vitae est.</em> Mauris placerat eleifend leo. Quisque sit amet est et sapien ullamcorper pharetra. Vestibulum erat wisi, condimentum sed, <code>commodo vitae</code>, ornare sit amet, wisi. Aenean fermentum, elit eget tincidunt condimentum, eros ipsum rutrum orci, sagittis tempus lacus enim ac dui. <a href="#">Donec non enim</a> in turpis pulvinar facilisis. Ut felis.</p> */}
               </View>
             </View>
 
@@ -196,7 +188,7 @@ export default class Notes extends Component {
             </View>
           </KeyboardAvoidingView>
 
-          <ActionButton
+          {/* <ActionButton
             style={{
               marginBottom: 30,
             }}
@@ -213,7 +205,7 @@ export default class Notes extends Component {
               onPress={() => this.props.navigation.navigate('AddCard')}>
               <IconMc name="cards-outline" size={30} color="#FFF" />
             </ActionButton.Item>
-          </ActionButton>
+          </ActionButton> */}
         </Container>
       </>
     );
@@ -246,3 +238,21 @@ var styles = StyleSheet.create({
     textDecorationLine: 'line-through',
   },
 });
+
+Notes.navigationOptions = ({navigation}) => ({
+  headerLeft: () => (
+    <TouchableOpacity
+      style={{marginTop: 30}}
+      onPress={() => {
+        navigation.navigate('Dashboard');
+      }}>
+      <IconMi name="arrow-back" size={30} color="#f93b10" />
+    </TouchableOpacity>
+  ),
+});
+
+Notes.propTypes = {
+  navigation: PropTypes.shape({
+    navigate: PropTypes.func.isRequired,
+  }).isRequired,
+};

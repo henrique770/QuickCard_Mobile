@@ -1,20 +1,14 @@
 import React, {useState, useEffect} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
+import PropTypes from 'prop-types';
 import {TouchableOpacity} from 'react-native';
 import IconMi from 'react-native-vector-icons/MaterialIcons';
 
-import Background from '~/components/Background';
+import * as S from '~/styles/global';
 import Spacing from '~/components/Spacing';
 // import { updateProfileRequest } from '~/store/modules/user/actions';
 
-import {
-  Container,
-  Title,
-  Separator,
-  Form,
-  FormInput,
-  SubmitButton,
-} from './styles';
+import {Container, Title, Separator, Form, SubmitButton} from './styles';
 
 export default function AddDeck({navigation}) {
   // const dispatch = useDispatch();
@@ -41,17 +35,12 @@ export default function AddDeck({navigation}) {
   }
 
   return (
-    <Background>
-      <Container>
-        <Spacing position="absolute" top="30" left="30">
-          <TouchableOpacity onPress={() => navigation.navigate('Decks')}>
-            <IconMi name="arrow-back" size={30} color="#FFF" />
-          </TouchableOpacity>
-        </Spacing>
+    <>
+      <S.Container>
         <Title>Adicionar Baralho</Title>
 
         <Form>
-          <FormInput
+          <S.FormInput
             icon="cards"
             autoCorrect={false}
             autoCapitalize="none"
@@ -63,10 +52,12 @@ export default function AddDeck({navigation}) {
 
           <Separator />
 
-          <SubmitButton onPress={handleSubmit}>Salvar</SubmitButton>
+          <S.ButtonTheme onPress={handleSubmit}>
+            <S.TextButton>Salvar</S.TextButton>
+          </S.ButtonTheme>
         </Form>
-      </Container>
-    </Background>
+      </S.Container>
+    </>
   );
 }
 AddDeck.navigationOptions = {
@@ -74,4 +65,22 @@ AddDeck.navigationOptions = {
   tabBarIcon: ({tintColor}) => (
     <IconMi name="event" size={20} color={tintColor} />
   ),
+};
+
+AddDeck.navigationOptions = ({navigation}) => ({
+  headerLeft: () => (
+    <TouchableOpacity
+      style={{marginTop: 30}}
+      onPress={() => {
+        navigation.navigate('Decks');
+      }}>
+      <IconMi name="arrow-back" size={30} color="#fff" />
+    </TouchableOpacity>
+  ),
+});
+
+AddDeck.propTypes = {
+  navigation: PropTypes.shape({
+    navigate: PropTypes.func.isRequired,
+  }).isRequired,
 };
