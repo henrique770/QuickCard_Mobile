@@ -2,6 +2,7 @@ import styled from 'styled-components/native';
 import Typography from '~/components/Typography';
 import Button from '~/components/Button';
 import Input from '~/components/Input';
+import Spacing from '~/components/Spacing';
 
 export const Box = styled.View`
   margin-bottom: 12px;
@@ -17,6 +18,12 @@ export const Container = styled.SafeAreaView`
   flex: 1;
   background: ${props => props.theme.background};
   ${({align}) => (align ? `align-items: ${align};` : ``)}
+  ${({white}) => (white ? `background: #fff!important;` : ``)}
+`;
+
+export const Sidebar = styled.SafeAreaView`
+  flex: 1;
+  background: ${props => props.theme.sidebar};
 `;
 
 export const Title = styled.Text`
@@ -52,4 +59,8 @@ export const FormInput = styled(Input)`
 export const ButtonTheme = styled(Button)`
   background: ${props => props.theme.colorButton};
   border-radius: 10px;
+`;
+
+export const Margin = styled(Spacing)`
+  margin-top: 65px;
 `;

@@ -7,7 +7,7 @@ import IconMi from 'react-native-vector-icons/MaterialIcons';
 import IconMc from 'react-native-vector-icons/MaterialCommunityIcons';
 import ActionButton from 'react-native-action-button';
 import {TouchableOpacity, Alert} from 'react-native';
-import {DrawerActions} from 'react-navigation-drawer';
+
 import {withTheme} from 'styled-components';
 
 import * as S from '~/styles/global';
@@ -39,15 +39,12 @@ function Decks({navigation, ...props}) {
   return (
     <>
       <S.Container>
-        <Spacing position="absolute" top="30" right="30">
-          <TouchableOpacity
-            onPress={() => navigation.dispatch(DrawerActions.openDrawer())}>
-            <IconMi name="menu" size={30} color="#FFF" />
+        <Spacing position="absolute" top="18" right="30">
+          <TouchableOpacity onPress={() => navigation.openDrawer()}>
+            <IconMi name="menu" size={25} color="#FFF" />
           </TouchableOpacity>
         </Spacing>
-
-        <S.Title>Baralhos</S.Title>
-
+        <S.Margin />
         <S.List
           data={data}
           numColumns={2}

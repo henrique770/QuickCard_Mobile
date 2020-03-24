@@ -7,4 +7,5 @@ export default {
   inputColor: '#1e1e1e3d',
   textButtonColor: '#fe650e',
   iconColor: '#fe650e',
+  sidebar: '#111',
 };

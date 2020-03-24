@@ -13,7 +13,7 @@ import {
 import IconMi from 'react-native-vector-icons/MaterialIcons';
 import {withTheme} from 'styled-components';
 import ActionButton from 'react-native-action-button';
-import {DrawerActions} from 'react-navigation-drawer';
+
 import Swipeable from 'react-native-swipeable-row';
 
 import * as S from '~/styles/global';
@@ -57,14 +57,13 @@ function Dashboard({navigation, ...props}) {
   return (
     <>
       <S.Container>
-        <Spacing position="absolute" right="30" top="30">
-          <TouchableOpacity
-            onPress={() => navigation.dispatch(DrawerActions.openDrawer())}>
-            <IconMi name="menu" size={30} color="#FFF" />
+        <Spacing position="absolute" right="30" top="18">
+          <TouchableOpacity onPress={() => navigation.openDrawer()}>
+            <IconMi name="menu" size={25} color="#FFF" />
           </TouchableOpacity>
         </Spacing>
 
-        <S.Title>Todas as notas</S.Title>
+        <S.Margin />
         <S.List
           data={data}
           keyExtractor={item => String(item)}
