@@ -52,8 +52,8 @@ export default class Notes extends Component {
     return (
       <>
         <Container>
-          <Spacing mb="40">
-            <Spacing position="absolute" top="22" right="30" width="50">
+          <Spacing mb="20">
+            <Spacing position="absolute" top="5" right="30" width="50">
               <ContainerTag>
                 <IconMc name="tag" size={20} color="#f93b10" />
                 <TagInput
@@ -237,18 +237,6 @@ var styles = StyleSheet.create({
   lineThroughButton: {
     textDecorationLine: 'line-through',
   },
-});
-
-Notes.navigationOptions = ({navigation}) => ({
-  headerLeft: () => (
-    <TouchableOpacity
-      style={{marginTop: 30}}
-      onPress={() => {
-        navigation.navigate('Dashboard');
-      }}>
-      <IconMi name="arrow-back" size={30} color="#f93b10" />
-    </TouchableOpacity>
-  ),
 });
 
 Notes.propTypes = {

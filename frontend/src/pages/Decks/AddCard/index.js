@@ -48,7 +48,7 @@ export default function AddCard({navigation}) {
             <IconMi name="arrow-back" size={30} color="#FFF" />
           </TouchableOpacity>
         </Spacing> */}
-        <Title>Adicionar Cartão</Title>
+        <S.Margin />
 
         <Form>
           <S.FormInput
@@ -95,21 +95,3 @@ export default function AddCard({navigation}) {
     </>
   );
 }
-
-AddCard.navigationOptions = ({navigation}) => ({
-  headerLeft: () => (
-    <TouchableOpacity
-      style={{marginTop: 30}}
-      onPress={() => {
-        navigation.navigate('Decks');
-      }}>
-      <IconMi name="arrow-back" size={30} color="#fff" />
-    </TouchableOpacity>
-  ),
-});
-
-AddCard.propTypes = {
-  navigation: PropTypes.shape({
-    navigate: PropTypes.func.isRequired,
-  }).isRequired,
-};

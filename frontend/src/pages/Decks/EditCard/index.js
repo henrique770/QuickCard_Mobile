@@ -62,8 +62,7 @@ export default function EditCard({navigation}) {
   return (
     <>
       <S.Container>
-        <Title>Editar Cartão</Title>
-
+        <S.Margin />
         <Form>
           <S.FormInput
             icon="cards-outline"

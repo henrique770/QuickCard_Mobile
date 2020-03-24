@@ -37,8 +37,7 @@ export default function AddDeck({navigation}) {
   return (
     <>
       <S.Container>
-        <Title>Adicionar Baralho</Title>
-
+        <S.Margin />
         <Form>
           <S.FormInput
             icon="cards"

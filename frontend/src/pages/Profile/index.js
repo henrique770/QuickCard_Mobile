@@ -7,7 +7,7 @@ import Spacing from '~/components/Spacing';
 
 import IconMi from 'react-native-vector-icons/MaterialIcons';
 import {TouchableOpacity} from 'react-native';
-import {DrawerActions} from 'react-navigation-drawer';
+
 // import { updateProfileRequest } from '~/store/modules/user/actions';
 import {signOut} from '~/store/modules/auth/actions';
 
@@ -55,13 +55,12 @@ export default function Profile({navigation}) {
   return (
     <>
       <S.Container>
-        <Spacing position="absolute" top="30" right="30">
-          <TouchableOpacity
-            onPress={() => navigation.dispatch(DrawerActions.openDrawer())}>
-            <IconMi name="menu" size={30} color="#FFF" />
+        <Spacing position="absolute" top="18" right="30">
+          <TouchableOpacity onPress={() => navigation.openDrawer()}>
+            <IconMi name="menu" size={25} color="#FFF" />
           </TouchableOpacity>
         </Spacing>
-        <S.Title>Meu perfil</S.Title>
+        <S.Margin />
         <View
           style={{
             display: 'flex',

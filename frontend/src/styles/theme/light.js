@@ -7,5 +7,6 @@ export default {
   inputColor: 'rgba(0, 0, 0, 0.1)',
   textButtonColor: '#fe650e',
   iconColor: '#fff',
+  sidebar: '#fff',
   // #f93b10
 };

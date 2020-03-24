@@ -20,13 +20,12 @@ export default function Card({navigation}) {
   return (
     <>
       <S.Container align="center">
-        <Spacing position="absolute" top="30" right="30">
+        <Spacing position="absolute" top="16" right="30">
           <TouchableOpacity onPress={() => navigation.navigate('EditCard')}>
-            <IconMi name="settings" size={30} color="#FFF" />
+            <IconMi name="settings" size={25} color="#FFF" />
           </TouchableOpacity>
         </Spacing>
-        <S.Title>Card</S.Title>
-
+        <S.Margin />
         <FlipCard
           flipHorizontal={true}
           flipVertical={false}
@@ -64,7 +63,7 @@ export default function Card({navigation}) {
           <ButtonContainer mb="50">
             <Animatable.View
               animation="fadeInUp"
-              iterationCount={1}
+              easing="ease-out-circ"
               direction="alternate">
               <Button>
                 <S.TextButton>Difícil</S.TextButton>
@@ -72,15 +71,17 @@ export default function Card({navigation}) {
             </Animatable.View>
             <Animatable.View
               animation="fadeInUp"
-              iterationCount={1}
-              direction="alternate">
+              delay={30}
+              easing="ease-out-circ"
+              direction="normal">
               <Button>
                 <S.TextButton>Bom</S.TextButton>
               </Button>
             </Animatable.View>
             <Animatable.View
               animation="fadeInUp"
-              iterationCount={1}
+              delay={60}
+              easing="ease-out-circ"
               direction="alternate">
               <Button>
                 <S.TextButton>Fácil</S.TextButton>

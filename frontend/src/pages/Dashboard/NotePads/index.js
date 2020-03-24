@@ -4,7 +4,6 @@ import Spacing from '~/components/Spacing';
 
 import {TouchableOpacity, Alert} from 'react-native';
 import IconMi from 'react-native-vector-icons/MaterialIcons';
-import {DrawerActions} from 'react-navigation-drawer';
 
 import * as S from '~/styles/global';
 
@@ -34,13 +33,12 @@ export default function NotePads({navigation}) {
   return (
     <>
       <S.Container>
-        <Spacing position="absolute" top="30" right="30">
-          <TouchableOpacity
-            onPress={() => navigation.dispatch(DrawerActions.openDrawer())}>
-            <IconMi name="menu" size={30} color="#FFF" />
+        <Spacing position="absolute" top="18" right="30">
+          <TouchableOpacity onPress={() => navigation.openDrawer()}>
+            <IconMi name="menu" size={25} color="#FFF" />
           </TouchableOpacity>
         </Spacing>
-        <S.Title>Cadernos</S.Title>
+        <S.Margin />
         <S.List
           data={data}
           numColumns={2}
