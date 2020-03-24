@@ -45,11 +45,11 @@ export default function Charts({navigation}) {
   return (
     <>
       <S.Container white>
-        <Spacing position="absolute" top="18" right="30">
+        {/* <Spacing position="absolute" top="18" right="30">
           <TouchableOpacity onPress={() => navigation.openDrawer()}>
             <IconMi name="menu" size={25} color="#f93b10" />
           </TouchableOpacity>
-        </Spacing>
+        </Spacing> */}
         <S.Margin />
         <View style={{flex: 1, justifyContent: 'center', padding: 30}}>
           <PieChart style={{height: 400}} data={pieData}>

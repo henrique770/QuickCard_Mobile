@@ -3,18 +3,21 @@ import {View, Image} from 'react-native';
 
 import Typography from '~/components/Typography';
 import Spacing from '~/components/Spacing';
+import Switch from '~/components/SwitchToggle';
 import {
   DrawerContentScrollView,
   DrawerItemList,
   DrawerItem,
 } from '@react-navigation/drawer';
+import {DrawerActions} from '@react-navigation/native';
+import IconIo from 'react-native-vector-icons/Ionicons';
 
 import {withTheme} from 'styled-components';
 
 import * as S from './styles';
 import * as G from '~/styles/global';
 
-function CustomDrawerContent(props) {
+function CustomDrawerContent({...props}) {
   return (
     <G.Sidebar>
       <Spacing mb="20">
@@ -41,8 +44,37 @@ function CustomDrawerContent(props) {
         </View>
       </Spacing>
       <DrawerContentScrollView {...props}>
-        <DrawerItemList {...props} />
-        {/* <DrawerItem label="Help" onPress={() => alert('Link to help')} /> */}
+        <DrawerItemList
+          activeTintColor={props.theme.primaryText}
+          inactiveTintColor={props.theme.primaryText}
+          labelStyle={{
+            fontWeight: 'bold',
+          }}
+          navigation
+          {...props}
+        />
+        <Spacing
+          ds="flex"
+          style={{
+            justifyContent: 'space-between',
+            flexDirection: 'row',
+            alignItems: 'center',
+          }}>
+          <DrawerItem
+            icon={({size}) => (
+              <IconIo color="#fe650e" size={size} name={'ios-moon'} />
+            )}
+            labelStyle={{
+              color: props.theme.primaryText,
+              fontWeight: 'bold',
+            }}
+            label="Tema Escuro"
+            onPress={() =>
+              props.navigation.dispatch(DrawerActions.toggleDrawer())
+            }
+          />
+          <Switch />
+        </Spacing>
       </DrawerContentScrollView>
     </G.Sidebar>
   );

@@ -9,6 +9,7 @@ import {
 
 import {createStackNavigator} from '@react-navigation/stack';
 import {createDrawerNavigator} from '@react-navigation/drawer';
+import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 
 import IconMc from 'react-native-vector-icons/MaterialCommunityIcons';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -26,13 +27,16 @@ import Card from './pages/Decks/Card';
 import AddCard from './pages/Decks/AddCard';
 import EditCard from './pages/Decks/EditCard';
 
-import Charts from './pages/Charts';
+import PieChart from './pages/Charts/PieChart';
+import LineChart from './pages/Charts/LineChart';
+
 import Profile from './pages/Profile';
 
 import CustomDrawerContent from '~/components/CustomDrawerContent';
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
+const Tab = createMaterialTopTabNavigator();
 
 function StackNotes() {
   return (
@@ -164,27 +168,27 @@ function StackProfile() {
 
 function StackCharts() {
   return (
-    <Stack.Navigator
-      screenOptions={{
-        headerTransparent: true,
-        headerTintColor: '#fff',
-        headerLeftContainerStyle: {
-          marginLeft: 10,
-        },
-      }}>
-      <Stack.Screen
-        name="Charts"
-        component={Charts}
+    <Tab.Navigator>
+      <Tab.Screen
+        name="PieChart"
+        component={PieChart}
         options={{
-          title: 'Estatísticas',
+          title: 'Gráfico em Pizza',
+        }}
+      />
+      <Tab.Screen
+        name="LineChart"
+        component={LineChart}
+        options={{
+          title: 'Gráfico em linha',
           headerTintColor: '#f93b10',
         }}
       />
-    </Stack.Navigator>
+    </Tab.Navigator>
   );
 }
 
-export default function createRouter(isSigned = false) {
+export default function createRouter(isSigned = false, ...props) {
   return !isSigned ? (
     <Stack.Navigator headerMode="none">
       <Stack.Screen name="SignIn" component={SignIn} />
@@ -195,27 +199,9 @@ export default function createRouter(isSigned = false) {
       <Drawer.Navigator
         drawerStyle={{
           backgroundColor: '#fff',
-          width: 300,
+          width: 301,
         }}
         drawerContent={props => <CustomDrawerContent {...props} />}>
-        <Drawer.Screen
-          name="Todas as notas"
-          options={{
-            drawerIcon: () => (
-              <Icon color={'#fe650e'} size={20} name={'file-text'} />
-            ),
-          }}
-          component={StackNotes}
-        />
-        <Drawer.Screen
-          name="Bloco de notas"
-          options={{
-            drawerIcon: () => (
-              <Icon color={'#fe650e'} size={20} name={'book'} />
-            ),
-          }}
-          component={StackNotepads}
-        />
         <Drawer.Screen
           name="Baralhos"
           options={{
@@ -226,10 +212,29 @@ export default function createRouter(isSigned = false) {
           component={StackDecks}
         />
         <Drawer.Screen
+          name="Todas as notas"
+          options={{
+            drawerIcon: () => (
+              <IconMc color={'#fe650e'} size={20} name={'file'} />
+            ),
+          }}
+          component={StackNotes}
+        />
+        <Drawer.Screen
+          name="Bloco de notas"
+          options={{
+            drawerIcon: () => (
+              <IconMc color={'#fe650e'} size={20} name={'book-multiple'} />
+            ),
+          }}
+          component={StackNotepads}
+        />
+
+        <Drawer.Screen
           name="Estatísticas"
           options={{
             drawerIcon: () => (
-              <Icon color={'#fe650e'} size={20} name={'pie-chart'} />
+              <IconMc color={'#fe650e'} size={20} name={'chart-bar'} />
             ),
           }}
           component={StackCharts}
@@ -238,7 +243,7 @@ export default function createRouter(isSigned = false) {
           name="Perfil"
           options={{
             drawerIcon: () => (
-              <Icon color={'#fe650e'} size={20} name={'user'} />
+              <Icon color={'#fe650e'} size={20} name={'user-circle-o'} />
             ),
           }}
           component={StackProfile}
