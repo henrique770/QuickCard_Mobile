@@ -8,11 +8,6 @@
 
 
 
-## current stage
-
-[![QuickCard Mobile](https://i.ibb.co/L66hP8Z/https-i-ytimg-com-vi-5-Nv-Isa-Pvzhc-maxresdefault.jpg)](https://www.youtube.com/watch?v=5NvIsaPvzhc&feature=youtu.be "QuickCard Mobile")
-
-
 ### `prototype`
 https://github.com/henrique770/QuickCard-Project
 ### `web version`
