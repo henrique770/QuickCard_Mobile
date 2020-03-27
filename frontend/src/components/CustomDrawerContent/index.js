@@ -53,7 +53,7 @@ function CustomDrawerContent({...props}) {
           navigation
           {...props}
         />
-        <Spacing
+        {/* <Spacing
           ds="flex"
           style={{
             justifyContent: 'space-between',
@@ -74,7 +74,7 @@ function CustomDrawerContent({...props}) {
             }
           />
           <Switch />
-        </Spacing>
+        </Spacing> */}
       </DrawerContentScrollView>
     </G.Sidebar>
   );

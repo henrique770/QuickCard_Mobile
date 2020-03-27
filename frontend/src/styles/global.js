@@ -21,6 +21,11 @@ export const Container = styled.SafeAreaView`
   ${({white}) => (white ? `background: #fff!important;` : ``)}
 `;
 
+export const InverseBackground = styled.SafeAreaView`
+  flex: 1;
+  background: ${props => props.theme.background2};
+`;
+
 export const Sidebar = styled.SafeAreaView`
   flex: 1;
   background: ${props => props.theme.sidebar};

@@ -14,9 +14,11 @@ import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs
 import IconMc from 'react-native-vector-icons/MaterialCommunityIcons';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
-import Dashboard from './pages/Dashboard';
+import Dashboard from './pages/Dashboard/Dashboard';
 import Notes from './pages/Dashboard/Notes';
+
 import NotePads from './pages/Dashboard/NotePads';
+import Blocs from './pages/Dashboard/Blocs';
 
 import SignIn from './pages/Auth/SignIn';
 import SignUp from './pages/Auth/SignUp';
@@ -140,6 +142,14 @@ function StackNotepads() {
           headerTintColor: '#fff',
         }}
       />
+      <Stack.Screen
+        name="Blocs"
+        component={Blocs}
+        options={{
+          title: 'Anotações do bloco',
+          headerTintColor: '#fff',
+        }}
+      />
     </Stack.Navigator>
   );
 }
@@ -168,23 +178,22 @@ function StackProfile() {
 
 function StackCharts() {
   return (
-    <Tab.Navigator>
+    <Stack.Navigator
+      screenOptions={{
+        headerTransparent: true,
+        headerTintColor: '#fe650e',
+        headerLeftContainerStyle: {
+          marginLeft: 10,
+        },
+      }}>
       <Tab.Screen
         name="PieChart"
         component={PieChart}
         options={{
-          title: 'Gráfico em Pizza',
+          title: 'Estatísticas',
         }}
       />
-      <Tab.Screen
-        name="LineChart"
-        component={LineChart}
-        options={{
-          title: 'Gráfico em linha',
-          headerTintColor: '#f93b10',
-        }}
-      />
-    </Tab.Navigator>
+    </Stack.Navigator>
   );
 }
 

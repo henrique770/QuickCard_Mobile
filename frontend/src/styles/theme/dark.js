@@ -1,6 +1,7 @@
 export default {
   primaryText: '#cbcdc6',
   background: '#000',
+  background2: '#000',
   backgroundbox: '#1e1e1ead',
   colorButton: '#303030',
   floatButton: '#fe650e',
