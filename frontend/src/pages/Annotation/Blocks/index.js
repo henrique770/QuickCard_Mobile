@@ -3,13 +3,7 @@ import React from 'react';
 import Typography from '~/components/Typography';
 import Spacing from '~/components/Spacing';
 
-import {
-  TouchableOpacity,
-  TouchableWithoutFeedback,
-  Alert,
-  StyleSheet,
-  View,
-} from 'react-native';
+import {TouchableOpacity, TouchableWithoutFeedback, Alert} from 'react-native';
 import IconMi from 'react-native-vector-icons/MaterialIcons';
 import {withTheme} from 'styled-components';
 import ActionButton from 'react-native-action-button';
@@ -23,9 +17,7 @@ const Text = Typography;
 
 console.disableYellowBox = true;
 
-function Dashboard({navigation, ...props}) {
-  const leftContent = <Text>Deslize para ativar</Text>;
-
+function Blocks({navigation, ...props}) {
   const rightButtons = [
     <S.Box
       style={{
@@ -57,23 +49,14 @@ function Dashboard({navigation, ...props}) {
   return (
     <>
       <S.Container>
-        <Spacing position="absolute" right="30" top="18">
-          <TouchableOpacity onPress={() => navigation.openDrawer()}>
-            <IconMi name="menu" size={25} color="#FFF" />
-          </TouchableOpacity>
-        </Spacing>
-
         <S.Margin />
         <S.List
           data={data}
           keyExtractor={item => String(item)}
           renderItem={({item}) => (
-            <Swipeable
-              autoClose={true}
-              leftContent={leftContent}
-              rightButtons={rightButtons}>
+            <Swipeable autoClose={true} rightButtons={rightButtons}>
               <TouchableWithoutFeedback
-                onPress={() => navigation.navigate('Notes')}>
+                onPress={() => navigation.navigate('AddBlockNotes')}>
                 <S.Box data={item}>
                   <S.Text weight="bold" size="16">
                     QuickCard
@@ -95,14 +78,14 @@ function Dashboard({navigation, ...props}) {
       <ActionButton buttonColor={props.theme.floatButton}>
         <ActionButton.Item
           buttonColor="#333"
-          title="Adicionar nota"
+          title="Adicionar nota ao bloco"
           textContainerStyle={{
             height: 25,
           }}
           textStyle={{
             fontSize: 13,
           }}
-          onPress={() => navigation.navigate('Notes')}>
+          onPress={() => navigation.navigate('AddBlockNotes')}>
           <IconMi name="note-add" color="#fff" size={30} />
         </ActionButton.Item>
       </ActionButton>
@@ -110,4 +93,4 @@ function Dashboard({navigation, ...props}) {
   );
 }
 
-export default withTheme(Dashboard);
+export default withTheme(Blocks);

@@ -1,11 +1,4 @@
 import React from 'react';
-import {
-  YellowBox,
-  Dimensions,
-  View,
-  Button,
-  TouchableOpacity,
-} from 'react-native';
 
 import {createStackNavigator} from '@react-navigation/stack';
 import {createDrawerNavigator} from '@react-navigation/drawer';
@@ -14,11 +7,13 @@ import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs
 import IconMc from 'react-native-vector-icons/MaterialCommunityIcons';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
-import Dashboard from './pages/Dashboard/Dashboard';
-import Notes from './pages/Dashboard/Notes';
+import Dashboard from './pages/Annotation/_Dashboard';
+import AddNotes from './pages/Annotation/_AddNotes';
 
-import NotePads from './pages/Dashboard/NotePads';
-import Blocs from './pages/Dashboard/Blocs';
+import NoteBlocks from './pages/Annotation/NoteBlocks';
+import AddBlocks from './pages/Annotation/AddBlocks';
+import Blocks from './pages/Annotation/Blocks';
+import AddBlockNotes from './pages/Annotation/AddBlockNotes';
 
 import SignIn from './pages/Auth/SignIn';
 import SignUp from './pages/Auth/SignUp';
@@ -30,7 +25,6 @@ import AddCard from './pages/Decks/AddCard';
 import EditCard from './pages/Decks/EditCard';
 
 import PieChart from './pages/Charts/PieChart';
-import LineChart from './pages/Charts/LineChart';
 
 import Profile from './pages/Profile';
 
@@ -59,8 +53,8 @@ function StackNotes() {
       />
 
       <Stack.Screen
-        name="Notes"
-        component={Notes}
+        name="AddNotes"
+        component={AddNotes}
         options={{
           title: '',
           headerTintColor: '#f93b10',
@@ -124,7 +118,7 @@ function StackDecks() {
   );
 }
 
-function StackNotepads() {
+function StackNoteBlocks() {
   return (
     <Stack.Navigator
       screenOptions={{
@@ -135,19 +129,35 @@ function StackNotepads() {
         },
       }}>
       <Stack.Screen
-        name="NotePads"
-        component={NotePads}
+        name="NoteBlocks"
+        component={NoteBlocks}
         options={{
-          title: 'Cadernos',
+          title: 'Blocos de notas',
           headerTintColor: '#fff',
         }}
       />
       <Stack.Screen
-        name="Blocs"
-        component={Blocs}
+        name="Blocks"
+        component={Blocks}
         options={{
           title: 'Anotações do bloco',
           headerTintColor: '#fff',
+        }}
+      />
+      <Stack.Screen
+        name="AddBlocks"
+        component={AddBlocks}
+        options={{
+          title: 'Adicionar Bloco de notas',
+          headerTintColor: '#fff',
+        }}
+      />
+      <Stack.Screen
+        name="AddBlockNotes"
+        component={AddBlockNotes}
+        options={{
+          title: '',
+          headerTintColor: '#f93b10',
         }}
       />
     </Stack.Navigator>
@@ -197,7 +207,7 @@ function StackCharts() {
   );
 }
 
-export default function createRouter(isSigned = false, ...props) {
+export default function createRouter(isSigned = false) {
   return !isSigned ? (
     <Stack.Navigator headerMode="none">
       <Stack.Screen name="SignIn" component={SignIn} />
@@ -230,13 +240,13 @@ export default function createRouter(isSigned = false, ...props) {
           component={StackNotes}
         />
         <Drawer.Screen
-          name="Bloco de notas"
+          name="Blocos de notas"
           options={{
             drawerIcon: () => (
               <IconMc color={'#fe650e'} size={20} name={'book-multiple'} />
             ),
           }}
-          component={StackNotepads}
+          component={StackNoteBlocks}
         />
 
         <Drawer.Screen

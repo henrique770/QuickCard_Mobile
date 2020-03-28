@@ -12,7 +12,7 @@ import * as S from '~/styles/global';
 const data = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14];
 const Text = Typography;
 
-function NotePads({navigation, ...props}) {
+function NoteBlocks({navigation, ...props}) {
   function deleteNotePad() {
     Alert.alert(
       'Alerta',
@@ -48,7 +48,7 @@ function NotePads({navigation, ...props}) {
           renderItem={({item}) => (
             <S.Container>
               <TouchableOpacity
-                onPress={() => navigation.navigate('Blocs')}
+                onPress={() => navigation.navigate('Blocks')}
                 onLongPress={() => deleteNotePad()}>
                 <S.Box data={item}>
                   <S.Text weight="bold" size="16" maxHeight="95">
@@ -66,20 +66,19 @@ function NotePads({navigation, ...props}) {
       <ActionButton buttonColor={props.theme.floatButton}>
         <ActionButton.Item
           buttonColor="#333"
-          title="Adicionar caderno"
+          title="Adicionar bloco de notas"
           textContainerStyle={{
             height: 25,
           }}
           textStyle={{
             fontSize: 13,
           }}
-          onPress={() => {}}>
-          {/* navigation.navigate('Notes') */}
-          <IconMi name="note-add" color="#fff" size={30} />
+          onPress={() => navigation.navigate('AddBlocks')}>
+          <IconMi name="library-add" color="#fff" size={30} />
         </ActionButton.Item>
       </ActionButton>
     </>
   );
 }
 
-export default withTheme(NotePads);
+export default withTheme(NoteBlocks);
