@@ -44,19 +44,20 @@ export default function Charts({navigation}) {
 
   return (
     <>
-      <S.InverseBackground>
+      <S.Container>
         <Spacing position="absolute" top="18" right="30">
           <TouchableOpacity onPress={() => navigation.openDrawer()}>
-            <IconMi name="menu" size={25} color="#f93b10" />
+            <IconMi name="menu" size={25} color="#fff" />
           </TouchableOpacity>
         </Spacing>
         <S.Margin />
-        <View style={{flex: 1, justifyContent: 'center', padding: 30}}>
+        <S.StyledContainer
+          style={{flex: 1, justifyContent: 'center', padding: 30}}>
           <PieChart style={{height: 400}} data={pieData}>
             <Label>{data.value}</Label>
           </PieChart>
-        </View>
-      </S.InverseBackground>
+        </S.StyledContainer>
+      </S.Container>
     </>
   );
 }

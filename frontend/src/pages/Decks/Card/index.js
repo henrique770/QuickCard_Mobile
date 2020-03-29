@@ -8,7 +8,7 @@ import * as Animatable from 'react-native-animatable';
 
 import FlipCard from 'react-native-flip-card';
 import IconMi from 'react-native-vector-icons/MaterialIcons';
-import {FlipCardBox, ButtonContainer, Button} from './styles';
+import {FlipCardBox, Button} from './styles';
 import * as S from '~/styles/global';
 
 export default function Card({navigation}) {
@@ -60,7 +60,7 @@ export default function Card({navigation}) {
           </FlipCardBox>
         </FlipCard>
         {isShow && (
-          <ButtonContainer mb="50">
+          <S.ButtonContainer mb="50">
             <Animatable.View
               animation="fadeInUp"
               easing="ease-out-circ"
@@ -87,7 +87,7 @@ export default function Card({navigation}) {
                 <S.TextButton>Fácil</S.TextButton>
               </Button>
             </Animatable.View>
-          </ButtonContainer>
+          </S.ButtonContainer>
         )}
       </S.Container>
     </>

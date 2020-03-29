@@ -7,13 +7,13 @@ import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs
 import IconMc from 'react-native-vector-icons/MaterialCommunityIcons';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
-import Dashboard from './pages/Annotation/_Dashboard';
-import AddNotes from './pages/Annotation/_AddNotes';
+import Dashboard from './pages/Dashboard';
+import AddNotes from './pages/Dashboard/_AddNotes';
 
-import NoteBlocks from './pages/Annotation/NoteBlocks';
-import AddBlocks from './pages/Annotation/AddBlocks';
-import Blocks from './pages/Annotation/Blocks';
-import AddBlockNotes from './pages/Annotation/AddBlockNotes';
+import NoteBlocks from './pages/Dashboard/NoteBlocks';
+import AddBlocks from './pages/Dashboard/AddBlocks';
+import Blocks from './pages/Dashboard/Blocks';
+import AddBlockNotes from './pages/Dashboard/AddBlockNotes';
 
 import SignIn from './pages/Auth/SignIn';
 import SignUp from './pages/Auth/SignUp';
@@ -24,9 +24,11 @@ import Card from './pages/Decks/Card';
 import AddCard from './pages/Decks/AddCard';
 import EditCard from './pages/Decks/EditCard';
 
-import PieChart from './pages/Charts/PieChart';
+import PieChart from './pages/Charts';
 
 import Profile from './pages/Profile';
+
+import Pomodoro from './pages/Pomodoro';
 
 import CustomDrawerContent from '~/components/CustomDrawerContent';
 
@@ -114,6 +116,14 @@ function StackDecks() {
           headerTintColor: '#fff',
         }}
       />
+      <Stack.Screen
+        name="Pomodoro"
+        component={Pomodoro}
+        options={{
+          title: 'Pomodoro',
+          headerTintColor: '#fff',
+        }}
+      />
     </Stack.Navigator>
   );
 }
@@ -164,6 +174,27 @@ function StackNoteBlocks() {
   );
 }
 
+function StackCharts() {
+  return (
+    <Stack.Navigator
+      screenOptions={{
+        headerTransparent: true,
+        headerTintColor: '#fff',
+        headerLeftContainerStyle: {
+          marginLeft: 10,
+        },
+      }}>
+      <Tab.Screen
+        name="PieChart"
+        component={PieChart}
+        options={{
+          title: 'Estatísticas',
+        }}
+      />
+    </Stack.Navigator>
+  );
+}
+
 function StackProfile() {
   return (
     <Stack.Navigator
@@ -186,21 +217,22 @@ function StackProfile() {
   );
 }
 
-function StackCharts() {
+function StackPomodoro() {
   return (
     <Stack.Navigator
       screenOptions={{
         headerTransparent: true,
-        headerTintColor: '#fe650e',
+        headerTintColor: '#fff',
         headerLeftContainerStyle: {
           marginLeft: 10,
         },
       }}>
-      <Tab.Screen
-        name="PieChart"
-        component={PieChart}
+      <Stack.Screen
+        name="Pomodoro"
+        component={Pomodoro}
         options={{
-          title: 'Estatísticas',
+          title: 'Pomodoro',
+          headerTintColor: '#fff',
         }}
       />
     </Stack.Navigator>
@@ -247,6 +279,16 @@ export default function createRouter(isSigned = false) {
             ),
           }}
           component={StackNoteBlocks}
+        />
+
+        <Drawer.Screen
+          name="Pomodoro"
+          options={{
+            drawerIcon: () => (
+              <IconMc color={'#fe650e'} size={20} name={'timer'} />
+            ),
+          }}
+          component={StackPomodoro}
         />
 
         <Drawer.Screen

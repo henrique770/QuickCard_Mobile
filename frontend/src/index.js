@@ -16,7 +16,7 @@ import './config/ReactotronConfig';
 import {store, persistor} from './store';
 import App from './App';
 
-export default function Index({...props}) {
+export default function Index() {
   const [dark, setDark] = useState(false);
   return (
     <ThemeProvider theme={dark ? darkTheme : lightTheme}>
@@ -29,12 +29,9 @@ export default function Index({...props}) {
                 dark ? darkTheme.background : lightTheme.background
               }
             />
-            <App
-              {...props}
-              onDarkModeChange={() => setDark(!dark)}
-              darkModeValue={dark}
-            />
+            <App />
             {/* <Switch
+              style={{position: 'absolute', right: 50, top: 18}}
               thumbColor="#424242"
               trackColor="#292929"
               value={dark}

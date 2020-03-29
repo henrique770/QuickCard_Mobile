@@ -21,11 +21,6 @@ export const Container = styled.SafeAreaView`
   ${({white}) => (white ? `background: #fff!important;` : ``)}
 `;
 
-export const InverseBackground = styled.SafeAreaView`
-  flex: 1;
-  background: ${props => props.theme.background2};
-`;
-
 export const Sidebar = styled.SafeAreaView`
   flex: 1;
   background: ${props => props.theme.sidebar};
@@ -68,4 +63,18 @@ export const ButtonTheme = styled(Button)`
 
 export const Margin = styled(Spacing)`
   margin-top: 65px;
+`;
+
+export const StyledContainer = styled.View`
+  flex: 1;
+  background: ${props => props.theme.backgroundbox};
+  border-top-left-radius: 25px;
+  border-top-right-radius: 25px;
+`;
+
+export const ButtonContainer = styled(Spacing)`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  width: 100%;
 `;

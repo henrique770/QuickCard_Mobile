@@ -82,6 +82,18 @@ function Decks({navigation, ...props}) {
       <ActionButton buttonColor={props.theme.floatButton}>
         <ActionButton.Item
           buttonColor="#333"
+          title="Pomodoro"
+          textContainerStyle={{
+            height: 25,
+          }}
+          textStyle={{
+            fontSize: 13,
+          }}
+          onPress={() => navigation.navigate('Pomodoro')}>
+          <IconMc name="timer" size={30} color="#FFF" />
+        </ActionButton.Item>
+        <ActionButton.Item
+          buttonColor="#333"
           title="Adicionar Cartão"
           textContainerStyle={{
             height: 25,
@@ -97,11 +109,9 @@ function Decks({navigation, ...props}) {
           title="Adicionar Baralho"
           textContainerStyle={{
             height: 25,
-            // backgroundColor: '#000',
           }}
           textStyle={{
             fontSize: 13,
-            // color: '#fff',
           }}
           onPress={() => navigation.navigate('AddDeck')}>
           <IconMc name="cards" size={30} color="#FFF" />
