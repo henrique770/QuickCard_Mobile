@@ -1,20 +1,50 @@
-import React, {useState} from 'react';
+import React, {useState, useRef, useEffect} from 'react';
 import * as S from '~/styles/global';
 import {View} from 'react-native';
 import Typography from '~/components/Typography';
 import Spacing from '~/components/Spacing';
 import * as Animatable from 'react-native-animatable';
+import moment from 'moment';
 
 import IconMi from 'react-native-vector-icons/MaterialIcons';
+import IconMc from 'react-native-vector-icons/MaterialCommunityIcons';
 import {TouchableOpacity} from 'react-native';
-import {ButtonPomodoro, InputSetNumber} from './styles';
+import {ButtonPomodoro} from './styles';
+
+import {useInterval} from '~/hooks/useInterval';
 
 export default function Pomodoro({navigation}) {
-  const [isSetting, setIsSetting] = useState(false);
+  const [active, setActive] = useState(false);
+  const [breakVal, setBreakVal] = useState(5);
+  const [sessionVal, setSessionVal] = useState(0.4);
+  const [mode, setMode] = useState('session');
+  const [time, setTime] = useState(null);
 
-  function handleSetting() {
-    setIsSetting(!isSetting);
-  }
+  useInterval(() => setTime(time - 1000), active ? 1000 : null);
+
+  useEffect(() => {
+    setTime(sessionVal * 60 * 1000);
+  }, [sessionVal]);
+
+  useEffect(() => {
+    if (time === 0 && mode === 'session') {
+      setActive(false);
+      setMode('break');
+      setTime(breakVal * 60 * 1000);
+    } else if (time === 0 && mode === 'break') {
+      setActive(false);
+      setMode('session');
+      setTime(sessionVal * 60 * 1000);
+    }
+  }, [time, breakVal, sessionVal, mode]);
+
+  const handleReset = () => {
+    setActive(false);
+    setMode('session');
+    setBreakVal(5);
+    setSessionVal(25);
+    setTime(25 * 60 * 1000);
+  };
 
   return (
     <>
@@ -27,55 +57,28 @@ export default function Pomodoro({navigation}) {
         <S.Margin />
 
         <S.StyledContainer>
-          {!isSetting && (
-            <View
-              style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-              <S.Text size={80} weight="bold">
-                25:00
-              </S.Text>
-            </View>
-          )}
-          {isSetting && (
-            <View
-              style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-              <S.Text size={40} weight="bold">
-                5:00
-              </S.Text>
-              <Spacing mt="30" />
-              <S.Text size={40} weight="bold">
-                25:00
-              </S.Text>
-              <Spacing mt="30" />
-              <Typography
-                onPress={() => handleSetting()}
-                size="20"
-                weight="bold"
-                color="#fe650e">
-                Fechar
-              </Typography>
-            </View>
-          )}
+          <View
+            style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+            <Typography size={20} weight="bold" color="#fe650e">
+              {mode === 'session' ? 'Sessão' : 'Pausa'}
+            </Typography>
+            <S.Text size={80} weight="bold">
+              {moment(time).format('mm:ss')}
+            </S.Text>
+          </View>
 
           <S.ButtonContainer mb="50">
-            <Animatable.View
-              animation="fadeInUp"
-              easing="ease-out-circ"
-              direction="alternate">
-              <ButtonPomodoro>
-                <Typography color="#fff">
-                  <IconMi name="play-arrow" size={25} color="#FFF" />
-                </Typography>
-              </ButtonPomodoro>
-            </Animatable.View>
             <Animatable.View
               animation="fadeInUp"
               delay={30}
               easing="ease-out-circ"
               direction="normal">
-              <ButtonPomodoro>
-                <Typography color="#fff">
-                  <IconMi name="pause" size={25} color="#FFF" />
-                </Typography>
+              <ButtonPomodoro onPress={() => setActive(!active)}>
+                <IconMi
+                  name={active ? `pause` : `play-arrow`}
+                  size={25}
+                  color="#FFF"
+                />
               </ButtonPomodoro>
             </Animatable.View>
             <Animatable.View
@@ -83,10 +86,8 @@ export default function Pomodoro({navigation}) {
               delay={60}
               easing="ease-out-circ"
               direction="alternate">
-              <ButtonPomodoro onPress={() => handleSetting()}>
-                <Typography color="#fff">
-                  <IconMi name="settings" size={25} color="#FFF" />
-                </Typography>
+              <ButtonPomodoro onPress={() => handleReset()}>
+                <IconMc name="reload" size={25} color="#FFF" />
               </ButtonPomodoro>
             </Animatable.View>
           </S.ButtonContainer>
