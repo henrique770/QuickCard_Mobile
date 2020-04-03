@@ -1,0 +1,63 @@
+{
+  "note": [
+    {
+      "id": "1",
+      "content": "QuickCard é um software de estudo que tem como principais",
+      "name": "QuickCard"
+    },
+    {
+      "id": "2",
+      "content": "Biblioteca : Redux implementa a arquitetura flux",
+      "name": "Arquitetura Flux"
+    },
+    {
+      "id": "3",
+      "content": "Shell - interpretador de comandos \nGui - interface gráfica",
+      "name": "Sistemas operacionais"
+    },
+    {
+      "id": "4",
+      "content": "quinoa,tofu, queijo cottage, frango, batata doce, arroz e feijao, ovo, banana,iogurte natural",
+      "name": "nojunkfood"
+    },
+    {
+      "id": "5",
+      "content": "Bem as 5 forças de Porter concebido por Michael Porter, foi publicado na forma de artigo como  as 5 forças competitivas que moldam  a estratégia em 1979, na Havard Business Review",
+      "name": "fala de quinta ( 5 estratégias competitivas de poter )"
+    }
+  ],
+  "deck": [
+    {
+      "id": "3",
+      "name": "Bash e terminal linux / lista de comandos"
+    },
+    {
+      "id": "2",
+      "name": "Palavras e expressões em inglês"
+    },
+    {
+      "id": "1",
+      "name": "Linguagem Javascript"
+    },
+    {
+      "id": "4",
+      "name": "Atalhos visual studio code, produtividade"
+    },
+    {
+      "id": "5",
+      "name": "Lógica computacional, estatística, proposições"
+    },
+    {
+      "id": "6",
+      "name": "Linguagem C, palavras reservadas"
+    },
+    {
+      "id": "7",
+      "name": "Objetos em Javascript"
+    },
+    {
+      "id": "8",
+      "name": "Propriedades CSS, flexbox"
+    }
+  ]
+}

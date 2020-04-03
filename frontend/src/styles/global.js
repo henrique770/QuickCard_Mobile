@@ -9,6 +9,7 @@ export const Box = styled.View`
   margin-right: 7px;
   margin-left: 7px;
   padding: 20px;
+  ${({heightFixed}) => (heightFixed ? `height: 150px;` : ``)}
   max-height: 180px;
   border-radius: 12px;
   background: ${props => props.theme.backgroundbox};

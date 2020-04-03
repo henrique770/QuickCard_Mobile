@@ -11,12 +11,56 @@ import {TouchableOpacity, Alert} from 'react-native';
 import {withTheme} from 'styled-components';
 
 import * as S from '~/styles/global';
-// import api from '~/services/api';
+import api from '~/services/api';
 
-const data = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16];
+const data = [
+  {
+    id: '3',
+    name: 'Bash e terminal linux / lista de comandos',
+  },
+  {
+    id: '2',
+    name: 'Palavras e expressões em inglês',
+  },
+  {
+    id: '1',
+    name: 'Linguagem Javascript',
+  },
+  {
+    id: '4',
+    name: 'Atalhos visual studio code, produtividade',
+  },
+  {
+    id: '5',
+    name: 'Lógica computacional, estatística, proposições',
+  },
+  {
+    id: '6',
+    name: 'Linguagem C, palavras reservadas',
+  },
+  {
+    id: '7',
+    name: 'Objetos em Javascript',
+  },
+  {
+    id: '8',
+    name: 'Propriedades CSS, flexbox',
+  },
+];
 const Text = Typography;
 
 function Decks({navigation, ...props}) {
+  const [deck, setDeck] = useState([]);
+
+  useEffect(() => {
+    async function loadDeks() {
+      const response = await api.get('deck');
+
+      setDeck(response.data);
+    }
+    loadDeks();
+  }, []);
+
   function deleteDeck() {
     Alert.alert(
       'Alerta',
@@ -48,30 +92,31 @@ function Decks({navigation, ...props}) {
         <S.List
           data={data}
           numColumns={2}
-          keyExtractor={item => String(item)}
+          keyExtractor={item => String(item.id)}
           renderItem={({item}) => (
             <S.Container>
               <TouchableOpacity
                 onPress={() => navigation.navigate('Card')}
                 onLongPress={() => deleteDeck()}>
-                <S.Box data={item}>
-                  <S.Text weight="bold" size="16" maxHeight="95">
-                    Bash e terminal linux / lista de comandos
+                <S.Box data={item} heightFixed>
+                  <S.Text weight="bold" size="16" maxHeight="60">
+                    {item.name}
                   </S.Text>
-                  <Spacing mt="4" />
-                  <Text color="#656565" size="14">
-                    Novos:{' '}
-                    <Text color="#fe650e" weight="bold">
-                      20
+                  <Spacing mt="4" position="absolute" bottom={20} left={20}>
+                    <Text color="#656565" size="14">
+                      Novos:{' '}
+                      <Text color="#fe650e" weight="bold">
+                        20
+                      </Text>
                     </Text>
-                  </Text>
-                  <Spacing mb="4" />
-                  <Text color="#656565" size="14">
-                    A revisar:{' '}
-                    <Text color="#f93b10" weight="bold">
-                      50
+                    <Spacing mb="4" />
+                    <Text color="#656565" size="14">
+                      A revisar:{' '}
+                      <Text color="#f93b10" weight="bold">
+                        50
+                      </Text>
                     </Text>
-                  </Text>
+                  </Spacing>
                 </S.Box>
               </TouchableOpacity>
             </S.Container>
@@ -80,7 +125,7 @@ function Decks({navigation, ...props}) {
       </S.Container>
 
       <ActionButton buttonColor={props.theme.floatButton}>
-        <ActionButton.Item
+        {/* <ActionButton.Item
           buttonColor="#333"
           title="Pomodoro"
           textContainerStyle={{
@@ -91,7 +136,7 @@ function Decks({navigation, ...props}) {
           }}
           onPress={() => navigation.navigate('Pomodoro')}>
           <IconMc name="timer" size={30} color="#FFF" />
-        </ActionButton.Item>
+        </ActionButton.Item> */}
         <ActionButton.Item
           buttonColor="#333"
           title="Adicionar Cartão"

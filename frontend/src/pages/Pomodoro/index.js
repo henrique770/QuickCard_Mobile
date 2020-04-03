@@ -16,7 +16,7 @@ import {useInterval} from '~/hooks/useInterval';
 export default function Pomodoro({navigation}) {
   const [active, setActive] = useState(false);
   const [breakVal, setBreakVal] = useState(5);
-  const [sessionVal, setSessionVal] = useState(0.4);
+  const [sessionVal, setSessionVal] = useState(25);
   const [mode, setMode] = useState('session');
   const [time, setTime] = useState(null);
 
