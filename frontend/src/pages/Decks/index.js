@@ -15,36 +15,64 @@ import api from '~/services/api';
 
 const data = [
   {
-    id: '3',
-    name: 'Bash e terminal linux / lista de comandos',
+    id: '1',
+    student: {},
+    name: 'Linguagem Javascript',
+    card: [
+      {
+        id: '1',
+        deck: {},
+        front: 'new operator',
+        verse:
+          'cria uma instancia de um tipo de objeto definido pelo usuário ou de um dos tipos nativos (built-in) que possuem uma função construtora.',
+        isActive: true, // flag para controle de ativo/inativo
+      },
+      {
+        id: '2',
+        deck: {},
+        front: 'expressão !!',
+        verse: 'transforma qualquer tipo para booleano',
+        isActive: true, // flag para controle de ativo/inativo
+      },
+      {
+        id: '3',
+        deck: {},
+        front: 'método then()',
+        verse:
+          'retorna uma Promise. Possui dois argumentos, ambos são "call back functions", sendo uma para o sucesso e outra para o fracasso da promessa.',
+        isActive: true, // flag para controle de ativo/inativo
+      },
+    ],
+    isActive: true, // flag para controle de ativo/inativo
   },
   {
     id: '2',
+    student: {},
     name: 'Palavras e expressões em inglês',
-  },
-  {
-    id: '1',
-    name: 'Linguagem Javascript',
-  },
-  {
-    id: '4',
-    name: 'Atalhos visual studio code, produtividade',
-  },
-  {
-    id: '5',
-    name: 'Lógica computacional, estatística, proposições',
-  },
-  {
-    id: '6',
-    name: 'Linguagem C, palavras reservadas',
-  },
-  {
-    id: '7',
-    name: 'Objetos em Javascript',
-  },
-  {
-    id: '8',
-    name: 'Propriedades CSS, flexbox',
+    card: [
+      {
+        id: '1',
+        deck: {},
+        front: 'perhaps',
+        verse: 'possivelmente',
+        isActive: true, // flag para controle de ativo/inativo
+      },
+      {
+        id: '2',
+        deck: {},
+        front: 'to be on the ball',
+        verse: 'antenado,ficar ligado',
+        isActive: true, // flag para controle de ativo/inativo
+      },
+      {
+        id: '3',
+        deck: {},
+        front: 'approach',
+        verse: 'aproximação, abordar',
+        isActive: true, // flag para controle de ativo/inativo
+      },
+    ],
+    isActive: true, // flag para controle de ativo/inativo
   },
 ];
 const Text = Typography;
@@ -58,6 +86,7 @@ function Decks({navigation, ...props}) {
 
       setDeck(response.data);
     }
+
     loadDeks();
   }, []);
 
@@ -92,15 +121,15 @@ function Decks({navigation, ...props}) {
         <S.List
           data={data}
           numColumns={2}
-          keyExtractor={item => String(item.id)}
-          renderItem={({item}) => (
+          keyExtractor={(item) => String(item.id)}
+          renderItem={({item: flashcard}) => (
             <S.Container>
               <TouchableOpacity
-                onPress={() => navigation.navigate('Card')}
+                onPress={() => navigation.navigate('Card', {...flashcard})}
                 onLongPress={() => deleteDeck()}>
-                <S.Box data={item} heightFixed>
+                <S.Box data={flashcard} heightFixed>
                   <S.Text weight="bold" size="16" maxHeight="60">
-                    {item.name}
+                    {flashcard.name}
                   </S.Text>
                   <Spacing mt="4" position="absolute" bottom={20} left={20}>
                     <Text color="#656565" size="14">

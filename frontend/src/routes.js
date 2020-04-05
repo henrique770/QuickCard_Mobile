@@ -77,6 +77,9 @@ function StackDecks() {
         headerLeftContainerStyle: {
           marginLeft: 10,
         },
+        headerTitleStyle: {
+          maxWidth: 250,
+        },
       }}>
       <Stack.Screen
         name="Decks"
@@ -252,7 +255,7 @@ export default function createRouter(isSigned = false) {
           backgroundColor: '#fff',
           width: 301,
         }}
-        drawerContent={props => <CustomDrawerContent {...props} />}>
+        drawerContent={(props) => <CustomDrawerContent {...props} />}>
         <Drawer.Screen
           name="Baralhos"
           options={{

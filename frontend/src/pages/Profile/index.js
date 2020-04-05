@@ -15,7 +15,7 @@ import {Separator, Form} from './styles';
 
 export default function Profile({navigation}) {
   const dispatch = useDispatch();
-  const profile = useSelector(state => state.user.profile);
+  const profile = useSelector((state) => state.user.profile);
 
   const emailRef = useRef();
   const oldPasswordRef = useRef();
@@ -23,9 +23,11 @@ export default function Profile({navigation}) {
   const confirmPasswordRef = useRef();
 
   const [name, setName] = useState('');
-  // profile.name
+  // const [name, setName] = useState(profile.name);
+
   const [email, setEmail] = useState('');
-  // profile.email
+  // const [email, setEmail] = useState(profile.name);
+
   const [oldPassword, setOldPassword] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');

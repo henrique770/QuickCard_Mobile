@@ -1,21 +1,44 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import PropTypes from 'prop-types';
 
 import Spacing from '~/components/Spacing';
+import Typography from '~/components/Typography';
 
-import {TouchableOpacity, View} from 'react-native';
+import {TouchableOpacity, ScrollView} from 'react-native';
 import * as Animatable from 'react-native-animatable';
 
 import FlipCard from 'react-native-flip-card';
 import IconMi from 'react-native-vector-icons/MaterialIcons';
+
 import {FlipCardBox, Button} from './styles';
 import * as S from '~/styles/global';
 
-export default function Card({navigation}) {
+const Text = Typography;
+
+export default function Card({navigation, route}) {
+  const {name, card} = route.params;
   const [isShow, setIsShow] = useState(false);
+  const [cardsVisible, setCardsVisible] = useState(true);
+  const [cardIndex, setCardIndex] = useState(0);
+
+  useEffect(() => {
+    function changeTitle() {
+      navigation.setOptions({title: `${name}`});
+    }
+    changeTitle();
+  });
 
   function showAnswer() {
     setIsShow(!isShow);
+  }
+
+  function nextCard() {
+    if (cardIndex + 1 < card.length) {
+      setCardIndex(cardIndex + 1);
+    }
+    // if (cardIndex + 1 >= card.length) {
+    //   setCardsVisible(false);
+    // }
   }
   return (
     <>
@@ -26,47 +49,64 @@ export default function Card({navigation}) {
           </TouchableOpacity>
         </Spacing>
         <S.Margin />
-        <FlipCard
-          flipHorizontal={true}
-          flipVertical={false}
-          flip={false}
-          clickable={true}
-          onFlipStart={() => {
-            showAnswer();
-          }}>
-          <FlipCardBox>
-            <S.Text
-              width="260"
-              size="30"
-              textAlign="center"
-              weight="bold"
-              overflow="hidden"
-              maxHeight="250">
-              Oque é o elemento "Text View"?
-            </S.Text>
-          </FlipCardBox>
+        {cardsVisible && (
+          <FlipCard
+            flipHorizontal={true}
+            flipVertical={false}
+            flip={false}
+            clickable={true}
+            onFlipStart={() => {
+              showAnswer();
+            }}>
+            <FlipCardBox>
+              <ScrollView
+                contentContainerStyle={{flexGrow: 1, justifyContent: 'center'}}>
+                <S.Text
+                  width="260"
+                  size="30"
+                  textAlign="center"
+                  weight="bold"
+                  overflow="hidden">
+                  {card[cardIndex].front}
+                </S.Text>
+              </ScrollView>
+            </FlipCardBox>
 
-          <FlipCardBox>
-            <S.Text
-              width="260"
-              size="30"
-              textAlign="center"
-              weight="bold"
-              overflow="hidden"
-              maxHeight="250">
-              Um elemento da interface do usuário que é responsável por exibir
-              textos
-            </S.Text>
-          </FlipCardBox>
-        </FlipCard>
+            <FlipCardBox>
+              <ScrollView
+                contentContainerStyle={{flexGrow: 1, justifyContent: 'center'}}>
+                <S.Text
+                  width="260"
+                  size="30"
+                  textAlign="center"
+                  weight="bold"
+                  overflow="hidden">
+                  {card[cardIndex].verse}
+                </S.Text>
+              </ScrollView>
+            </FlipCardBox>
+          </FlipCard>
+        )}
+
         {isShow && (
           <S.ButtonContainer mb="50">
             <Animatable.View
               animation="fadeInUp"
               easing="ease-out-circ"
               direction="alternate">
-              <Button>
-                <S.TextButton>Difícil</S.TextButton>
+              <Button onPress={() => nextCard()}>
+                <Text size={17} color="#fe650e">
+                  Difícil
+                </Text>
+                {`\n`}
+                <Text size={10} weight="bold">
+                  <IconMi
+                    name="keyboard-arrow-right"
+                    color="#fe650e"
+                    size={10}
+                  />{' '}
+                  10min
+                </Text>
               </Button>
             </Animatable.View>
             <Animatable.View
@@ -74,8 +114,19 @@ export default function Card({navigation}) {
               delay={30}
               easing="ease-out-circ"
               direction="normal">
-              <Button>
-                <S.TextButton>Bom</S.TextButton>
+              <Button onPress={() => nextCard()}>
+                <Text size={17} color="#fe650e">
+                  Bom
+                </Text>
+                {`\n`}
+                <Text size={10} weight="bold">
+                  <IconMi
+                    name="keyboard-arrow-right"
+                    color="#fe650e"
+                    size={10}
+                  />{' '}
+                  1d
+                </Text>
               </Button>
             </Animatable.View>
             <Animatable.View
@@ -83,8 +134,19 @@ export default function Card({navigation}) {
               delay={60}
               easing="ease-out-circ"
               direction="alternate">
-              <Button>
-                <S.TextButton>Fácil</S.TextButton>
+              <Button onPress={() => nextCard()}>
+                <Text size={17} color="#fe650e">
+                  Fácil
+                </Text>
+                {`\n`}
+                <Text size={10} weight="bold">
+                  <IconMi
+                    name="keyboard-arrow-right"
+                    color="#fe650e"
+                    size={10}
+                  />{' '}
+                  2d
+                </Text>
               </Button>
             </Animatable.View>
           </S.ButtonContainer>

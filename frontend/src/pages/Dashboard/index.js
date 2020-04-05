@@ -100,7 +100,7 @@ function Dashboard({navigation, ...props}) {
         <S.Margin />
         <S.List
           data={data}
-          keyExtractor={item => String(item.id)}
+          keyExtractor={(item) => String(item.id)}
           renderItem={({item}) => (
             <Swipeable autoClose={true} rightButtons={rightButtons}>
               <TouchableWithoutFeedback

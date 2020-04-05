@@ -8,7 +8,7 @@ export const FlipCardBox = styled.View`
   border-radius: 10px;
   align-items: center;
   justify-content: center;
-  background-color: ${props => props.theme.backgroundbox};
+  background-color: ${(props) => props.theme.backgroundbox};
 `;
 
 export const Button = styled(ButtonTheme)`
