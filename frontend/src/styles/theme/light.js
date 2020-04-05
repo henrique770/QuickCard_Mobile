@@ -2,6 +2,7 @@ export default {
   primaryText: '#333',
   background: '#fe650e',
   backgroundbox: '#fff',
+  background2: '#fff',
   colorButton: '#fff',
   floatButton: '#222',
   inputColor: 'rgba(0, 0, 0, 0.1)',

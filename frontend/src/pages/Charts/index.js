@@ -8,7 +8,7 @@ import Spacing from '~/components/Spacing';
 import * as S from '~/styles/global';
 
 export default function Charts({navigation}) {
-  const data = [30, 10, 25, 18, 17];
+  const data = [50, 10, 20, 20];
 
   const randomColor = () =>
     ('#' + ((Math.random() * 0xffffff) << 0).toString(16) + '000000').slice(
@@ -44,18 +44,19 @@ export default function Charts({navigation}) {
 
   return (
     <>
-      <S.Container white>
-        {/* <Spacing position="absolute" top="18" right="30">
+      <S.Container>
+        <Spacing position="absolute" top="18" right="30">
           <TouchableOpacity onPress={() => navigation.openDrawer()}>
-            <IconMi name="menu" size={25} color="#f93b10" />
+            <IconMi name="menu" size={25} color="#fff" />
           </TouchableOpacity>
-        </Spacing> */}
+        </Spacing>
         <S.Margin />
-        <View style={{flex: 1, justifyContent: 'center', padding: 30}}>
+        <S.StyledContainer
+          style={{flex: 1, justifyContent: 'center', padding: 30}}>
           <PieChart style={{height: 400}} data={pieData}>
             <Label>{data.value}</Label>
           </PieChart>
-        </View>
+        </S.StyledContainer>
       </S.Container>
     </>
   );

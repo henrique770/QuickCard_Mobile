@@ -20,7 +20,7 @@ import {Container, Title, ContainerTag, TagInput} from './styles';
 
 const defaultStyles = getDefaultStyles();
 
-export default class Notes extends Component {
+export default class AddNotes extends Component {
   constructor(props) {
     super(props);
 
@@ -239,7 +239,7 @@ var styles = StyleSheet.create({
   },
 });
 
-Notes.propTypes = {
+AddNotes.propTypes = {
   navigation: PropTypes.shape({
     navigate: PropTypes.func.isRequired,
   }).isRequired,

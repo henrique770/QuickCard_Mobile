@@ -1,6 +1,5 @@
 import styled from 'styled-components/native';
-import Spacing from '~/components/Spacing';
-import {ButtonTheme, Text} from '~/styles/global';
+import {ButtonTheme} from '~/styles/global';
 
 export const FlipCardBox = styled.View`
   width: 300px;
@@ -9,14 +8,7 @@ export const FlipCardBox = styled.View`
   border-radius: 10px;
   align-items: center;
   justify-content: center;
-  background-color: ${props => props.theme.backgroundbox};
-`;
-
-export const ButtonContainer = styled(Spacing)`
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  width: 100%;
+  background-color: ${(props) => props.theme.backgroundbox};
 `;
 
 export const Button = styled(ButtonTheme)`
