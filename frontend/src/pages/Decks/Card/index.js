@@ -64,14 +64,6 @@ export default function Card({navigation, route}) {
                 showAnswer();
               }}>
               <ContainerFlashCard>
-                <Animatable.View
-                  animation="fadeInUp"
-                  easing="ease-out-circ"
-                  direction="alternate">
-                  <Text color="#fff" size={20} weight="bold" textAlign="center">
-                    Frente
-                  </Text>
-                </Animatable.View>
                 <Spacing mt={10} />
                 <FlipCardBox>
                   <ScrollView
@@ -79,6 +71,11 @@ export default function Card({navigation, route}) {
                       flexGrow: 1,
                       justifyContent: 'center',
                     }}>
+                    <Spacing position="absolute" top="10">
+                      <Text color="#fe650e" weight="bold">
+                        Frente
+                      </Text>
+                    </Spacing>
                     <S.Text
                       width="260"
                       size="30"
@@ -89,17 +86,8 @@ export default function Card({navigation, route}) {
                     </S.Text>
                   </ScrollView>
                 </FlipCardBox>
-                <Spacing mb={99} />
               </ContainerFlashCard>
               <ContainerFlashCard>
-                <Animatable.View
-                  animation="fadeInUp"
-                  easing="ease-out-circ"
-                  direction="alternate">
-                  <Text color="#fff" size={20} weight="bold" textAlign="center">
-                    Verso
-                  </Text>
-                </Animatable.View>
                 <Spacing mt={10} />
                 <FlipCardBox>
                   <ScrollView
@@ -107,6 +95,11 @@ export default function Card({navigation, route}) {
                       flexGrow: 1,
                       justifyContent: 'center',
                     }}>
+                    <Spacing position="absolute" top="10">
+                      <Text color="#fe650e" weight="bold">
+                        Verso
+                      </Text>
+                    </Spacing>
                     <S.Text
                       width="260"
                       size="30"
