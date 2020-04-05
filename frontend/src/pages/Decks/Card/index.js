@@ -4,22 +4,23 @@ import PropTypes from 'prop-types';
 import Spacing from '~/components/Spacing';
 import Typography from '~/components/Typography';
 
-import {TouchableOpacity, ScrollView} from 'react-native';
+import {TouchableOpacity, ScrollView, View} from 'react-native';
 import * as Animatable from 'react-native-animatable';
 
 import FlipCard from 'react-native-flip-card';
 import IconMi from 'react-native-vector-icons/MaterialIcons';
 
-import {FlipCardBox, Button} from './styles';
+import {FlipCardBox, Button, EndButton, ContainerFlashCard} from './styles';
 import * as S from '~/styles/global';
 
 const Text = Typography;
 
 export default function Card({navigation, route}) {
   const {name, card} = route.params;
+  const [cardIndex, setCardIndex] = useState(0);
   const [isShow, setIsShow] = useState(false);
   const [cardsVisible, setCardsVisible] = useState(true);
-  const [cardIndex, setCardIndex] = useState(0);
+  const [endQuiz, setEndQuiz] = useState(false);
 
   useEffect(() => {
     function changeTitle() {
@@ -36,56 +37,89 @@ export default function Card({navigation, route}) {
     if (cardIndex + 1 < card.length) {
       setCardIndex(cardIndex + 1);
     }
-    // if (cardIndex + 1 >= card.length) {
-    //   setCardsVisible(false);
-    // }
+
+    if (cardIndex + 1 === card.length) {
+      setCardsVisible(false);
+      setIsShow(false);
+      setEndQuiz(true);
+    }
   }
   return (
     <>
-      <S.Container align="center">
+      <S.Container align={endQuiz ? `` : 'center'}>
         <Spacing position="absolute" top="16" right="30">
           <TouchableOpacity onPress={() => navigation.navigate('EditCard')}>
-            <IconMi name="settings" size={25} color="#FFF" />
+            {!endQuiz && <IconMi name="settings" size={25} color="#FFF" />}
           </TouchableOpacity>
         </Spacing>
         <S.Margin />
         {cardsVisible && (
-          <FlipCard
-            flipHorizontal={true}
-            flipVertical={false}
-            flip={false}
-            clickable={true}
-            onFlipStart={() => {
-              showAnswer();
-            }}>
-            <FlipCardBox>
-              <ScrollView
-                contentContainerStyle={{flexGrow: 1, justifyContent: 'center'}}>
-                <S.Text
-                  width="260"
-                  size="30"
-                  textAlign="center"
-                  weight="bold"
-                  overflow="hidden">
-                  {card[cardIndex].front}
-                </S.Text>
-              </ScrollView>
-            </FlipCardBox>
-
-            <FlipCardBox>
-              <ScrollView
-                contentContainerStyle={{flexGrow: 1, justifyContent: 'center'}}>
-                <S.Text
-                  width="260"
-                  size="30"
-                  textAlign="center"
-                  weight="bold"
-                  overflow="hidden">
-                  {card[cardIndex].verse}
-                </S.Text>
-              </ScrollView>
-            </FlipCardBox>
-          </FlipCard>
+          <>
+            <FlipCard
+              flipHorizontal={true}
+              flipVertical={false}
+              flip={false}
+              clickable={true}
+              onFlipStart={() => {
+                showAnswer();
+              }}>
+              <ContainerFlashCard>
+                <Animatable.View
+                  animation="fadeInUp"
+                  easing="ease-out-circ"
+                  direction="alternate">
+                  <Text color="#fff" size={20} weight="bold" textAlign="center">
+                    Frente
+                  </Text>
+                </Animatable.View>
+                <Spacing mt={10} />
+                <FlipCardBox>
+                  <ScrollView
+                    contentContainerStyle={{
+                      flexGrow: 1,
+                      justifyContent: 'center',
+                    }}>
+                    <S.Text
+                      width="260"
+                      size="30"
+                      textAlign="center"
+                      weight="bold"
+                      overflow="hidden">
+                      {card[cardIndex].front}
+                    </S.Text>
+                  </ScrollView>
+                </FlipCardBox>
+                <Spacing mb={99} />
+              </ContainerFlashCard>
+              <ContainerFlashCard>
+                <Animatable.View
+                  animation="fadeInUp"
+                  easing="ease-out-circ"
+                  direction="alternate">
+                  <Text color="#fff" size={20} weight="bold" textAlign="center">
+                    Verso
+                  </Text>
+                </Animatable.View>
+                <Spacing mt={10} />
+                <FlipCardBox>
+                  <ScrollView
+                    contentContainerStyle={{
+                      flexGrow: 1,
+                      justifyContent: 'center',
+                    }}>
+                    <S.Text
+                      width="260"
+                      size="30"
+                      textAlign="center"
+                      weight="bold"
+                      overflow="hidden">
+                      {card[cardIndex].verse}
+                    </S.Text>
+                  </ScrollView>
+                </FlipCardBox>
+              </ContainerFlashCard>
+            </FlipCard>
+          </>
         )}
 
         {isShow && (
@@ -150,6 +184,23 @@ export default function Card({navigation, route}) {
               </Button>
             </Animatable.View>
           </S.ButtonContainer>
+        )}
+
+        {endQuiz && (
+          <S.StyledContainer>
+            <View
+              style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+              <Text size={20} weight="bold" width={300} textAlign="center">
+                Parabéns!! você terminou de responder o baralho
+              </Text>
+              <Spacing mt={30} />
+              <EndButton onPress={() => navigation.navigate('Decks')}>
+                <Text weight="bold" color="#fff" textAlign="center">
+                  Voltar para página inicial
+                </Text>
+              </EndButton>
+            </View>
+          </S.StyledContainer>
         )}
       </S.Container>
     </>
