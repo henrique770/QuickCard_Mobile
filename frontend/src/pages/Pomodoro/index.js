@@ -10,6 +10,8 @@ import IconMi from 'react-native-vector-icons/MaterialIcons';
 import IconMc from 'react-native-vector-icons/MaterialCommunityIcons';
 import {TouchableOpacity} from 'react-native';
 import {ButtonPomodoro} from './styles';
+import animationBackground from '~/assets/timer-animation.json';
+import Lottie from 'lottie-react-native';
 
 import {useInterval} from '~/hooks/useInterval';
 
@@ -59,6 +61,13 @@ export default function Pomodoro({navigation}) {
         <S.StyledContainer>
           <View
             style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+            <Lottie
+              resizeMode="contain"
+              source={animationBackground}
+              autoPlay
+              duration={1}
+            />
+
             <Typography size={20} weight="bold" color="#fe650e">
               {mode === 'session' ? 'Sessão' : 'Pausa'}
             </Typography>
