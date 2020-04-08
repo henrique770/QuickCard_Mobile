@@ -12,6 +12,8 @@ import IconMi from 'react-native-vector-icons/MaterialIcons';
 
 import {FlipCardBox, Button, EndButton, ContainerFlashCard} from './styles';
 import * as S from '~/styles/global';
+import successAnimation from '~/assets/animation-success.json';
+import Lottie from 'lottie-react-native';
 
 const Text = Typography;
 
@@ -126,14 +128,14 @@ export default function Card({navigation, route}) {
                   Difícil
                 </Text>
                 {`\n`}
-                <Text size={10} weight="bold">
+                <S.Text size={10} weight="bold">
                   <IconMi
                     name="keyboard-arrow-right"
                     color="#fe650e"
                     size={10}
                   />{' '}
                   10min
-                </Text>
+                </S.Text>
               </Button>
             </Animatable.View>
             <Animatable.View
@@ -146,14 +148,14 @@ export default function Card({navigation, route}) {
                   Bom
                 </Text>
                 {`\n`}
-                <Text size={10} weight="bold">
+                <S.Text size={10} weight="bold">
                   <IconMi
                     name="keyboard-arrow-right"
                     color="#fe650e"
                     size={10}
                   />{' '}
                   1d
-                </Text>
+                </S.Text>
               </Button>
             </Animatable.View>
             <Animatable.View
@@ -166,14 +168,14 @@ export default function Card({navigation, route}) {
                   Fácil
                 </Text>
                 {`\n`}
-                <Text size={10} weight="bold">
+                <S.Text size={10} weight="bold">
                   <IconMi
                     name="keyboard-arrow-right"
                     color="#fe650e"
                     size={10}
                   />{' '}
                   2d
-                </Text>
+                </S.Text>
               </Button>
             </Animatable.View>
           </S.ButtonContainer>
@@ -181,14 +183,16 @@ export default function Card({navigation, route}) {
 
         {endQuiz && (
           <S.StyledContainer>
+            <Lottie style={{bottom: 190}} source={successAnimation} autoPlay />
             <View
               style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-              <Text size={20} weight="bold" width={300} textAlign="center">
-                Parabéns!! você terminou de responder o baralho
-              </Text>
-              <Spacing mt={30} />
+              <Spacing mt={100} mb={30}>
+                <S.Text size={25} weight="bold" width={300} textAlign="center">
+                  Parabéns!! você terminou de responder o baralho
+                </S.Text>
+              </Spacing>
               <EndButton onPress={() => navigation.navigate('Decks')}>
-                <Text weight="bold" color="#fff" textAlign="center">
+                <Text size={18} weight="bold" color="#fff" textAlign="center">
                   Voltar para página inicial
                 </Text>
               </EndButton>
