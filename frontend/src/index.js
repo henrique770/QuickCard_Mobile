@@ -17,7 +17,7 @@ import {store, persistor} from './store';
 import App from './App';
 
 export default function Index() {
-  const [dark, setDark] = useState(true);
+  const [dark, setDark] = useState(false);
   return (
     <ThemeProvider theme={dark ? darkTheme : lightTheme}>
       <NavigationContainer>
