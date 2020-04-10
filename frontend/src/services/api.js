@@ -1,8 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'http://localhost:3333',
-  // baseURL: 'http://177.159.242.229:8080/',
+  baseURL: 'http://api-quickcard-io.umbler.net/api/v1',
 });
 
 export default api;
