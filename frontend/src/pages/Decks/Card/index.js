@@ -15,19 +15,33 @@ import * as S from '~/styles/global';
 import successAnimation from '~/assets/animation-success.json';
 import Lottie from 'lottie-react-native';
 
-const Text = Typography;
+import RepositoryBase from '~/store/repository/repositoryBase'
+import Deck from '~/models/Deck'
+
+const Text = Typography
+  , repository = new RepositoryBase(Deck)
 
 export default function Card({navigation, route}) {
-  const {name, card} = route.params;
+
+  const {name, card, _id} = route.params;
   const [cardIndex, setCardIndex] = useState(0);
   const [isShow, setIsShow] = useState(false);
   const [cardsVisible, setCardsVisible] = useState(true);
   const [endQuiz, setEndQuiz] = useState(false);
 
-  useEffect(() => {
+  useEffect( async () => {
     function changeTitle() {
       navigation.setOptions({title: `${name}`});
     }
+
+
+    (async () =>{
+
+      let deck = await repository.getById(_id)
+      console.log(deck)
+    })() 
+
+
     changeTitle();
   });
 
@@ -84,7 +98,7 @@ export default function Card({navigation, route}) {
                       textAlign="center"
                       weight="bold"
                       overflow="hidden">
-                      {card[cardIndex].front}
+                      card[cardIndex].front}
                     </S.Text>
                   </ScrollView>
                 </FlipCardBox>
@@ -108,7 +122,7 @@ export default function Card({navigation, route}) {
                       textAlign="center"
                       weight="bold"
                       overflow="hidden">
-                      {card[cardIndex].verse}
+                      card[cardIndex].verse}
                     </S.Text>
                   </ScrollView>
                 </FlipCardBox>

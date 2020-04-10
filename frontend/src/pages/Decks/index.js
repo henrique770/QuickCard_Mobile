@@ -11,80 +11,24 @@ import {TouchableOpacity, Alert} from 'react-native';
 import {withTheme} from 'styled-components';
 
 import * as S from '~/styles/global';
-import api from '~/services/api';
 
-const data = [
-  {
-    id: '1',
-    student: {},
-    name: 'Linguagem Javascript',
-    card: [
-      {
-        id: '1',
-        deck: {},
-        front: 'new operator',
-        verse:
-          'cria uma instancia de um tipo de objeto definido pelo usuário ou de um dos tipos nativos (built-in) que possuem uma função construtora.',
-        isActive: true, // flag para controle de ativo/inativo
-      },
-      {
-        id: '2',
-        deck: {},
-        front: 'expressão !!',
-        verse: 'transforma qualquer tipo para booleano',
-        isActive: true, // flag para controle de ativo/inativo
-      },
-      {
-        id: '3',
-        deck: {},
-        front: 'método then()',
-        verse:
-          'retorna uma Promise. Possui dois argumentos, ambos são "call back functions", sendo uma para o sucesso e outra para o fracasso da promessa.',
-        isActive: true, // flag para controle de ativo/inativo
-      },
-    ],
-    isActive: true, // flag para controle de ativo/inativo
-  },
-  {
-    id: '2',
-    student: {},
-    name: 'Palavras e expressões em inglês',
-    card: [
-      {
-        id: '1',
-        deck: {},
-        front: 'perhaps',
-        verse: 'possivelmente',
-        isActive: true, // flag para controle de ativo/inativo
-      },
-      {
-        id: '2',
-        deck: {},
-        front: 'to be on the ball',
-        verse: 'antenado,ficar ligado',
-        isActive: true, // flag para controle de ativo/inativo
-      },
-      {
-        id: '3',
-        deck: {},
-        front: 'approach',
-        verse: 'aproximação, abordar',
-        isActive: true, // flag para controle de ativo/inativo
-      },
-    ],
-    isActive: true, // flag para controle de ativo/inativo
-  },
-];
-const Text = Typography;
+import RepositoryBase from '~/store/repository/repositoryBase'
+import Deck from '~/models/Deck'
+
+
+const Text = Typography
+  , repository = new RepositoryBase(Deck)
 
 function Decks({navigation, ...props}) {
-  const [deck, setDeck] = useState([]);
+
+  const [data, setData] = useState([]);
 
   useEffect(() => {
     async function loadDeks() {
-      const response = await api.get('deck');
-
-      setDeck(response.data);
+      
+      let data = await repository.getAll()
+      //console.log(data)
+      setData(data)
     }
 
     loadDeks();
@@ -122,14 +66,14 @@ function Decks({navigation, ...props}) {
           data={data}
           numColumns={2}
           keyExtractor={(item) => String(item.id)}
-          renderItem={({item: flashcard}) => (
+          renderItem={({item: deck}) => (
             <S.Container>
               <TouchableOpacity
-                onPress={() => navigation.navigate('Card', {...flashcard})}
+                onPress={() => navigation.navigate('Card', {...deck})}
                 onLongPress={() => deleteDeck()}>
-                <S.Box data={flashcard} heightFixed>
+                <S.Box data={deck} heightFixed>
                   <S.Text weight="bold" size="16" maxHeight="60">
-                    {flashcard.name}
+                    {deck.name}
                   </S.Text>
                   <Spacing mt="4" position="absolute" bottom={20} left={20}>
                     <Text color="#656565" size="14">
@@ -166,6 +110,7 @@ function Decks({navigation, ...props}) {
           onPress={() => navigation.navigate('Pomodoro')}>
           <IconMc name="timer" size={30} color="#FFF" />
         </ActionButton.Item> */}
+
         <ActionButton.Item
           buttonColor="#333"
           title="Adicionar Cartão"
@@ -175,9 +120,13 @@ function Decks({navigation, ...props}) {
           textStyle={{
             fontSize: 13,
           }}
-          onPress={() => navigation.navigate('AddCard')}>
+          onPress={() => navigation.navigate('AddCard', data.map( e => {
+            return { _id : e._id , name : e.name }
+          }))}>
+            
           <IconMc name="cards-outline" size={30} color="#FFF" />
         </ActionButton.Item>
+
         <ActionButton.Item
           buttonColor="#333"
           title="Adicionar Baralho"
@@ -187,9 +136,10 @@ function Decks({navigation, ...props}) {
           textStyle={{
             fontSize: 13,
           }}
-          onPress={() => navigation.navigate('AddDeck')}>
+          onPress={() => navigation.navigate('AddDeck' , data.map( e => { e._id , e.name}) )}>
           <IconMc name="cards" size={30} color="#FFF" />
         </ActionButton.Item>
+
       </ActionButton>
     </>
   );

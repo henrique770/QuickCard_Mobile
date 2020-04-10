@@ -10,12 +10,12 @@ import Spacing from '~/components/Spacing';
 
 import {Container, Title, Separator, Form, SubmitButton} from './styles';
 
-export default function AddDeck({navigation}) {
+export default function AddDeck({navigation, route}) {
   // const dispatch = useDispatch();
   // const profile = useSelector(state => state.user.profile);
 
   const [deckname, setDeckname] = useState('');
-
+  
   // useEffect(() => {
   //     setOldPassword('');
   //     setPassword('');
