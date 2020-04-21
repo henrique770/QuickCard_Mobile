@@ -1,99 +1,85 @@
+import { BaseModel, types } from './expoSqliteOrm/index'
+import factoryEntity from '~/store/factoryEntity'
+import BaseEntity from '~/entities/BaseEntity'
+
 
 import api from '~/services/api'
 import automapper from 'automapper-js'
 
-const RepositoryBase = function(model) {
 
-    let self = this
+const __dirEntiy = './../../entities'
 
-    this.url = model.prototype.getUrl()
 
-    this.modelName = model.name
-
-    let isRequired = false
-
-    //#region Retrive
+class RepositoryBase {
 
     /**
-     * Retrieve api information 
-     * @returns {Array<Any>} List entity model
-     */
-    this.getAll = async () => {
-
-        let listEntity = []
-
-        try
-        {
-            let response = await api.get(self.url)
-        
-            if(response.status == 200)
-            {
-                let data = automapper(model, response.data)
-                
-                listEntity = self._activeModelsFilter(data)
-            }
-        }   
-        catch(err)
-        {
-            console.log(`Error requet GET repository in url: ${self.url}`, err)
-        }
-        finally
-        {
-            return listEntity
-        }
-    }
-
-    /**
-     * Retrieve api information by id
-     * @param {string} id identify the model to be sought
-     * @returns {any} model 
-     */
-    this.getById = async (id) => {
-        
-        let entiy = { }
-        
-        try
-        {
-            let response = await api.get(`${self.url}/${id}`)
-
-            if(response.status == 200)
-            {
-                let data = automapper(model, response.data)
-                entiy = data.isActive ? data : { }
-            }
-        }
-        catch(err)
-        {
-            console.log(`Error requet GET BY ID repository in url: ${self.url}`, err)
-        }
-        finally
-        {
-            return entiy
-        }
-    }
-
-    //#endregion
-
-    //#region PRIVATES FUNCTIONS 
-
-    /**
-     * return models that are active
-     * @param {Array<Any>} data raw data
-     * @returns {Array<any>} processed data
      * 
-     * @throws {Exception} Param 'data' is not array type  
+     * @param {BaseModel} model 
      */
-    this._activeModelsFilter = data => {
+    constructor(model){
 
-        if(Array.isArray(data))
-        {
-            return data.filter( e => e.isActive)
-        }
-
-        throw "Param 'data' is not array type"
+        this._model = model
+        this._entity =  factoryEntity.get(`${model.tableName}Entity`)  
     }
 
-    //#endregion    
+
+    /**
+     * Process SQLite and Mapper response for entity
+     * @param {RepositoryBase} self 
+     * @param {any} result 
+     */
+    _resolverEntity( self, result) {
+
+        try{
+            let dataMapper = automapper( self._entity , result ) 
+
+            return dataMapper
+        }
+        catch(err)
+        {
+            console.log('error automapper.'. err)
+            throw err;
+        }
+    }
+
+    /**
+     * Retrieve entity equivalent to the passed identifier
+     * @param {string} id 
+     * @returns {Promisse<BaseEntity>} 
+     */
+    async getById(id) {
+
+        try {
+            return await this._model.find(id)
+                .then(e => this._resolverEntity( this , e)) 
+                .catch( e => {
+
+                    console.log('Error Find Repositorio.', e)
+                }) 
+            
+        } catch (error) {
+            console.log('Error Find Repositorio.', error)
+            throw error
+        }
+    }
+
+    /**
+     * @returns {Promise<BaseEntity[]>}
+     */
+    async all() {
+        try {
+            return await this._model.all()
+                .then(e => this._resolverEntity( this , e)) 
+                .catch( e => {
+
+                    console.log('Error Find Repositorio.', e)
+                }) 
+            
+        } catch (error) {
+            console.log('Error Find Repositorio.', error)
+            throw error
+        }
+    }
 
 }
 
