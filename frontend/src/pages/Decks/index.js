@@ -13,26 +13,27 @@ import {withTheme} from 'styled-components';
 import * as S from '~/styles/global';
 
 import RepositoryBase from '~/store/repository/repositoryBase'
-import Deck from '~/models/Deck'
+import DeckModel from '~/store/models/DeckModel'
 
+const repositorio = new RepositoryBase(DeckModel)
+  , Text = Typography;
 
-const Text = Typography
-  , repository = new RepositoryBase(Deck)
 
 function Decks({navigation, ...props}) {
 
-  const [data, setData] = useState([]);
+  const [decks, setDeck] = useState([]);
 
   useEffect(() => {
-    async function loadDeks() {
-      
-      let data = await repository.getAll()
-      //console.log(data)
-      setData(data)
-    }
 
-    loadDeks();
+    repositorio.all()
+      .then( d => {
+        setDeck(d)
+      })
+      .catch( r => {
+        console.log( 'Erro', r)
+      })
   }, []);
+
 
   function deleteDeck() {
     Alert.alert(
@@ -63,18 +64,20 @@ function Decks({navigation, ...props}) {
         </Spacing>
         <S.Margin />
         <S.List
-          data={data}
+          data={decks}
           numColumns={2}
-          keyExtractor={(item) => String(item.id)}
+          keyExtractor={(item) => String(item.Id)}
           renderItem={({item: deck}) => (
             <S.Container>
               <TouchableOpacity
                 onPress={() => navigation.navigate('Card', {...deck})}
                 onLongPress={() => deleteDeck()}>
                 <S.Box data={deck} heightFixed>
+
                   <S.Text weight="bold" size="16" maxHeight="60">
-                    {deck.name}
+                    {deck.Name}
                   </S.Text>
+
                   <Spacing mt="4" position="absolute" bottom={20} left={20}>
                     <Text color="#656565" size="14">
                       Novos:{' '}
@@ -90,6 +93,7 @@ function Decks({navigation, ...props}) {
                       </Text>
                     </Text>
                   </Spacing>
+                  
                 </S.Box>
               </TouchableOpacity>
             </S.Container>
@@ -120,9 +124,10 @@ function Decks({navigation, ...props}) {
           textStyle={{
             fontSize: 13,
           }}
-          onPress={() => navigation.navigate('AddCard', data.map( e => {
-            return { _id : e._id , name : e.name }
-          }))}>
+          //onPress={() => navigation.navigate('AddCard', data.map( e => {
+           // return { _id : e._id , name : e.name }
+          //}))}
+          >
             
           <IconMc name="cards-outline" size={30} color="#FFF" />
         </ActionButton.Item>
@@ -136,7 +141,8 @@ function Decks({navigation, ...props}) {
           textStyle={{
             fontSize: 13,
           }}
-          onPress={() => navigation.navigate('AddDeck' , data.map( e => { e._id , e.name}) )}>
+          //onPress={() => navigation.navigate('AddDeck' , data.map( e => { e._id , e.name}) )}
+          >
           <IconMc name="cards" size={30} color="#FFF" />
         </ActionButton.Item>
 

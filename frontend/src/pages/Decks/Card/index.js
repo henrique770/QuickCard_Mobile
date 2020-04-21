@@ -15,35 +15,37 @@ import * as S from '~/styles/global';
 import successAnimation from '~/assets/animation-success.json';
 import Lottie from 'lottie-react-native';
 
-import RepositoryBase from '~/store/repository/repositoryBase'
-import Deck from '~/models/Deck'
-
 const Text = Typography
-  , repository = new RepositoryBase(Deck)
+
+
+const getCard = async _id => {
+  return {}
+}
 
 export default function Card({navigation, route}) {
 
-  const {name, card, _id} = route.params;
+  const {name, _id} = route.params;
   const [cardIndex, setCardIndex] = useState(0);
   const [isShow, setIsShow] = useState(false);
-  const [cardsVisible, setCardsVisible] = useState(true);
+  const [cardsVisible, setCardsVisible] = useState(false);
   const [endQuiz, setEndQuiz] = useState(false);
+  const [cardData, setCardData] = useState({});
 
-  useEffect( async () => {
+  useEffect(() => {
+    
     function changeTitle() {
       navigation.setOptions({title: `${name}`});
     }
 
-
-    (async () =>{
-
-      let deck = await repository.getById(_id)
-      console.log(deck)
-    })() 
-
-
+    getCard(_id)
+      .then( card => {
+        console.log('card', card)
+        setCardData(card)
+        setCardsVisible(true)
+    })
+    
     changeTitle();
-  });
+  } , []);
 
   function showAnswer() {
     setIsShow(!isShow);
@@ -98,7 +100,7 @@ export default function Card({navigation, route}) {
                       textAlign="center"
                       weight="bold"
                       overflow="hidden">
-                      card[cardIndex].front}
+                      {cardData.front}
                     </S.Text>
                   </ScrollView>
                 </FlipCardBox>
@@ -122,7 +124,7 @@ export default function Card({navigation, route}) {
                       textAlign="center"
                       weight="bold"
                       overflow="hidden">
-                      card[cardIndex].verse}
+                      {cardData.verse}
                     </S.Text>
                   </ScrollView>
                 </FlipCardBox>

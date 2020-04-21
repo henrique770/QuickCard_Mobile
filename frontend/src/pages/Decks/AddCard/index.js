@@ -14,32 +14,28 @@ import { View, Picker, StyleSheet } from "react-native";
 
 import {Title, Separator, Form} from './styles';
 
+
 export default function AddCard({navigation, route}) {
-  // const dispatch = useDispatch();
-  // const profile = useSelector(state => state.user.profile);
 
-  const [selectedValue, setSelectedValue] = useState('');
   const decks = route.params
+   , [selectedValue, setSelectedValue] = useState((()=>{
 
-  const frontRef = useRef();
-  const backRef = useRef();
+      if(Array.isArray(decks))
+      {
+        return decks[0]._id
+      }
 
-  const [deck, setDeck] = useState('');
-  const [front, setFront] = useState('');
-  // profile.name
-  const [back, setBack] = useState('');
-  // profile.email
+      return ''
+    })())
+   , frontRef = useRef()
+   , backRef = useRef()
+   , [front, setFront] = useState('')
+   , [verse, setVerse] = useState('')
 
-  // useEffect(() => {
-  //     setOldPassword('');
-  //     setPassword('');
-  //     setConfirmPassword('');
-  // }, [profile]);
 
-  function handleSubmit() {
-   
+  async function handleSubmit(e) {
+     
   }
-
 
   let decksRegistre = decks.map(deck => {
     return <Picker.Item value={deck._id} label={deck.name} />
@@ -68,8 +64,7 @@ export default function AddCard({navigation, route}) {
         >
           {decksRegistre}
         </Picker>
-
-          
+          {/*
           <S.FormInput
             icon="cards"
             autoCorrect={false}
@@ -77,10 +72,10 @@ export default function AddCard({navigation, route}) {
             placeholder="Baralho"
             returnKeyType="next"
             onSubmitEditing={() => frontRef.current.focus()}
-            value={deck}
-            onChangeText={setDeck}
+            value={}
+            onChangeText={}
           />
-
+          */}
           <S.FormInput
             name="front"
             icon="cards-outline"
@@ -102,14 +97,14 @@ export default function AddCard({navigation, route}) {
             placeholder="Verso"
             ref={backRef}
             returnKeyType="next"
-            value={back}
-            onChangeText={setBack}
+            value={verse}
+            onChangeText={setVerse}
           />
 
           <Separator />
 
           <S.ButtonTheme onPress={handleSubmit}>
-            <S.TextButton>Salvar</S.TextButton>
+            <S.TextButton type='submit'>Salvar</S.TextButton>
           </S.ButtonTheme>
         </Form>
       </S.Container>
