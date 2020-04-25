@@ -1,5 +1,5 @@
 import ExtendsModel from './ExtendsModel'
-import { types } from 'expo-sqlite-orm'
+import { types } from '~/store/repository/expoSqliteOrm/index'
 
 
 const __tableNameModel__ = 'Deck'

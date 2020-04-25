@@ -12,12 +12,9 @@ import {withTheme} from 'styled-components';
 
 import * as S from '~/styles/global';
 
-import RepositoryBase from '~/store/repository/repositoryBase'
-import DeckModel from '~/store/models/DeckModel'
+import {ServiceProxy , typeService } from '~/store/service/index'
 
-const repositorio = new RepositoryBase(DeckModel)
-  , Text = Typography;
-
+const Text = Typography;
 
 function Decks({navigation, ...props}) {
 
@@ -25,6 +22,19 @@ function Decks({navigation, ...props}) {
 
   useEffect(() => {
 
+    const serviceProxy = new ServiceProxy(typeService.Deck)
+
+    serviceProxy.all()
+      .then( e => {
+
+        setDeck(e)
+      })
+      .catch( e => {
+
+        console.log('error', e)
+      })
+
+    /*
     repositorio.all()
       .then( d => {
         setDeck(d)
@@ -32,6 +42,7 @@ function Decks({navigation, ...props}) {
       .catch( r => {
         console.log( 'Erro', r)
       })
+    */
   }, []);
 
 
