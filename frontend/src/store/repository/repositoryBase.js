@@ -1,14 +1,7 @@
 import { BaseModel, types } from './expoSqliteOrm/index'
-import factoryEntity from '~/store/factoryEntity'
 import BaseEntity from '~/entities/BaseEntity'
 
-
-import api from '~/services/api'
 import automapper from 'automapper-js'
-
-
-const __dirEntiy = './../../entities'
-
 
 class RepositoryBase {
 
@@ -16,10 +9,10 @@ class RepositoryBase {
      * 
      * @param {BaseModel} model 
      */
-    constructor(model){
+    constructor(model , entity){
 
         this._model = model
-        this._entity =  factoryEntity.get(`${model.tableName}Entity`)  
+        this._entity = entity  
     }
 
 
@@ -31,9 +24,10 @@ class RepositoryBase {
     _resolverEntity( self, result) {
 
         try{
-            let dataMapper = automapper( self._entity , result ) 
+            //let dataMapper = automapper( self._entity , result ) 
+            //return dataMapper
 
-            return dataMapper
+            return result
         }
         catch(err)
         {
