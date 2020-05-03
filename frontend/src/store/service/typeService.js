@@ -2,5 +2,6 @@
  * @type TypeService
  */
 export const typeService = {
-    Deck : 'Deck'
+  Deck : 'Deck'
+  , Card : 'Card'
 }

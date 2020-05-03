@@ -1,5 +1,6 @@
 import {
     DeckModel
+    , CardModel
 } from '~/store/models/index'
 
 
@@ -7,10 +8,16 @@ const factoryModel = ( () => {
 
     const models = []
 
-    models.push({
+    models.push(
+      {
         name: 'DeckModel'
         , service: DeckModel
-    })
+      }
+      , {
+        name: 'CardModel'
+        , service: CardModel
+      }
+    )
 
     return {
 

@@ -19,7 +19,7 @@ export default class DatabaseLayer {
                 sqlResolve({ rows: rows.raw(), insertId })
               },
               (_, error) => {
-                sqlReject(_) 
+                sqlReject(_)
               }
             )
           })
@@ -47,7 +47,12 @@ export default class DatabaseLayer {
   insert(obj) {
     const sql = QueryBuilder.insert(this.tableName, obj)
     const params = Object.values(obj)
-    return this.executeSql(sql, params).then(({ insertId }) => this.find(insertId))
+
+    return this.executeSql(sql, params).then(( data ) => {
+      // forcar get bu ID
+      let insertId = obj.Id;
+      return this.find(insertId)
+    })
   }
 
   update(obj) {

@@ -1,20 +1,29 @@
-import BaseEntity from '~/entities/BaseEntity'
+import {
+  BaseEntity
+  , CardEntity
+  , DeckEntity
 
-import DeckEntity from '~/entities/DeckEntity'
-
+} from '~/entities/index'
 
 const factoryEntity = ( () => {
 
     const entities = []
 
+    //#region REGISTRE
+
     entities.push({
-        name: 'DeckEntity'
-        , service: DeckEntity
+      name: 'DeckEntity'
+      , service: DeckEntity
     })
 
+    entities.push({
+      name: 'CardEntity'
+      , service: CardEntity
+    })
+
+    //#endregion
 
     return {
-
         /**
          * @returns {BaseEntity}
          */

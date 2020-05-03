@@ -9,31 +9,9 @@ class RepositoryBase {
      * 
      * @param {BaseModel} model 
      */
-    constructor(model , entity){
+    constructor(model){
 
         this._model = model
-        this._entity = entity  
-    }
-
-
-    /**
-     * Process SQLite and Mapper response for entity
-     * @param {RepositoryBase} self 
-     * @param {any} result 
-     */
-    _resolverEntity( self, result) {
-
-        try{
-            //let dataMapper = automapper( self._entity , result ) 
-            //return dataMapper
-
-            return result
-        }
-        catch(err)
-        {
-            console.log('error automapper.'. err)
-            throw err;
-        }
     }
 
     /**
@@ -45,7 +23,7 @@ class RepositoryBase {
 
         try {
             return await this._model.find(id)
-                .then(e => this._resolverEntity( this , e)) 
+                .then(e => e) 
                 .catch( e => {
 
                     console.log('Error Find Repositorio.', e)
@@ -57,13 +35,11 @@ class RepositoryBase {
         }
     }
 
-    /**
-     * @returns {Promise<BaseEntity[]>}
-     */
+    
     async all() {
         try {
             return await this._model.all()
-                .then(e => this._resolverEntity( this , e)) 
+                .then(e => e) 
                 .catch( e => {
 
                     console.log('Error Find Repositorio.', e)

@@ -1,5 +1,2 @@
-import  DeckModel from './DeckModel'
-
-export {
-    DeckModel
-}
+export DeckModel from './DeckModel'
+export CardModel from './CardModel'
