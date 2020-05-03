@@ -1,94 +1,26 @@
 import React, {useState, useEffect} from 'react';
-
-import Typography from '~/components/Typography';
-import Spacing from '~/components/Spacing';
+import {useSelector, useDispatch} from 'react-redux';
 
 import IconMi from 'react-native-vector-icons/MaterialIcons';
 import IconMc from 'react-native-vector-icons/MaterialCommunityIcons';
 import ActionButton from 'react-native-action-button';
 import {TouchableOpacity, Alert} from 'react-native';
 
+import Typography from '~/components/Typography';
+import Spacing from '~/components/Spacing';
 import {withTheme} from 'styled-components';
-
 import * as S from '~/styles/global';
-import api from '~/services/api';
-
-const data = [
-  {
-    id: '1',
-    student: {},
-    name: 'Linguagem Javascript',
-    card: [
-      {
-        id: '1',
-        deck: {},
-        front: 'new operator',
-        verse:
-          'cria uma instancia de um tipo de objeto definido pelo usuário ou de um dos tipos nativos (built-in) que possuem uma função construtora.',
-        isActive: true, // flag para controle de ativo/inativo
-      },
-      {
-        id: '2',
-        deck: {},
-        front: 'expressão !!',
-        verse: 'transforma qualquer tipo para booleano',
-        isActive: true, // flag para controle de ativo/inativo
-      },
-      {
-        id: '3',
-        deck: {},
-        front: 'método then()',
-        verse:
-          'retorna uma Promise. Possui dois argumentos, ambos são "call back functions", sendo uma para o sucesso e outra para o fracasso da promessa.',
-        isActive: true, // flag para controle de ativo/inativo
-      },
-    ],
-    isActive: true, // flag para controle de ativo/inativo
-  },
-  {
-    id: '2',
-    student: {},
-    name: 'Palavras e expressões em inglês',
-    card: [
-      {
-        id: '1',
-        deck: {},
-        front: 'perhaps',
-        verse: 'possivelmente',
-        isActive: true, // flag para controle de ativo/inativo
-      },
-      {
-        id: '2',
-        deck: {},
-        front: 'to be on the ball',
-        verse: 'antenado,ficar ligado',
-        isActive: true, // flag para controle de ativo/inativo
-      },
-      {
-        id: '3',
-        deck: {},
-        front: 'approach',
-        verse: 'aproximação, abordar',
-        isActive: true, // flag para controle de ativo/inativo
-      },
-    ],
-    isActive: true, // flag para controle de ativo/inativo
-  },
-];
+import construct from "@babel/runtime/helpers/esm/construct";
 const Text = Typography;
 
 function Decks({navigation, ...props}) {
-  const [deck, setDeck] = useState([]);
 
-  useEffect(() => {
-    async function loadDeks() {
-      const response = await api.get('deck');
+  const deckState = useSelector( state => state.deck.data)
+  const [decks, setDeck] = useState(deckState);
 
-      setDeck(response.data);
-    }
-
-    loadDeks();
-  }, []);
+  useEffect((e) => {
+    setDeck(deckState)
+  }, [deckState]);
 
   function deleteDeck() {
     Alert.alert(
@@ -119,18 +51,20 @@ function Decks({navigation, ...props}) {
         </Spacing>
         <S.Margin />
         <S.List
-          data={data}
+          data={decks}
           numColumns={2}
-          keyExtractor={(item) => String(item.id)}
-          renderItem={({item: flashcard}) => (
+          keyExtractor={(item) => String(item.Id)}
+          renderItem={({item: deck}) => (
             <S.Container>
               <TouchableOpacity
-                onPress={() => navigation.navigate('Card', {...flashcard})}
+                onPress={() => navigation.navigate('Card', {...deck})}
                 onLongPress={() => deleteDeck()}>
-                <S.Box data={flashcard} heightFixed>
+                <S.Box data={deck} heightFixed>
+
                   <S.Text weight="bold" size="16" maxHeight="60">
-                    {flashcard.name}
+                    {deck.Name}
                   </S.Text>
+
                   <Spacing mt="4" position="absolute" bottom={20} left={20}>
                     <Text color="#656565" size="14">
                       Novos:{' '}
@@ -146,6 +80,7 @@ function Decks({navigation, ...props}) {
                       </Text>
                     </Text>
                   </Spacing>
+
                 </S.Box>
               </TouchableOpacity>
             </S.Container>
@@ -166,6 +101,7 @@ function Decks({navigation, ...props}) {
           onPress={() => navigation.navigate('Pomodoro')}>
           <IconMc name="timer" size={30} color="#FFF" />
         </ActionButton.Item> */}
+
         <ActionButton.Item
           buttonColor="#333"
           title="Adicionar Cartão"
@@ -175,9 +111,12 @@ function Decks({navigation, ...props}) {
           textStyle={{
             fontSize: 13,
           }}
-          onPress={() => navigation.navigate('AddCard')}>
+          onPress={() => navigation.navigate('AddCard')}
+          >
+
           <IconMc name="cards-outline" size={30} color="#FFF" />
         </ActionButton.Item>
+
         <ActionButton.Item
           buttonColor="#333"
           title="Adicionar Baralho"
@@ -187,9 +126,13 @@ function Decks({navigation, ...props}) {
           textStyle={{
             fontSize: 13,
           }}
-          onPress={() => navigation.navigate('AddDeck')}>
+
+          onPress={() => navigation.navigate('AddDeck')}
+
+          >
           <IconMc name="cards" size={30} color="#FFF" />
         </ActionButton.Item>
+
       </ActionButton>
     </>
   );
