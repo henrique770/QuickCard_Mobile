@@ -1,50 +1,26 @@
 import React, {useState, useEffect} from 'react';
-
-import Typography from '~/components/Typography';
-import Spacing from '~/components/Spacing';
+import {useSelector, useDispatch} from 'react-redux';
 
 import IconMi from 'react-native-vector-icons/MaterialIcons';
 import IconMc from 'react-native-vector-icons/MaterialCommunityIcons';
 import ActionButton from 'react-native-action-button';
 import {TouchableOpacity, Alert} from 'react-native';
 
+import Typography from '~/components/Typography';
+import Spacing from '~/components/Spacing';
 import {withTheme} from 'styled-components';
-
 import * as S from '~/styles/global';
-
-import {ServiceProxy , typeService } from '~/store/service/index'
-
+import construct from "@babel/runtime/helpers/esm/construct";
 const Text = Typography;
 
 function Decks({navigation, ...props}) {
 
-  const [decks, setDeck] = useState([]);
+  const deckState = useSelector( state => state.deck.data)
+  const [decks, setDeck] = useState(deckState);
 
-  useEffect(() => {
-
-    const serviceProxy = new ServiceProxy(typeService.Deck)
-
-    serviceProxy.all()
-      .then( e => {
-
-        setDeck(e)
-      })
-      .catch( e => {
-
-        console.log('error', e)
-      })
-
-    /*
-    repositorio.all()
-      .then( d => {
-        setDeck(d)
-      })
-      .catch( r => {
-        console.log( 'Erro', r)
-      })
-    */
-  }, []);
-
+  useEffect((e) => {
+    setDeck(deckState)
+  }, [deckState]);
 
   function deleteDeck() {
     Alert.alert(
@@ -104,7 +80,7 @@ function Decks({navigation, ...props}) {
                       </Text>
                     </Text>
                   </Spacing>
-                  
+
                 </S.Box>
               </TouchableOpacity>
             </S.Container>
@@ -135,11 +111,9 @@ function Decks({navigation, ...props}) {
           textStyle={{
             fontSize: 13,
           }}
-          //onPress={() => navigation.navigate('AddCard', data.map( e => {
-           // return { _id : e._id , name : e.name }
-          //}))}
+          onPress={() => navigation.navigate('AddCard')}
           >
-            
+
           <IconMc name="cards-outline" size={30} color="#FFF" />
         </ActionButton.Item>
 
@@ -152,7 +126,9 @@ function Decks({navigation, ...props}) {
           textStyle={{
             fontSize: 13,
           }}
-          //onPress={() => navigation.navigate('AddDeck' , data.map( e => { e._id , e.name}) )}
+
+          onPress={() => navigation.navigate('AddDeck')}
+
           >
           <IconMc name="cards" size={30} color="#FFF" />
         </ActionButton.Item>

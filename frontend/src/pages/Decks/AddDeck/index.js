@@ -10,8 +10,14 @@ import Spacing from '~/components/Spacing';
 
 import {Container, Title, Separator, Form, SubmitButton} from './styles';
 
+//import {ServiceProxy , typeService } from '~/store/service/index'
+
+//const serviceProxy = new ServiceProxy(typeService.Deck)
+
+import { addDeck } from '~/store/modules/deck/actions'
+
 export default function AddDeck({navigation, route}) {
-  // const dispatch = useDispatch();
+   const dispatch = useDispatch();
   // const profile = useSelector(state => state.user.profile);
 
   const [deckname, setDeckname] = useState('');
@@ -23,15 +29,23 @@ export default function AddDeck({navigation, route}) {
   // }, [profile]);
 
   function handleSubmit() {
-    // dispatch(
-    //     updateProfileRequest({
-    //         name,
-    //         email,
-    //         password,
-    //         oldPassword,
-    //         confirmPassword,
-    //     })
-    // );
+
+    dispatch(addDeck({
+      Name : deckname
+    }))
+
+    /*
+    serviceProxy.add({
+      Name : deckname
+    })
+    .then(e => {
+
+      console.log('sucess', e)
+    })
+    .catch(e => {
+      console.log('error' , e)
+    })
+    */
   }
 
   return (

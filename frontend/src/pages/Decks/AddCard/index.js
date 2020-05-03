@@ -11,34 +11,34 @@ import IconMi from 'react-native-vector-icons/MaterialIcons';
 import { View, Picker, StyleSheet } from "react-native";
 
 // import { updateProfileRequest } from '~/store/modules/user/actions';
+import { addCard } from '~/store/modules/deck/actions'
 
 import {Title, Separator, Form} from './styles';
+import Typography from '~/components/Typography';
+const Text = Typography;
 
 
 export default function AddCard({navigation, route}) {
 
-  const decks = route.params
-   , [selectedValue, setSelectedValue] = useState((()=>{
+  const decks = useSelector( state => state.deck.data )
+  const dispatch = useDispatch()
+  const [selectedValue, setSelectedValue] = useState('')
+  const frontRef = useRef()
+  const backRef = useRef()
+  const [front, setFront] = useState('')
+  const [verse, setVerse] = useState('')
 
-      if(Array.isArray(decks))
-      {
-        return decks[0]._id
-      }
+  function handleSubmit(e) {
 
-      return ''
-    })())
-   , frontRef = useRef()
-   , backRef = useRef()
-   , [front, setFront] = useState('')
-   , [verse, setVerse] = useState('')
-
-
-  async function handleSubmit(e) {
-     
+    dispatch(addCard({
+      Verse : verse
+      , Front : front
+      , IdDeck : selectedValue
+    }))
   }
 
   let decksRegistre = decks.map(deck => {
-    return <Picker.Item value={deck._id} label={deck.name} />
+    return <Picker.Item value={deck.Id} label={deck.Name} />
   })
 
   return (
@@ -52,60 +52,60 @@ export default function AddCard({navigation, route}) {
         <S.Margin />
 
         <Form>
+          <Text color="#FFF" weight="bold">Deck:</Text>
+          <Picker
+            name="idDeck"
+            selectedValue={selectedValue}
+            style={{ height: 50, width: 150 , color: '#fff'}}
+            onValueChange={(itemValue , itemIndex) => {
+              console.log('Item value : ',itemValue)
+              setSelectedValue(itemValue)
+            }}
+          >
+            {decksRegistre}
+          </Picker>
+            {/*
+            <S.FormInput
+              icon="cards"
+              autoCorrect={false}
+              autoCapitalize="none"
+              placeholder="Baralho"
+              returnKeyType="next"
+              onSubmitEditing={() => frontRef.current.focus()}
+              value={}
+              onChangeText={}
+            />
+            */}
+            <S.FormInput
+              name="front"
+              icon="cards-outline"
+              autoCorrect={false}
+              autoCapitalize="none"
+              placeholder="Frente"
+              ref={frontRef}
+              returnKeyType="next"
+              onSubmitEditing={() => backRef.current.focus()}
+              value={front}
+              onChangeText={setFront}
+            />
 
-        <Picker
-          name="idDeck"
-          selectedValue={selectedValue}
-          style={{ height: 50, width: 150 , color: '#fff'}}
-          onValueChange={(e) => {
-            console.log(e)
-            setSelectedValue(e)
-          }}
-        >
-          {decksRegistre}
-        </Picker>
-          {/*
-          <S.FormInput
-            icon="cards"
-            autoCorrect={false}
-            autoCapitalize="none"
-            placeholder="Baralho"
-            returnKeyType="next"
-            onSubmitEditing={() => frontRef.current.focus()}
-            value={}
-            onChangeText={}
-          />
-          */}
-          <S.FormInput
-            name="front"
-            icon="cards-outline"
-            autoCorrect={false}
-            autoCapitalize="none"
-            placeholder="Frente"
-            ref={frontRef}
-            returnKeyType="next"
-            onSubmitEditing={() => backRef.current.focus()}
-            value={front}
-            onChangeText={setFront}
-          />
+            <S.FormInput
+              name="verse"
+              icon="cards-playing-outline"
+              autoCorrect={false}
+              autoCapitalize="none"
+              placeholder="Verso"
+              ref={backRef}
+              returnKeyType="next"
+              value={verse}
+              onChangeText={setVerse}
+            />
 
-          <S.FormInput
-            name="verse"
-            icon="cards-playing-outline"
-            autoCorrect={false}
-            autoCapitalize="none"
-            placeholder="Verso"
-            ref={backRef}
-            returnKeyType="next"
-            value={verse}
-            onChangeText={setVerse}
-          />
+            <Separator />
 
-          <Separator />
-
-          <S.ButtonTheme onPress={handleSubmit}>
-            <S.TextButton type='submit'>Salvar</S.TextButton>
-          </S.ButtonTheme>
+            <S.ButtonTheme onPress={handleSubmit}>
+              <S.TextButton type='submit'>Salvar</S.TextButton>
+            </S.ButtonTheme>
         </Form>
       </S.Container>
     </>

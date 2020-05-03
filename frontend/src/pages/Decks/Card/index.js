@@ -24,7 +24,11 @@ const getCard = async _id => {
 
 export default function Card({navigation, route}) {
 
-  const {name, _id} = route.params;
+  const { Name, Id} = route.params;
+
+  const name = Name
+    , _id = Id
+
   const [cardIndex, setCardIndex] = useState(0);
   const [isShow, setIsShow] = useState(false);
   const [cardsVisible, setCardsVisible] = useState(false);
@@ -32,7 +36,7 @@ export default function Card({navigation, route}) {
   const [cardData, setCardData] = useState({});
 
   useEffect(() => {
-    
+
     function changeTitle() {
       navigation.setOptions({title: `${name}`});
     }
@@ -43,7 +47,7 @@ export default function Card({navigation, route}) {
         setCardData(card)
         setCardsVisible(true)
     })
-    
+
     changeTitle();
   } , []);
 
