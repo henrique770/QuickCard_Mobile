@@ -10,11 +10,18 @@ import {ServiceProxy , typeService } from '~/store/service'
 
 export function* getDecksDataBase() {
 
-    const serviceProxy = new ServiceProxy(typeService.Deck)
+    const serviceProxyDeck = new ServiceProxy(typeService.Deck)
 
-    let data = yield serviceProxy.all()
+    let decks = yield serviceProxyDeck
+                      .include(typeService.Card, 'Cards', {
+                        foryKey : 'Id'
+                        , operKey : 'IdDeck_in'
+                      })
+                      .all()
 
-    yield put(setDecks({ data }))
+    console.log('decks database', decks)
+
+    yield put(setDecks({ data : decks }))
 }
 
 export function* setDecksDataBase() {
