@@ -18,12 +18,22 @@ export function find(tableName) {
  * })
  */
 export function query(tableName, options = {}) {
-  const { columns, page, limit, where, order } = {
+  let { columns, page, limit, where, order, inn } = {
     ...defaultOptions,
     ...options
   }
+  let whereStatement = queryWhere(where)
 
-  const whereStatement = queryWhere(where)
+  if(inn != undefined) {
+    try {
+      let paras = []
+        for(let i = 0; i < options.inn.key.length; i += 1)
+          paras.push('?')
+
+      whereStatement = whereStatement.replace('?' , paras.join() )
+    } catch {}
+  }
+
   let sqlParts = [
     'SELECT',
     columns,
@@ -55,14 +65,15 @@ export function propertyOperation(statement) {
     lteq: '<=',
     gt: '>',
     gteq: '>=',
-    cont: 'LIKE'
+    cont: 'LIKE',
+    in: 'IN({PARAMETRES})'
   }
   const pieces = statement.split('_')
   const operation = pieces.pop()
   const property = pieces.join('_')
   if (!operations.hasOwnProperty(operation)) {
     throw new Error(
-      'Operation not found, use (eq, neq, lt, lteq, gt, gteq, cont)'
+      'Operation not found, use (eq, neq, lt, lteq, gt, gteq, cont, _in)'
     )
   }
   return `${property} ${operations[operation]}`
@@ -70,7 +81,11 @@ export function propertyOperation(statement) {
 
 // Build where query
 export function queryWhere(options) {
-  const list = Object.keys(options).map(p => `${propertyOperation(p)} ?`)
+  const list = Object.keys(options).map(p => {
+    let prop = propertyOperation(p)
+
+   return  prop.includes('({PARAMETRES})') ? prop.replace('{PARAMETRES}' , '?') : `${prop} ?`
+  })
   return list.length > 0 ? `WHERE ${list.join(' AND ')}` : ''
 }
 
