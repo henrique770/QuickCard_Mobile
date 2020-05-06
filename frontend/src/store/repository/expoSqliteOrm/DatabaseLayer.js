@@ -101,7 +101,7 @@ export default class DatabaseLayer {
 
   query(options = {}) {
     const sql = QueryBuilder.query(this.tableName, options)
-    const params = Object.values(options.where || {})
+    const params = options.inn != null ? options.inn.key : Object.values(options.where || {})
     return this.executeSql(sql, params).then(({ rows }) => rows)
   }
 }

@@ -6,8 +6,8 @@ import automapper from 'automapper-js'
 class RepositoryBase {
 
     /**
-     * 
-     * @param {BaseModel} model 
+     *
+     * @param {BaseModel} model
      */
     constructor(model){
 
@@ -16,39 +16,43 @@ class RepositoryBase {
 
     /**
      * Retrieve entity equivalent to the passed identifier
-     * @param {string} id 
-     * @returns {Promisse<BaseEntity>} 
+     * @param {string} id
+     * @returns {Promisse<BaseEntity>}
      */
     async getById(id) {
 
         try {
             return await this._model.find(id)
-                .then(e => e) 
+                .then(e => e)
                 .catch( e => {
 
                     console.log('Error Find Repositorio.', e)
-                }) 
-            
+                })
+
         } catch (error) {
             console.log('Error Find Repositorio.', error)
             throw error
         }
     }
 
-    
+
     async all() {
         try {
             return await this._model.all()
-                .then(e => e) 
+                .then(e => e)
                 .catch( e => {
 
                     console.log('Error Find Repositorio.', e)
-                }) 
-            
+                })
+
         } catch (error) {
             console.log('Error Find Repositorio.', error)
             throw error
         }
+    }
+
+    async query(query) {
+      return this._model.query(query)
     }
 
 }
