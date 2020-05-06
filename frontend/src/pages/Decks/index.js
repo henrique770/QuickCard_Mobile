@@ -67,18 +67,20 @@ function Decks({navigation, ...props}) {
 
                   <Spacing mt="4" position="absolute" bottom={20} left={20}>
                     <Text color="#656565" size="14">
-                      Novos:{' '}
+                      Total cartões:{' '}
                       <Text color="#fe650e" weight="bold">
-                        20
+                        {deck.Cards.length}
                       </Text>
                     </Text>
                     <Spacing mb="4" />
+                    {/*
                     <Text color="#656565" size="14">
                       A revisar:{' '}
                       <Text color="#f93b10" weight="bold">
                         50
                       </Text>
                     </Text>
+                    */}
                   </Spacing>
 
                 </S.Box>
