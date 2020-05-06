@@ -1,4 +1,5 @@
 import React, {useState, useEffect} from 'react';
+import {useSelector, useDispatch} from 'react-redux';
 import PropTypes from 'prop-types';
 
 import Spacing from '~/components/Spacing';
@@ -24,31 +25,24 @@ const getCard = async _id => {
 
 export default function Card({navigation, route}) {
 
-  const { Name, Id} = route.params;
-
-  const name = Name
-    , _id = Id
-
+  const { Id } = route.params;
+  const Deck = useSelector( state => state.deck.data.find( deck => deck.Id == Id ))
+  const Card = Deck.getDeckRandom()
   const [cardIndex, setCardIndex] = useState(0);
   const [isShow, setIsShow] = useState(false);
   const [cardsVisible, setCardsVisible] = useState(false);
   const [endQuiz, setEndQuiz] = useState(false);
-  const [cardData, setCardData] = useState({});
+  const [cardData, setCardData] = useState(Card);
 
   useEffect(() => {
 
-    function changeTitle() {
-      navigation.setOptions({title: `${name}`});
+    navigation.setOptions({title: `${Deck.Name}`});
+
+    if(Card)
+    {
+      setCardsVisible(true)
+      console.log('Card info: ', cardData)
     }
-
-    getCard(_id)
-      .then( card => {
-        console.log('card', card)
-        setCardData(card)
-        setCardsVisible(true)
-    })
-
-    changeTitle();
   } , []);
 
   function showAnswer() {
@@ -56,6 +50,11 @@ export default function Card({navigation, route}) {
   }
 
   function nextCard() {
+    let Card = Deck.getDeckRandom()
+
+    console.log('Card info: ', cardData)
+    setCardData(Card)
+    /*
     if (cardIndex + 1 < card.length) {
       setCardIndex(cardIndex + 1);
     }
@@ -65,6 +64,7 @@ export default function Card({navigation, route}) {
       setIsShow(false);
       setEndQuiz(true);
     }
+    */
   }
   return (
     <>
@@ -104,7 +104,7 @@ export default function Card({navigation, route}) {
                       textAlign="center"
                       weight="bold"
                       overflow="hidden">
-                      {cardData.front}
+                      {cardData.Front}
                     </S.Text>
                   </ScrollView>
                 </FlipCardBox>
@@ -128,7 +128,7 @@ export default function Card({navigation, route}) {
                       textAlign="center"
                       weight="bold"
                       overflow="hidden">
-                      {cardData.verse}
+                      {cardData.Verse}
                     </S.Text>
                   </ScrollView>
                 </FlipCardBox>
