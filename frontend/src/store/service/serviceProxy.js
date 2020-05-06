@@ -42,28 +42,144 @@ class ServiceProxy {
         this._model = factoryModel.get(`${type}Model`)
         this._entity = factoryEntity.get(`${type}Entity`)
         this._repository = new RepositoryBase(this._model)
+        this._extds = undefined
+    }
+
+
+    //#region REPOSITORY OPERATION EXTENSION
+
+    include(type, prop, query) {
+
+      let self = Object.assign({}, this)
+
+      self.__proto__ = this.__proto__
+
+      if(self._extds == undefined)
+      {
+        self._extds = []
+      }
+
+      self._extds.push({
+        include : true
+        , include_args : {type, prop, query }
+      })
+
+      return self
+    }
+
+    _solveIncludeEntity(result, extds) {
+      let serviceProxyInclude = new ServiceProxy(extds.include_args.type)
+        , query_args = extds.include_args.query
+        , query = {
+          foryKey : query_args.foryKey
+          , operKey : query_args.operKey
+          , key : Array.isArray(result) ? result.map( e => e[query_args.foryKey] ) : [result[query_args.foryKey]]
+        }
+        , key = query.operKey.split('_')[0]
+        , where = {}
+        , data = automapper( this._entity, result )
+
+      where[query_args.operKey] = query.key
+
+      return  serviceProxyInclude._repository
+        .query({
+          inn : query ,
+          where
+        })
+        .then( result => {
+
+          if(data == undefined)
+          {
+            return data
+          }
+          else if(Array.isArray(data))
+          {
+            for(let i = 0; i < data.length; i += 1)
+            {
+              let dataItem = data[i]
+                , relatedItens = result.filter( itemResult => itemResult[key] == dataItem[query.foryKey] )
+
+              if(relatedItens)
+              {
+                dataItem[extds.include_args.prop] = automapper( serviceProxyInclude._entity, relatedItens)
+              }
+            }
+          }
+          else {
+            let relatedItens = result.filter( itemResult => itemResult[key] == dataItem[query.foryKey] )
+            data[extds.include_args.prop] = automapper( serviceProxyInclude._entity, relatedItens)
+          }
+
+          return this._solveTypeResultOutPut(data)
+        })
+    }
+
+    _solveTypeExtensionSwitch(result, extds) {
+      switch (true) {
+
+        case extds.include:
+          return this._solveIncludeEntity(result, extds)
+
+        default:
+          return result
+      }
+    }
+
+    //#endregion
+
+    _solveTypeExtensionOutPut(result) {
+
+      if(this._extds != null && this._extds.length)
+      {
+        let extds = this._extds.pop()
+
+        return  this._solveTypeExtensionSwitch( result , extds )
+      }
+
+      return result
+    }
+
+    _solveTypeResultOutPut(result) {
+
+        if(this._extds != null && this._extds.length)
+        {
+            return this._solveTypeExtensionOutPut(result)
+        }
+
+        return automapper( this._entity, result )
     }
 
     //#region Repository read
-
-    _resolveTypeResultOutPut(result) {
-
-        let data = automapper( this._entity, result )
-
-        return data
-    }
 
     async all() {
 
         return this._repository.all()
             .then( result => {
-               return this._resolveTypeResultOutPut(result)
+               return this._solveTypeResultOutPut(result)
             })
+    }
+
+    async where(query) {
+
+      let self = this
+
+      try {
+        return this._repository
+          .query(query)
+          .then( result => {
+
+            return self._solveTypeResultOutPut(result)
+          })
+      }
+      catch (e) {
+        console.log('Error:' , e)
+        return { }
+      }
     }
 
     //#endregion
 
-    //#region
+    //#region Repository read
 
     async add(entitySource) {
 
@@ -77,6 +193,7 @@ class ServiceProxy {
     }
 
     //#endregion
+
 
 }
 
