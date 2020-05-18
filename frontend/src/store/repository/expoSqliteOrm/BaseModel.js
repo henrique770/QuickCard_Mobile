@@ -55,7 +55,7 @@ export default class BaseModel {
   }
 
   save() {
-    if (this.id) {
+    if (this.Id) {
       return this.constructor.repository
         .update(this)
         .then(res => this.setProperties(res))
@@ -90,7 +90,7 @@ export default class BaseModel {
 
   static all() {
     return this.repository.all()
-  }    
+  }
 
   /**
    * @param {columns: '*', page: 1, limit: 30, where: {}, order: 'id DESC'} options

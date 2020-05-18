@@ -57,9 +57,9 @@ export default class DatabaseLayer {
 
   update(obj) {
     const sql = QueryBuilder.update(this.tableName, obj)
-    const { id, ...props } = obj
+    const { Id, ...props } = obj
     const params = Object.values(props)
-    return this.executeSql(sql, [...params, id])
+    return this.executeSql(sql, [...params, Id])
   }
 
   bulkInsertOrReplace(objs) {
