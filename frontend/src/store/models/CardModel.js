@@ -27,13 +27,32 @@ class CardModel extends BaseModel{
           type: types.TEXT
           , not_null: true
         }
+        , DateLastView : {
+          type: types.DATE
+          , not_null: false
+        }
+        , DateNextView : {
+          type: types.DATE
+          , not_null: false
+        }
+        , NumDifficultCount : {
+          type: types.NUMERIC
+          , not_null: false
+        }
+        , NumEasyCount : {
+          type: types.NUMERIC
+          , not_null: false
+        }
+        , NumGoodCount : {
+          type: types.NUMERIC
+          , not_null: false
+        }
         , IsActive : {
           type: types.BOOLEAN
           , not_null : true
         }
       }
     }
-
 
     static get tableName() {
       return __tableNameModel__

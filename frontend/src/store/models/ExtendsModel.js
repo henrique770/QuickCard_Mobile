@@ -3,7 +3,7 @@ import SqLite  from 'react-native-sqlite-storage'
 
 const __databaseName__ = 'QuickCard'
  , __createLocation__ = '~QuickCard.db'
- , __DEBUG__ = true
+ , __DEBUG__ = false
 
  SqLite.DEBUG(__DEBUG__);
 
@@ -27,6 +27,9 @@ class ExtendsModel extends BaseModel {
             console.log("SQL Error: " + e)
           })
     }
+
+
+
 }
 
 

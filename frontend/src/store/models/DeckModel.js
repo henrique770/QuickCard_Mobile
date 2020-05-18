@@ -16,21 +16,17 @@ class DeckModel extends ExtendsModel {
 
     static get columnMapping() {
         return {
-            Id : { 
-                type: types.TEXT 
-                , primary_key: true 
+            Id : {
+                type: types.TEXT
+                , primary_key: true
             }
             , Name : {
-                type: types.TEXT 
-                , not_null: true 
+                type: types.TEXT
+                , not_null: true
             }
             , IsActive : {
-                type: types.BOOLEAN 
+                type: types.BOOLEAN
                 , not_null : true
-            }
-            , IdStudent : {
-                type: types.TEXT
-                , not_null : false
             }
         }
     }
