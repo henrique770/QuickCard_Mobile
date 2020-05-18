@@ -16,18 +16,22 @@ import * as S from '~/styles/global';
 import successAnimation from '~/assets/animation-success.json';
 import Lottie from 'lottie-react-native';
 
+import { updateCard } from '~/store/modules/deck/actions'
+
 const Text = Typography
 
-
-const getCard = async _id => {
-  return {}
+const typesOfHits = {
+  difficult : 1
+  , easy : 2
+  , good : 3
 }
 
 export default function Card({navigation, route}) {
 
-  const { Id } = route.params;
-  const Deck = useSelector( state => state.deck.data.find( deck => deck.Id == Id ))
-  const Card = Deck.getDeckRandom()
+  const { Deck } = route.params;
+  //const Deck = useSelector( state => state.deck.data.find( deck => deck.Id == Id ))
+  const Card = {}
+  const dispatch = useDispatch();
   const [cardIndex, setCardIndex] = useState(0);
   const [isShow, setIsShow] = useState(false);
   const [cardsVisible, setCardsVisible] = useState(false);
@@ -35,8 +39,8 @@ export default function Card({navigation, route}) {
   const [cardData, setCardData] = useState(Card);
 
   useEffect(() => {
-
     navigation.setOptions({title: `${Deck.Name}`});
+    getNextCard()
 
     if(Card)
     {
@@ -49,23 +53,54 @@ export default function Card({navigation, route}) {
     setIsShow(!isShow);
   }
 
-  function nextCard() {
-    let Card = Deck.getDeckRandom()
-
-    console.log('Card info: ', cardData)
-    setCardData(Card)
-    /*
-    if (cardIndex + 1 < card.length) {
-      setCardIndex(cardIndex + 1);
-    }
-
-    if (cardIndex + 1 === card.length) {
-      setCardsVisible(false);
-      setIsShow(false);
-      setEndQuiz(true);
-    }
-    */
+  function nextCard(hitType) {
+    setHitCard(hitType)
+    getNextCard()
   }
+
+  function setHitCard(hitType) {
+    switch (hitType) {
+      case typesOfHits.easy :
+
+        cardData.hitEasy()
+        break
+
+      case typesOfHits.good :
+
+        cardData.hitGood()
+        break
+
+      case typesOfHits.difficult :
+
+        cardData.hitDifficult()
+        break
+
+      default :
+        throw 'hit type not defined'
+    }
+
+    update(cardData)
+  }
+
+  function getNextCard() {
+    let card = Deck.getDeckRandom()
+
+    card.DateLastView = new Date()
+
+    card.Deck = {
+      Id : Deck.Id
+    }
+
+    console.log('Card info: ', card)
+    setCardData(card)
+    //update(card)
+  }
+
+  function update(card) {
+    console.log('update card' , card)
+    dispatch(updateCard({ card }))
+  }
+
   return (
     <>
       <S.Container align={endQuiz ? `` : 'center'}>
@@ -143,7 +178,7 @@ export default function Card({navigation, route}) {
               animation="fadeInUp"
               easing="ease-out-circ"
               direction="alternate">
-              <Button onPress={() => nextCard()}>
+              <Button onPress={() => nextCard(typesOfHits.difficult)}>
                 <Text size={17} color="#fe650e">
                   Difícil
                 </Text>
@@ -163,7 +198,7 @@ export default function Card({navigation, route}) {
               delay={30}
               easing="ease-out-circ"
               direction="normal">
-              <Button onPress={() => nextCard()}>
+              <Button onPress={() => nextCard(typesOfHits.good)}>
                 <Text size={17} color="#fe650e">
                   Bom
                 </Text>
@@ -183,7 +218,7 @@ export default function Card({navigation, route}) {
               delay={60}
               easing="ease-out-circ"
               direction="alternate">
-              <Button onPress={() => nextCard()}>
+              <Button onPress={() => nextCard(typesOfHits.easy)}>
                 <Text size={17} color="#fe650e">
                   Fácil
                 </Text>

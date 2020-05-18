@@ -57,7 +57,7 @@ function Decks({navigation, ...props}) {
           renderItem={({item: deck}) => (
             <S.Container>
               <TouchableOpacity
-                onPress={() => navigation.navigate('Card', {...deck})}
+                onPress={() => navigation.navigate('Card', { Deck : deck })}
                 onLongPress={() => deleteDeck()}>
                 <S.Box data={deck} heightFixed>
 
