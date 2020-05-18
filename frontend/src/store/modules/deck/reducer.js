@@ -42,10 +42,27 @@ export default function(state = INITIAL_STATE, action) {
                 , deck = draft.data.find( deck => deck.Id == card.Deck.Id)
 
               if(deck) {
+
                 deck.Cards.push(card)
-                console.log('action deck/card - ADD STATE : ', action)
-                break;
               }
+              console.log('action deck/card - ADD STATE : ', action)
+              break;
+            }
+
+            case '@decks/UPDATE_CARD_STATE': {
+              let { card } = action.payload
+                , deck = draft.data.find( deck => deck.Id == card.Deck.Id)
+
+              if(deck) {
+                let index = deck.Cards
+                              .map( prop => prop.Id)
+                              .indexOf(card.Id)
+
+                deck.Cards.splice(index, 1)
+                deck.Cards.push(card)
+              }
+              console.log('action deck/card - ADD STATE : ', action)
+              break;
             }
 
             //#endregion

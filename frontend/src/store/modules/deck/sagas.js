@@ -4,6 +4,7 @@ import {  getDecks
   , setDecks
   , addDeckState
   , addCardState
+  , updateCardState
 } from './actions'
 
 import {ServiceProxy , typeService } from '~/store/service'
@@ -52,9 +53,22 @@ export function* addCardDataBase(data) {
 
 }
 
+export function* updateCardDataBase(data) {
+    const { card } = data.payload
+      , serviceProxy = new ServiceProxy(typeService.Card)
+      , entity = yield serviceProxy.update(card)
+
+    entity.Deck = {
+      Id : card.Deck.Id
+    }
+
+    yield put(updateCardState({ card : entity }))
+}
+
 export default all([
     takeLatest('@decks/GET_DECKS', getDecksDataBase)
     , takeLatest('@decks/SET_DECKS', setDecksDataBase)
     , takeLatest('@decks/ADD_DECK_DATABASE', addDeckDataBase)
     , takeLatest('@decks/ADD_CARD_DATABASE', addCardDataBase)
+    , takeLatest('@decks/UPDATE_CARD_DATABASE', updateCardDataBase)
 ])

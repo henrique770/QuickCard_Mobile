@@ -34,10 +34,23 @@ export function addCard(card) {
     , payload: { card }
   }
 }
+export function updateCard({ card }) {
+  return {
+    type: '@decks/UPDATE_CARD_DATABASE'
+    , payload: { card }
+  }
+}
 
 export function addCardState({ card }) {
   return {
     type: '@decks/ADD_CARD_STATE'
+    , payload: { card }
+  }
+}
+
+export function updateCardState({ card }) {
+  return {
+    type: '@decks/UPDATE_CARD_STATE'
     , payload: { card }
   }
 }
