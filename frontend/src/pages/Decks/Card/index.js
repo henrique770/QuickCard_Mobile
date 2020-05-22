@@ -49,6 +49,8 @@ export default function Card({navigation, route}) {
     }
   } , []);
 
+  //#region UI LOGIC
+
   function showAnswer() {
     setIsShow(!isShow);
   }
@@ -83,6 +85,12 @@ export default function Card({navigation, route}) {
   }
 
   function getNextCard() {
+
+    if(Deck.isEmpty())
+    {
+      return
+    }
+
     let card = Deck.getDeckRandom()
 
     card.DateLastView = new Date()
@@ -101,77 +109,62 @@ export default function Card({navigation, route}) {
     dispatch(updateCard({ card }))
   }
 
-  return (
-    <>
-      <S.Container align={endQuiz ? `` : 'center'}>
-        <Spacing position="absolute" top="16" right="30">
-          <TouchableOpacity onPress={() => navigation.navigate('EditCard')}>
-            {!endQuiz && <IconMi name="settings" size={25} color="#FFF" />}
-          </TouchableOpacity>
-        </Spacing>
-        <S.Margin />
-        {cardsVisible && (
-          <>
-            <FlipCard
-              flipHorizontal={true}
-              flipVertical={false}
-              flip={false}
-              clickable={true}
-              onFlipStart={() => {
-                showAnswer();
-              }}>
-              <ContainerFlashCard>
-                <Spacing mt={10} />
-                <FlipCardBox>
-                  <ScrollView
-                    contentContainerStyle={{
-                      flexGrow: 1,
-                      justifyContent: 'center',
-                    }}>
-                    <Spacing position="absolute" top="10">
-                      <Text color="#fe650e" weight="bold">
-                        Frente
-                      </Text>
-                    </Spacing>
-                    <S.Text
-                      width="260"
-                      size="30"
-                      textAlign="center"
-                      weight="bold"
-                      overflow="hidden">
-                      {cardData.Front}
-                    </S.Text>
-                  </ScrollView>
-                </FlipCardBox>
-              </ContainerFlashCard>
-              <ContainerFlashCard>
-                <Spacing mt={10} />
-                <FlipCardBox>
-                  <ScrollView
-                    contentContainerStyle={{
-                      flexGrow: 1,
-                      justifyContent: 'center',
-                    }}>
-                    <Spacing position="absolute" top="10">
-                      <Text color="#fe650e" weight="bold">
-                        Verso
-                      </Text>
-                    </Spacing>
-                    <S.Text
-                      width="260"
-                      size="30"
-                      textAlign="center"
-                      weight="bold"
-                      overflow="hidden">
-                      {cardData.Verse}
-                    </S.Text>
-                  </ScrollView>
-                </FlipCardBox>
-              </ContainerFlashCard>
-            </FlipCard>
-          </>
-        )}
+  //#endregion
 
+  //#region UI COMPONENTS
+
+  function renderBodyCard() {
+    return ( <>
+      { cardsVisible && (
+          <FlipCard
+            flipHorizontal={true}
+            flipVertical={false}
+            flip={false}
+            clickable={true}
+            onFlipStart={() => {
+            showAnswer();
+          }}>
+            {/* CARD FRONT */}
+            { renderCard('Frente' , cardData.Front ) }
+            {/* CARD VERSE */}
+            { renderCard('Verso' , cardData.Verse ) }
+          </FlipCard>
+      )}
+      </>
+    )
+  }
+
+  function renderCard(strDescription, strCard) {
+    return ( <>
+      <ContainerFlashCard>
+        <Spacing mt={10} />
+        <FlipCardBox>
+          <ScrollView
+            contentContainerStyle={{
+              flexGrow: 1,
+              justifyContent: 'center',
+            }}>
+            <Spacing position="absolute" top="10">
+              <Text color="#fe650e" weight="bold">
+                { strDescription }
+              </Text>
+            </Spacing>
+            <S.Text
+              width="260"
+              size="30"
+              textAlign="center"
+              weight="bold"
+              overflow="hidden">
+                { strCard }
+            </S.Text>
+          </ScrollView>
+        </FlipCardBox>
+      </ContainerFlashCard>
+    </>)
+  }
+
+  function renderButtons() {
+      return ( <>
         {isShow && (
           <S.ButtonContainer mb="50">
             <Animatable.View
@@ -235,25 +228,68 @@ export default function Card({navigation, route}) {
             </Animatable.View>
           </S.ButtonContainer>
         )}
+      </>)
+  }
 
-        {endQuiz && (
-          <S.StyledContainer>
-            <Lottie style={{bottom: 190}} source={successAnimation} autoPlay />
-            <View
-              style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-              <Spacing mt={100} mb={30}>
-                <S.Text size={25} weight="bold" width={300} textAlign="center">
-                  Parabéns!! você terminou de responder o baralho
-                </S.Text>
-              </Spacing>
-              <EndButton onPress={() => navigation.navigate('Decks')}>
-                <Text size={18} weight="bold" color="#fff" textAlign="center">
-                  Voltar para página inicial
-                </Text>
-              </EndButton>
-            </View>
-          </S.StyledContainer>
+  function renderDeckEmpty() {
+    return ( <>
+      <Text>Deck vazio</Text>
+    </>)
+  }
+
+  function  renderEndQuiz() {
+    return ( <>
+      {endQuiz && (
+        <S.StyledContainer>
+          <Lottie style={{bottom: 190}} source={successAnimation} autoPlay />
+          <View
+            style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+            <Spacing mt={100} mb={30}>
+              <S.Text size={25} weight="bold" width={300} textAlign="center">
+                Parabéns!! você terminou de responder o baralho
+              </S.Text>
+            </Spacing>
+            <EndButton onPress={() => navigation.navigate('Decks')}>
+              <Text size={18} weight="bold" color="#fff" textAlign="center">
+                Voltar para página inicial
+              </Text>
+            </EndButton>
+          </View>
+        </S.StyledContainer>
+      )}
+    </>)
+  }
+
+  function renderBody() {
+    return ( <>
+      { renderBodyCard() }
+
+      { renderButtons() }
+
+      { renderEndQuiz() }
+    </>)
+  }
+
+  //#endregion
+
+  return (
+    <>
+      <S.Container align={endQuiz ? `` : 'center'}>
+        <Spacing position="absolute" top="16" right="30">
+          <TouchableOpacity onPress={() => navigation.navigate('EditCard')}>
+            {!endQuiz && !Deck.isEmpty() && <IconMi name="settings" size={25} color="#FFF" />}
+          </TouchableOpacity>
+        </Spacing>
+        <S.Margin />
+
+        { Deck.isEmpty() && (
+          renderDeckEmpty()
         )}
+
+        { !Deck.isEmpty() && (
+            renderBody()
+        )}
+
       </S.Container>
     </>
   );
