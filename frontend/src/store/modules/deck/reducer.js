@@ -39,11 +39,15 @@ export default function(state = INITIAL_STATE, action) {
 
             case '@decks/ADD_CARD_STATE': {
               let { card } = action.payload
-                , deck = draft.data.find( deck => deck.Id == card.Deck.Id)
-
-              if(deck) {
-
+                , indexOfDeck = draft.data.map( e => e.Id).indexOf(card.Deck.Id)
+                , deck = draft.data[indexOfDeck]
+              if(indexOfDeck > -1) {
+                draft.data.splice(indexOfDeck, 1)
                 deck.Cards.push(card)
+                draft.data.push(deck)
+              }
+              else {
+                console.log('Add card in deck - Deck not found')
               }
               console.log('action deck/card - ADD STATE : ', action)
               break;
