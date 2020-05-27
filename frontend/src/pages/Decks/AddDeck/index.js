@@ -1,32 +1,22 @@
 import React, {useState, useEffect} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 import PropTypes from 'prop-types';
-import {TouchableOpacity} from 'react-native';
+import {TouchableOpacity , Alert} from 'react-native';
 import IconMi from 'react-native-vector-icons/MaterialIcons';
 
 import * as S from '~/styles/global';
 import Spacing from '~/components/Spacing';
-// import { updateProfileRequest } from '~/store/modules/user/actions';
 
-import {Container, Title, Separator, Form, SubmitButton} from './styles';
+import { Container, Title, Separator, Form, SubmitButton} from './styles';
 
-//import {ServiceProxy , typeService } from '~/store/service/index'
 
-//const serviceProxy = new ServiceProxy(typeService.Deck)
 
 import { addDeck } from '~/store/modules/deck/actions'
 
 export default function AddDeck({navigation, route}) {
    const dispatch = useDispatch();
-  // const profile = useSelector(state => state.user.profile);
 
   const [deckname, setDeckname] = useState('');
-  
-  // useEffect(() => {
-  //     setOldPassword('');
-  //     setPassword('');
-  //     setConfirmPassword('');
-  // }, [profile]);
 
   function handleSubmit() {
 
@@ -34,18 +24,18 @@ export default function AddDeck({navigation, route}) {
       Name : deckname
     }))
 
-    /*
-    serviceProxy.add({
-      Name : deckname
-    })
-    .then(e => {
+    setDeckname('')
 
-      console.log('sucess', e)
-    })
-    .catch(e => {
-      console.log('error' , e)
-    })
-    */
+    Alert.alert(
+      'Alerta',
+      `Baralho adicionado com sucesso!`,
+      [
+        {
+          text: 'Ok',
+        },
+      ],
+      {cancelable: true},
+    );
   }
 
   return (

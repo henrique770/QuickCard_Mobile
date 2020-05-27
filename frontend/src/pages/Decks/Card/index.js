@@ -16,7 +16,7 @@ import * as S from '~/styles/global';
 import successAnimation from '~/assets/animation-success.json';
 import Lottie from 'lottie-react-native';
 
-import { updateCard } from '~/store/modules/deck/actions'
+import {updateCard, updateDeck} from '~/store/modules/deck/actions'
 
 const Text = Typography
 
@@ -29,13 +29,15 @@ const typesOfHits = {
 export default function Card({navigation, route}) {
 
   const { Deck } = route.params;
-  //const Deck = useSelector( state => state.deck.data.find( deck => deck.Id == Id ))
   const Card = {}
+
+  console.log('route params ' , route.params)
+
   const dispatch = useDispatch();
   const [cardIndex, setCardIndex] = useState(0);
   const [isShow, setIsShow] = useState(false);
   const [cardsVisible, setCardsVisible] = useState(false);
-  const [endQuiz, setEndQuiz] = useState(false);
+  const [endQuiz, setEndQuiz] = useState(Deck.checkRevisedDeck());
   const [cardData, setCardData] = useState(Card);
 
   useEffect(() => {
@@ -55,6 +57,17 @@ export default function Card({navigation, route}) {
     setIsShow(!isShow);
   }
 
+  function resetViewCard() {
+
+    if(isShow)
+      setIsShow(false)
+  }
+
+  function navigationToEditCard() {
+    resetViewCard()
+    navigation.navigate('EditCard', { Card : cardData })
+  }
+
   function nextCard(hitType) {
     setHitCard(hitType)
     getNextCard()
@@ -63,17 +76,14 @@ export default function Card({navigation, route}) {
   function setHitCard(hitType) {
     switch (hitType) {
       case typesOfHits.easy :
-
         cardData.hitEasy()
         break
 
       case typesOfHits.good :
-
         cardData.hitGood()
         break
 
       case typesOfHits.difficult :
-
         cardData.hitDifficult()
         break
 
@@ -85,6 +95,10 @@ export default function Card({navigation, route}) {
   }
 
   function getNextCard() {
+    if(Deck.checkRevisedDeck()) {
+      setEndQuiz(true)
+      return
+    }
 
     if(Deck.isEmpty())
     {
@@ -92,21 +106,34 @@ export default function Card({navigation, route}) {
     }
 
     let card = Deck.getDeckRandom()
+    Deck.orderCards()
 
-    card.DateLastView = new Date()
-
-    card.Deck = {
-      Id : Deck.Id
-    }
-
-    console.log('Card info: ', card)
     setCardData(card)
-    //update(card)
+  }
+
+  function reviewDeck() {
+    Deck.reviewCards()
+    update(Deck.Cards)
   }
 
   function update(card) {
-    console.log('update card' , card)
+    let setIdDeck = card => {
+      card.IdDeck = Deck.Id
+    }
+
+    if(Array.isArray(card)) {
+      for (let i = 0; i < card.length; i += 1) {
+        setIdDeck(card[i])
+      }
+    } else {
+      setIdDeck(card)
+    }
+
     dispatch(updateCard({ card }))
+
+    getNextCard()
+    setIsShow(false)
+    setEndQuiz(false)
   }
 
   //#endregion
@@ -233,7 +260,16 @@ export default function Card({navigation, route}) {
 
   function renderDeckEmpty() {
     return ( <>
-      <Text>Deck vazio</Text>
+      <S.StyledContainer>
+        <View
+          style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+          <Spacing mt={0} mb={0}>
+            <S.Text size={20} weight="bold" width={300} textAlign="center">
+              Deck não possui nenhum cartão registrado!
+            </S.Text>
+          </Spacing>
+        </View>
+      </S.StyledContainer>
     </>)
   }
 
@@ -249,14 +285,28 @@ export default function Card({navigation, route}) {
                 Parabéns!! você terminou de responder o baralho
               </S.Text>
             </Spacing>
-            <EndButton onPress={() => navigation.navigate('Decks')}>
-              <Text size={18} weight="bold" color="#fff" textAlign="center">
-                Voltar para página inicial
-              </Text>
-            </EndButton>
+
+            { endButton('Voltar para página inicial'
+                , () => navigation.navigate('Decks')) }
+
+            { endButton('Revisar novamente o baralho'
+                , () => reviewDeck()) }
+
           </View>
         </S.StyledContainer>
       )}
+    </>)
+  }
+
+  function endButton(text , onPress) {
+    return (<>
+      <Spacing mb={20}>
+        <EndButton onPress={onPress}>
+          <Text size={18} weight="bold" color="#fff" textAlign="center">
+            { text }
+          </Text>
+        </EndButton>
+      </Spacing>
     </>)
   }
 
@@ -265,8 +315,6 @@ export default function Card({navigation, route}) {
       { renderBodyCard() }
 
       { renderButtons() }
-
-      { renderEndQuiz() }
     </>)
   }
 
@@ -276,19 +324,23 @@ export default function Card({navigation, route}) {
     <>
       <S.Container align={endQuiz ? `` : 'center'}>
         <Spacing position="absolute" top="16" right="30">
-          <TouchableOpacity onPress={() => navigation.navigate('EditCard')}>
+          <TouchableOpacity onPress={() =>  navigationToEditCard()}>
             {!endQuiz && !Deck.isEmpty() && <IconMi name="settings" size={25} color="#FFF" />}
           </TouchableOpacity>
         </Spacing>
         <S.Margin />
 
-        { Deck.isEmpty() && (
+        { Deck.isEmpty() &&
           renderDeckEmpty()
-        )}
+        }
 
-        { !Deck.isEmpty() && (
-            renderBody()
-        )}
+        { !endQuiz && !Deck.isEmpty() &&
+          renderBody()
+        }
+
+        { endQuiz && !Deck.isEmpty() &&
+          renderEndQuiz()
+        }
 
       </S.Container>
     </>

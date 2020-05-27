@@ -10,36 +10,152 @@ import Typography from '~/components/Typography';
 import Spacing from '~/components/Spacing';
 import {withTheme} from 'styled-components';
 import * as S from '~/styles/global';
-import construct from "@babel/runtime/helpers/esm/construct";
+
+import { updateDeck } from '~/store/modules/deck/actions'
+
 const Text = Typography;
 
 function Decks({navigation, ...props}) {
 
+  const compare = (a, b) => {
+    return ('' + a.Name.toLowerCase()).localeCompare(b.Name.toLowerCase());
+  }
+
+  const filterActive = decks => {
+    if(Array.isArray(decks)) {
+      return decks.filter( deck => deck.IsActive )
+    }
+    return  decks
+  }
+
+  const dispatch = useDispatch()
   const deckState = useSelector( state => state.deck.data)
-  const [decks, setDeck] = useState(deckState);
+  const [decks, setDeck] = useState(filterActive(deckState));
+
+  const loadPage = () => {
+    if(Array.isArray(deckState)) {
+      if(deckState.length > 0) {
+        setDeck(filterActive(deckState))
+      } else {
+        setDeck(filterActive(deckState.sort(compare)))
+      }
+    }
+  }
 
   useEffect((e) => {
-    setDeck(deckState)
+    loadPage()
   }, [deckState]);
 
-  function deleteDeck() {
+  //#region UI LOGIC
+
+  function deleteDeck(deck) {
+    deck.IsActive = false
+
+    dispatch(updateDeck(deck))
+  }
+
+  function alertDeleteDeck(deck) {
     Alert.alert(
       'Alerta',
       `Você tem certeza que quer excluir?`,
       [
         {
           text: 'Não',
-          onPress: () => console.log('Excluir'),
+          onPress: () => {},
           style: 'Cancelar',
         },
         {
           text: 'Sim',
-          onPress: () => {},
+          onPress: () => deleteDeck(deck),
         },
       ],
       {cancelable: true},
     );
   }
+
+  //#endregion
+
+  //#region UI COMPONENTS
+
+  function renderAction(title, icon , navigate) {
+    return (
+      <ActionButton.Item
+        buttonColor="#333"
+        title={title}
+        textContainerStyle={{
+          height: 25,
+        }}
+        textStyle={{
+          fontSize: 13,
+        }}
+        onPress={() => navigation.navigate(navigate)}>
+        <IconMc name={icon} size={30} color="#FFF" />
+      </ActionButton.Item>
+    )
+  }
+
+  function renderActionButton() {
+    return (<>
+      <ActionButton buttonColor={props.theme.floatButton}>
+        { renderAction('Adicionar Cartão', 'cards-outline' , 'AddCard') }
+
+        { renderAction('Adicionar Baralho', 'cards', 'AddDeck') }
+      </ActionButton>
+    </>)
+  }
+
+  function renderTextCard(firstText, secondText) {
+    return (
+      <Text color="#656565" size="14">
+        { firstText }:{' '}
+        <Text color="#f93b10" weight="bold">
+          { secondText }
+        </Text>
+      </Text>
+    )
+  }
+
+  function renderBodyCard(deck) {
+    return (
+      <S.Box data={deck} heightFixed>
+        <S.Text weight="bold" size="16" maxHeight="60">
+          {deck.Name}
+        </S.Text>
+
+        <Spacing mt="4" position="absolute" bottom={20} left={20}>
+          { renderTextCard('Cartões', deck.totalCards()) }
+
+          { renderTextCard('A revisar', deck.totalUnreviewedCards()) }
+
+          { renderTextCard('Revisados', deck.totalCardsReviewed()) }
+        </Spacing>
+      </S.Box>
+    )
+  }
+
+  function renderListCard() {
+    return (
+      <S.List
+        data={decks}
+        numColumns={2}
+        keyExtractor={(item) => String(item.Id)}
+        renderItem={({item: deck}) => (
+          <S.Container>
+            <TouchableOpacity
+              onPress={() => navigation.navigate('Card', { Deck : deck })}
+              onLongPress={() => alertDeleteDeck(deck)}
+            >
+
+              { renderBodyCard(deck) }
+
+            </TouchableOpacity>
+          </S.Container>
+        )}
+      />
+    )
+  }
+
+  //#endregion
 
   return (
     <>
@@ -50,93 +166,12 @@ function Decks({navigation, ...props}) {
           </TouchableOpacity>
         </Spacing>
         <S.Margin />
-        <S.List
-          data={decks}
-          numColumns={2}
-          keyExtractor={(item) => String(item.Id)}
-          renderItem={({item: deck}) => (
-            <S.Container>
-              <TouchableOpacity
-                onPress={() => navigation.navigate('Card', { Deck : deck })}
-                //onLongPress={() => deleteDeck()}
-                >
-                <S.Box data={deck} heightFixed>
 
-                  <S.Text weight="bold" size="16" maxHeight="60">
-                    {deck.Name}
-                  </S.Text>
+        { renderListCard() }
 
-                  <Spacing mt="4" position="absolute" bottom={20} left={20}>
-                    <Text color="#656565" size="14">
-                      Total cartões:{' '}
-                      <Text color="#fe650e" weight="bold">
-                        {deck.Cards.length}
-                      </Text>
-                    </Text>
-                    <Spacing mb="4" />
-                    {/*
-                    <Text color="#656565" size="14">
-                      A revisar:{' '}
-                      <Text color="#f93b10" weight="bold">
-                        50
-                      </Text>
-                    </Text>
-                    */}
-                  </Spacing>
-
-                </S.Box>
-              </TouchableOpacity>
-            </S.Container>
-          )}
-        />
       </S.Container>
 
-      <ActionButton buttonColor={props.theme.floatButton}>
-        {/* <ActionButton.Item
-          buttonColor="#333"
-          title="Pomodoro"
-          textContainerStyle={{
-            height: 25,
-          }}
-          textStyle={{
-            fontSize: 13,
-          }}
-          onPress={() => navigation.navigate('Pomodoro')}>
-          <IconMc name="timer" size={30} color="#FFF" />
-        </ActionButton.Item> */}
-
-        <ActionButton.Item
-          buttonColor="#333"
-          title="Adicionar Cartão"
-          textContainerStyle={{
-            height: 25,
-          }}
-          textStyle={{
-            fontSize: 13,
-          }}
-          onPress={() => navigation.navigate('AddCard')}
-          >
-
-          <IconMc name="cards-outline" size={30} color="#FFF" />
-        </ActionButton.Item>
-
-        <ActionButton.Item
-          buttonColor="#333"
-          title="Adicionar Baralho"
-          textContainerStyle={{
-            height: 25,
-          }}
-          textStyle={{
-            fontSize: 13,
-          }}
-
-          onPress={() => navigation.navigate('AddDeck')}
-
-          >
-          <IconMc name="cards" size={30} color="#FFF" />
-        </ActionButton.Item>
-
-      </ActionButton>
+      { renderActionButton() }
     </>
   );
 }
