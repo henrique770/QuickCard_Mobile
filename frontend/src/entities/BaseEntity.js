@@ -12,6 +12,10 @@ class BaseEntity {
 
     get IsActive() { return this._isActive }
     set IsActive(value) { this._isActive = value }
+
+    clone() {
+      return new this.constructor(this)
+    }
 }
 
 export default BaseEntity

@@ -1,5 +1,9 @@
 import BaseEntity from "~/entities/BaseEntity";
 
+/**
+ * @type Card
+ * @typedef Card
+ */
 class CardEntity extends  BaseEntity {
 
   constructor(args = {}) {
@@ -13,9 +17,8 @@ class CardEntity extends  BaseEntity {
     this._verse = args.Verse
     this._front = args.Front
     this._deck = args.Deck
+    this._isReviewed = args.IsReviewed
   }
-
-
 
   get NumDifficultCount() { return this._numDifficultCount }
   set NumDifficultCount(value) { this._numDifficultCount = value; }
@@ -34,6 +37,14 @@ class CardEntity extends  BaseEntity {
 
   set Verse(value) { this._verse = value }
   get Verse() { return this._verse }
+
+  set IsReviewed(value) {
+    if(typeof value !== 'boolean')
+      throw `IsReviewed not boolean: value -> ${value}`
+
+    this._isReviewed = value
+  }
+  get IsReviewed() { return this._isReviewed }
 
   set DateNextView(value) {
 
@@ -55,19 +66,29 @@ class CardEntity extends  BaseEntity {
 
   get DateLastView() { return this._dateLastView }
 
+  /**
+   * set to card for revised
+   */
+  reviewed() {
+    this.IsReviewed = true
+  }
+
   hitEasy() {
     this.DateNextView = new Date((new Date()).setHours(72))
     this.NumEasyCount += 1
+    this.reviewed()
   }
 
   hitGood() {
     this.DateNextView = new Date((new Date()).setHours(24))
     this.NumGoodCount += 1
+    this.reviewed()
   }
 
   hitDifficult() {
     this.DateNextView = new Date((new Date()).setMinutes(10))
     this.NumDifficultCount += 1
+    this.reviewed()
   }
 }
 

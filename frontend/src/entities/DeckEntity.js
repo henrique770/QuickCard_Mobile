@@ -1,6 +1,10 @@
 
 import BaseEntity  from './BaseEntity'
 
+/**
+ * @type Deck
+ * @typedef Deck
+ */
 class DeckEntity extends BaseEntity {
 
    constructor(args = {})
@@ -9,6 +13,8 @@ class DeckEntity extends BaseEntity {
 
     this._name = args.Name
     this._cards = args.Cards
+
+     this.orderCards()
    }
 
    get Name(){ return this._name }
@@ -16,51 +22,135 @@ class DeckEntity extends BaseEntity {
 
   /**
    * returns card related to the deck
-   * @return {Cards[]}
+   * @return {Card[]}
    * @constructor
    */
   get Cards() {
       if(this._cards === undefined)
         return []
 
-      return this._cards
+      return this._cards.filter( e => e.IsActive)
     }
 
   /**
    * insert card array to deck
-   * @param value {Cards[]} - cards list
+   * @param value {Card[]} - cards list
    * @constructor
    */
-    set Cards(value) {
+  set Cards(value) {
+    if(this._cards === undefined)
+      this._cards = []
 
-      if(this._cards === undefined)
-        this._cards = []
-
-      if (Array.isArray(value)) {
-        this._cards.push(...value)
-      }
-      else if(typeof value === 'object') {
-        this._cards.push(push)
-      }
-    }
+    this._cards = value.filter( e => e.IsActive)
+  }
 
   /**
    * check for cards on the deck
    * @return {boolean}
    */
   isEmpty() {
-      return this.Cards.length === 0
+      return this.totalCards() === 0
+  }
+
+  orderCards() {
+    if(this.totalCards() === 0)
+      return
+
+    let order = (a, b) => {
+        if(a.DateNextView !== undefined && b.DateNextView !== undefined )
+          return (new Date(a.DateNextView)) < (new Date(b.DateNextView))
+
+        return false
+      }
+      , cardsOrder = this.Cards.sort(order)
+
+    this.Cards = cardsOrder
+  }
+
+  /**
+   * total cards in deck
+   * @return {number}
+   */
+  totalCards() {
+    return this.Cards.length
+  }
+
+  /**
+   * total cards reviewed
+   * @return {number}
+   */
+  totalCardsReviewed() {
+
+    return this.Cards.filter(card => card.IsReviewed).length
+  }
+
+  /**
+   * total cards unreviewed
+   * @return {number}
+   */
+  totalUnreviewedCards() {
+
+    return this.totalCards() - this.totalCardsReviewed()
+  }
+
+  /**
+   * check that all cards have been reviewed
+   * @return {boolean}
+   */
+  checkRevisedDeck() {
+    if(this.isEmpty())
+     return false
+
+    return this.totalCardsReviewed() === this.totalCards()
+  }
+
+  /**
+   * Change cards to view
+   */
+  reviewCards() {
+    if(!this.checkRevisedDeck())
+      return
+
+    for(let i = 0; i < this.totalCards(); i += 1) {
+      let card = this.Cards[i]
+      card.IsReviewed = false
+    }
+  }
+
+  getDeckRandom() {
+    let unreviewedCards = this.Cards.filter( card => !card.IsReviewed)
+      , countCards = unreviewedCards.length
+
+    if(countCards === 0) {
+      return null
     }
 
-    getDeckRandom() {
-      let countCards = this.Cards.length
-        , indexRandom = Math.floor(Math.random() * countCards) + 1
+    let card = unreviewedCards[0]
 
-      if(countCards === 0)
-          return null
+    card.DateLastView = new Date()
 
-      return this.Cards[indexRandom - 1]
+    card.Deck = {
+      Id : this.Id
     }
+
+    return card
+  }
+
+  removeCard(card) {
+    let indexOf = this.Cards.map(card => card.Id).indexOf(card.Id)
+
+    if(indexOf > -1) {
+
+      this.Cards.splice(indexOf, 1)
+      return true
+    }
+    return false
+  }
+
+  addCard(card) {
+
+    this.Cards.push(card)
+  }
 }
 
 export default DeckEntity
