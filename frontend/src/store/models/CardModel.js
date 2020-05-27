@@ -51,8 +51,14 @@ class CardModel extends BaseModel{
           type: types.BOOLEAN
           , not_null : true
         }
+        , IsReviewed : {
+          type: types.BOOLEAN
+          , not_null : true
+        }
       }
     }
+
+
 
     static get tableName() {
       return __tableNameModel__
