@@ -11,46 +11,26 @@ import Spacing from '~/components/Spacing';
 import {withTheme} from 'styled-components';
 import * as S from '~/styles/global';
 
-import { updateDeck } from '~/store/modules/deck/actions'
+import { updateDeck , getDecks } from '~/store/modules/deck/actions'
 
 const Text = Typography;
 
 function Decks({navigation, ...props}) {
 
-  const compare = (a, b) => {
-    return ('' + a.Name.toLowerCase()).localeCompare(b.Name.toLowerCase());
-  }
-
-  const filterActive = decks => {
-    if(Array.isArray(decks)) {
-      return decks.filter( deck => deck.IsActive )
-    }
-    return  decks
-  }
-
   const dispatch = useDispatch()
   const deckState = useSelector( state => state.deck.data)
-  const [decks, setDeck] = useState(filterActive(deckState));
 
-  const loadPage = () => {
-    if(Array.isArray(deckState)) {
-      if(deckState.length > 0) {
-        setDeck(filterActive(deckState))
-      } else {
-        setDeck(filterActive(deckState.sort(compare)))
-      }
-    }
-  }
+  let decks = [...deckState]
 
   useEffect((e) => {
-    loadPage()
-  }, [deckState]);
+    console.log('decks --- dispache')
+    dispatch(getDecks())
+  }, []);
 
   //#region UI LOGIC
 
   function deleteDeck(deck) {
     deck.IsActive = false
-
     dispatch(updateDeck(deck))
   }
 

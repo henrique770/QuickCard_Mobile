@@ -3,7 +3,7 @@ import SqLite  from 'react-native-sqlite-storage'
 
 const __databaseName__ = 'QuickCard'
  , __createLocation__ = '~QuickCard.db'
- , __DEBUG__ = false
+ , __DEBUG__ = true
 
  SqLite.DEBUG(__DEBUG__);
 

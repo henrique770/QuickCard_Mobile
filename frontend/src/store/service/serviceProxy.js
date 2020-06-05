@@ -75,7 +75,7 @@ const ServiceProxy = (() => {
        * @return { RepositoryBase | function(args) : BaseEntity }
        */
     get : (target , key) => {
-      console.log(`key target : ${key}`)
+     // console.log(`key target : ${key}`)
 
       if(key === 'add') {
         // replace target function
@@ -94,7 +94,6 @@ const ServiceProxy = (() => {
       }
 
       if(target[key] !== undefined) {
-
         return target[key]
       }
     }
