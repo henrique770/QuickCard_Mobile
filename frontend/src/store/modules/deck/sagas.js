@@ -10,7 +10,6 @@ import {  getDecks
 
 import {ServiceProxy , typeService } from '~/store/service'
 
-
 const filterActive = data => {
   if(Array.isArray(data)) {
     return data.filter( e => e.IsActive)
@@ -20,7 +19,7 @@ const filterActive = data => {
     return data
   }
 
-  return null
+  return []
 }
 
 export function* getDecksDataBase() {
@@ -61,7 +60,8 @@ export function* addCardDataBase(data) {
         Id : card.IdDeck
       }
 
-      yield put(addCardState({ card : entity }))
+    yield put(addCardState({ card : entity }))
+    yield getDecksDataBase()
 }
 
 export function* updateCardDataBase(data) {
@@ -88,17 +88,14 @@ export function* updateCardDataBase(data) {
       }
 }
 
-//#region
-
 export function* updateDeckDataBase(data) {
   const { deck } = data.payload
     , serviceProxy = new ServiceProxy(typeService.Deck)
     , entity = yield serviceProxy.update(deck)
 
   yield put(updateDeckState(entity))
+  yield getDecksDataBase()
 }
-
-//#endregion
 
 export default all([
     takeLatest('@decks/GET_DECKS', getDecksDataBase)
