@@ -12,19 +12,19 @@ export const Box = styled.View`
   ${({heightFixed}) => (heightFixed ? `height: 150px;` : ``)}
   max-height: 180px;
   border-radius: 12px;
-  background: ${(props) => props.theme.backgroundbox};
+  background: ${props => props.theme.backgroundbox};
 `;
 
 export const Container = styled.SafeAreaView`
   flex: 1;
-  background: ${(props) => props.theme.background};
+  background: ${props => props.theme.background};
   ${({align}) => (align ? `align-items: ${align};` : ``)}
   ${({white}) => (white ? `background: #fff!important;` : ``)}
 `;
 
 export const Sidebar = styled.SafeAreaView`
   flex: 1;
-  background: ${(props) => props.theme.sidebar};
+  background: ${props => props.theme.sidebar};
 `;
 
 export const Title = styled.Text`
@@ -37,12 +37,12 @@ export const Title = styled.Text`
 `;
 
 export const Text = styled(Typography)`
-  color: ${(props) => props.theme.primaryText};
+  color: ${props => props.theme.primaryText};
 `;
 
 export const TextButton = styled(Typography)`
   font-size: 17px;
-  color: ${(props) => props.theme.textButtonColor};
+  color: ${props => props.theme.textButtonColor};
 `;
 
 export const List = styled.FlatList.attrs({
@@ -53,12 +53,12 @@ export const List = styled.FlatList.attrs({
 })``;
 
 export const FormInput = styled(Input)`
-  background: ${(props) => props.theme.inputColor};
+  background: ${props => props.theme.inputColor};
   margin-bottom: 10px;
 `;
 
 export const ButtonTheme = styled(Button)`
-  background: ${(props) => props.theme.colorButton};
+  background: ${props => props.theme.colorButton};
   border-radius: 10px;
 `;
 
@@ -68,7 +68,7 @@ export const Margin = styled(Spacing)`
 
 export const StyledContainer = styled.View`
   flex: 1;
-  background: ${(props) => props.theme.backgroundbox};
+  background: ${props => props.theme.backgroundbox};
   border-top-left-radius: 25px;
   border-top-right-radius: 25px;
 `;

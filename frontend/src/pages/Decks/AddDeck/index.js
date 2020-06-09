@@ -1,30 +1,29 @@
 import React, {useState, useEffect} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 import PropTypes from 'prop-types';
-import {TouchableOpacity , Alert} from 'react-native';
+import {TouchableOpacity, Alert} from 'react-native';
 import IconMi from 'react-native-vector-icons/MaterialIcons';
 
 import * as S from '~/styles/global';
 import Spacing from '~/components/Spacing';
 
-import { Container, Title, Separator, Form, SubmitButton} from './styles';
+import {Container, Title, Separator, Form, SubmitButton} from './styles';
 
-
-
-import { addDeck } from '~/store/modules/deck/actions'
+import {addDeck} from '~/store/modules/deck/actions';
 
 export default function AddDeck({navigation, route}) {
-   const dispatch = useDispatch();
+  const dispatch = useDispatch();
 
   const [deckname, setDeckname] = useState('');
 
   function handleSubmit() {
+    dispatch(
+      addDeck({
+        Name: deckname,
+      }),
+    );
 
-    dispatch(addDeck({
-      Name : deckname
-    }))
-
-    setDeckname('')
+    setDeckname('');
 
     Alert.alert(
       'Alerta',
@@ -32,6 +31,7 @@ export default function AddDeck({navigation, route}) {
       [
         {
           text: 'Ok',
+          onPress: navigation.navigate('Decks'),
         },
       ],
       {cancelable: true},

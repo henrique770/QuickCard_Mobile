@@ -7,7 +7,7 @@ export const FlipCardBox = styled.View`
   height: 400px;
   border-radius: 10px;
   align-items: center;
-  background-color: ${(props) => props.theme.backgroundbox};
+  background-color: ${props => props.theme.backgroundbox};
 `;
 export const ContainerFlashCard = styled.View`
   display: flex;
@@ -25,6 +25,7 @@ export const Button = styled(ButtonTheme)`
 
 export const EndButton = styled(RectButton)`
   height: 46px;
+  width: 300px;
   background: #fe650e;
   border-radius: 10px;
   padding: 0 30px;

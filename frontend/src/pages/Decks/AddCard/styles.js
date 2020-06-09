@@ -1,12 +1,19 @@
 import styled from 'styled-components/native';
 
-import Input from '~/components/Input';
-import Button from '~/components/Button';
-
 export const Separator = styled.View`
   height: 1px;
   background: rgba(255, 255, 255, 0.2);
   margin: 20px 0 30px;
+`;
+
+export const SelectContainer = styled.View`
+  padding: 0 15px;
+  height: 46px;
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+  flex-direction: row;
+  align-items: center;
+  margin-bottom: 10px;
 `;
 
 export const Title = styled.Text`

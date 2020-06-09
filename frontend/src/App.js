@@ -5,8 +5,7 @@ import createRouter from './routes';
 
 export default function App() {
   const signed = true;
-  useEffect(() => {
-  } , [])
+  useEffect(() => {}, []);
 
   //const signed = useSelector(state => state.auth.signed);
   return createRouter(signed);
