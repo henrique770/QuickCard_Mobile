@@ -1,32 +1,38 @@
 import {
-    DeckModel
-    , CardModel
-} from '~/store/models/index'
+  DeckModel,
+  CardModel,
+  NotePadModel,
+  NoteModel,
+} from '~/store/models/index';
 
+const factoryModel = (() => {
+  const models = [];
 
-const factoryModel = ( () => {
+  models.push(
+    {
+      name: 'DeckModel',
+      service: DeckModel,
+    },
+    {
+      name: 'CardModel',
+      service: CardModel,
+    },
+    {
+      name: 'NotePadModel',
+      service: NotePadModel,
+    },
+    {
+      name: 'NoteModel',
+      service: NoteModel,
+    },
+  );
 
-    const models = []
+  return {
+    /**
+     * @returns {BaseEntity}
+     */
+    get: name => models.find(e => e.name == name).service,
+  };
+})();
 
-    models.push(
-      {
-        name: 'DeckModel'
-        , service: DeckModel
-      }
-      , {
-        name: 'CardModel'
-        , service: CardModel
-      }
-    )
-
-    return {
-
-        /**
-         * @returns {BaseEntity}
-         */
-        get : ( name ) => models.find( e => e.name == name).service
-    }
-
-})()
-
-export default factoryModel
+export default factoryModel;

@@ -1,35 +1,44 @@
 import {
-  BaseEntity
-  , CardEntity
-  , DeckEntity
+  BaseEntity,
+  CardEntity,
+  DeckEntity,
+  NotePadEntity,
+  NoteEntity,
+} from '~/entities/index';
 
-} from '~/entities/index'
+const factoryEntity = (() => {
+  const entities = [];
 
-const factoryEntity = ( () => {
+  //#region REGISTRE
 
-    const entities = []
+  entities.push({
+    name: 'DeckEntity',
+    service: DeckEntity,
+  });
 
-    //#region REGISTRE
+  entities.push({
+    name: 'CardEntity',
+    service: CardEntity,
+  });
 
-    entities.push({
-      name: 'DeckEntity'
-      , service: DeckEntity
-    })
+  entities.push({
+    name: 'NotePadEntity',
+    service: NotePadEntity,
+  });
 
-    entities.push({
-      name: 'CardEntity'
-      , service: CardEntity
-    })
+  entities.push({
+    name: 'NoteEntity',
+    service: NoteEntity,
+  });
 
-    //#endregion
+  //#endregion
 
-    return {
-        /**
-         * @returns {BaseEntity}
-         */
-        get : ( name ) => entities.find( e => e.name == name).service
-    }
+  return {
+    /**
+     * @returns {BaseEntity}
+     */
+    get: name => entities.find(e => e.name == name).service,
+  };
+})();
 
-})()
-
-export default factoryEntity
+export default factoryEntity;

@@ -1,13 +1,13 @@
 import ExtendsModel from './ExtendsModel';
 import {types} from '~/store/repository/expoSqliteOrm/index';
 
-const __tableNameModel__ = 'Deck';
+const __tableNameModel__ = 'NotePad';
 
 /**
- * @typedef Deck
- * @param {string} id - identificador do deck
+ * @typedef NotePad
+ * @param {string} id - identificador do bloco de nota
  */
-class DeckModel extends ExtendsModel {
+class NotePadModel extends ExtendsModel {
   constructor(obj) {
     super(obj);
   }
@@ -34,4 +34,4 @@ class DeckModel extends ExtendsModel {
   }
 }
 
-export default DeckModel;
+export default NotePadModel;
