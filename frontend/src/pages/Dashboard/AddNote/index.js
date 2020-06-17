@@ -20,7 +20,7 @@ import {Container, Title, ContainerTag, TagInput} from './styles';
 
 const defaultStyles = getDefaultStyles();
 
-export default class AddNotes extends Component {
+export default class AddNote extends Component {
   constructor(props) {
     super(props);
 
@@ -110,20 +110,20 @@ export default class AddNotes extends Component {
                 }}
                 size={30}
                 iconSet={[
-                  {
-                    type: 'tool',
-                    iconArray: [
-                      {
-                        buttonTypes: 'style',
-                        toolTypeText: 'image',
-                        iconComponent: (
-                          <Text style={styles.toolbarButton}>
-                            <IconMi name="image" size={30} />
-                          </Text>
-                        ),
-                      },
-                    ],
-                  },
+                  // {
+                  //   type: 'tool',
+                  //   iconArray: [
+                  //     {
+                  //       buttonTypes: 'style',
+                  //       toolTypeText: 'image',
+                  //       iconComponent: (
+                  //         <Text style={styles.toolbarButton}>
+                  //           <IconMi name="image" size={30} />
+                  //         </Text>
+                  //       ),
+                  //     },
+                  //   ],
+                  // },
                   {
                     type: 'tool',
                     iconArray: [
@@ -239,7 +239,7 @@ var styles = StyleSheet.create({
   },
 });
 
-AddNotes.propTypes = {
+AddNote.propTypes = {
   navigation: PropTypes.shape({
     navigate: PropTypes.func.isRequired,
   }).isRequired,

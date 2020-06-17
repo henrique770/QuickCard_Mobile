@@ -4,7 +4,7 @@ import {
   getNotePads,
   setNotePads,
   addNotePadState,
-  addNoteState,
+  AddNotetate,
   updateNoteState,
   updateNotePadState,
 } from './actions';
@@ -57,7 +57,7 @@ export function* addNoteDataBase(data) {
     Id: note.IdNotePad,
   };
 
-  yield put(addNoteState({card: entity}));
+  yield put(AddNotetate({card: entity}));
   yield getNotePadsDataBase();
 }
 
