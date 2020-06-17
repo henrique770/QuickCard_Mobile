@@ -11,12 +11,9 @@ import IconMi from 'react-native-vector-icons/MaterialIcons';
 import * as S from '~/styles/global';
 import { getNotePads } from "~/store/modules/notepad/actions";
 
-<<<<<<< HEAD:frontend/src/pages/Dashboard/NoteBlocks/index.js
-const data = [1];
 const Text = Typography;
 
-
-function NoteBlocks({navigation, ...props}) {
+function NotePad({navigation, ...props}) {
 
   const dispatch = useDispatch();
   const notePadState = useSelector( state => state.notepad.data)
@@ -26,35 +23,6 @@ function NoteBlocks({navigation, ...props}) {
     dispatch(getNotePads())
   }, []);
 
-
-=======
-const data = [
-  {
-    id: '4',
-    name: 'nojunkfood',
-  },
-  {
-    id: '2',
-    name: 'Arquitetura Flux',
-  },
-  {
-    id: '3',
-    name: 'Sistemas operacionais',
-  },
-  {
-    id: '1',
-    name: 'QuickCard',
-  },
-  {
-    id: '5',
-    name: 'fala de quinta ( 5 estratégias competitivas de poter )',
-  },
-];
-
-const Text = Typography;
-
-function NotePad({navigation, ...props}) {
->>>>>>> develop-integration:frontend/src/pages/Dashboard/NotePad/index.js
   function deleteNotePad() {
     Alert.alert(
       'Alerta',
@@ -92,23 +60,12 @@ function NotePad({navigation, ...props}) {
               <TouchableOpacity
                 onPress={() => navigation.navigate('NotePadNotes')}
                 onLongPress={() => deleteNotePad()}>
-<<<<<<< HEAD:frontend/src/pages/Dashboard/NoteBlocks/index.js
                 <S.Box data={item}>
                   <S.Text weight="bold" size="16" maxHeight="95">
                     {item.Name}
                   </S.Text>
                   <Spacing mt="4" />
                   <Text color="#fe650e">{item.totalNotes} Notas</Text>
-=======
-                <S.Box data={item} CustomHeight="150px">
-                  <S.Text weight="bold" size="16" maxHeight="60">
-                    {item.name}
-                  </S.Text>
-                  <Spacing mt="4" />
-                  <Spacing mt="4" position="absolute" bottom={20} left={20}>
-                    <Text color="#fe650e">5 Notas</Text>
-                  </Spacing>
->>>>>>> develop-integration:frontend/src/pages/Dashboard/NotePad/index.js
                 </S.Box>
               </TouchableOpacity>
             </S.Container>

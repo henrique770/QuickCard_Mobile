@@ -100,18 +100,18 @@ function Dashboard({navigation, ...props}) {
         <S.Margin />
         <S.List
           data={data}
-          keyExtractor={item => String(item.id)}
+          keyExtractor={item => String(item.Id)}
           renderItem={({item}) => (
             <Swipeable autoClose={true} rightButtons={rightButtons}>
               <TouchableWithoutFeedback
                 onPress={() => navigation.navigate('AddNote')}>
                 <S.Box data={item}>
                   <S.Text weight="bold" size="16">
-                    {item.name}
+                    {item.Name}
                   </S.Text>
                   <Spacing mt="4" mb="4">
                     <Text size="14" color="#656565" maxHeight="50">
-                      {item.content}
+                      {item.Content}
                     </Text>
                   </Spacing>
                   <Text color="#fe650e">Primeiro Caderno</Text>
