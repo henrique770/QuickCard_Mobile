@@ -27,11 +27,11 @@ export function* getNotePadsDataBase() {
   const serviceProxyNotePad = new ServiceProxy(typeService.NotePad);
 
   let notepads = yield serviceProxyNotePad
-    .include(typeService.Note, 'Notes', {
-      foryKey: 'Id',
-      operKey: 'IdNotePad_in',
-    })
-    .all();
+                          .include(typeService.Note, 'Notes', {
+                            foryKey: 'Id',
+                            operKey: 'IdNotePad_in',
+                          })
+                          .all();
 
   console.log('notepads database', notepads);
 

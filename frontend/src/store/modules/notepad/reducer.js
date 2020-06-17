@@ -12,10 +12,11 @@ operationsActions['@notepads/SET_NOTEPADS'] = (state, draft, action) => {
   const compare = (a, b) => {
     return ('' + a.Name.toLowerCase()).localeCompare(b.Name.toLowerCase());
   };
-  draft.data = [...action.payload.data].sort(compare);
+  draft.data = [...action.payload.data];//.sort(compare);
 };
 //#endregion
 
+/*
 //#region UPDATE STATE NOTEPAD
 operationsActions['@notepads/UPDATE_NOTEPAD_STATE'] = (
   state,
@@ -81,7 +82,7 @@ operationsActions['@notepads/ADD_NOTE_STATE'] = (state, draft, action) => {
   }
 };
 //#endregion
-
+*/
 //#endregion
 
 export default function(state = INITIAL_STATE, action) {
@@ -91,7 +92,7 @@ export default function(state = INITIAL_STATE, action) {
     if (typeof operation === 'function') {
       operation(state, draft, action);
     } else {
-      console.log(' - undefined action - ', action);
+      console.log(' - undefined action - ', action.type);
     }
   });
 }

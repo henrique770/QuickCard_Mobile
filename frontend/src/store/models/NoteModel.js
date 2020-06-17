@@ -22,6 +22,10 @@ class NoteModel extends BaseModel {
         type: types.TEXT,
         not_null: true,
       },
+      IsActive: {
+        type: types.BOOLEAN,
+        not_null: true,
+      },
     };
   }
 
