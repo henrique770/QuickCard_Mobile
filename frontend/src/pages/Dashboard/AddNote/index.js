@@ -6,6 +6,7 @@ import {
   Text,
   KeyboardAvoidingView,
   View,
+  Picker,
 } from 'react-native';
 
 import CNEditor, {
@@ -27,6 +28,7 @@ export default class AddNote extends Component {
     this.state = {
       selectedTag: 'body',
       selectedStyles: [],
+      language: 'java',
     };
 
     this.editor = null;
@@ -56,11 +58,24 @@ export default class AddNote extends Component {
             <Spacing position="absolute" top="5" right="30" width="50">
               <ContainerTag>
                 <IconMc name="tag" size={20} color="#f93b10" />
-                <TagInput
+
+                <Picker
+                  style={{
+                    height: 50,
+                    width: '100%',
+                  }}
+                  selectedValue={this.state.language}
+                  onValueChange={(itemValue, itemIndex) =>
+                    this.setState({language: itemValue})
+                  }>
+                  <Picker.Item label="Java" value="java" />
+                  <Picker.Item label="JavaScript" value="js" />
+                </Picker>
+                {/* <TagInput
                   autoCorrect={false}
                   autoCapitalize="none"
                   placeholder="Tag Baralho"
-                />
+                /> */}
               </ContainerTag>
             </Spacing>
           </Spacing>
