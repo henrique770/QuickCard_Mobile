@@ -82,7 +82,7 @@ function Dashboard({navigation, ...props}) {
           ])
         }>
         <Text>
-          <IconMc name="close-circle-outline" color="#fff" size={30} />
+          <IconMc name="trash-can" color="#fff" size={30} />
         </Text>
       </TouchableOpacity>
     </S.Box>,
@@ -100,11 +100,11 @@ function Dashboard({navigation, ...props}) {
         <S.Margin />
         <S.List
           data={data}
-          keyExtractor={(item) => String(item.id)}
+          keyExtractor={item => String(item.id)}
           renderItem={({item}) => (
             <Swipeable autoClose={true} rightButtons={rightButtons}>
               <TouchableWithoutFeedback
-                onPress={() => navigation.navigate('AddNotes')}>
+                onPress={() => navigation.navigate('AddNote')}>
                 <S.Box data={item}>
                   <S.Text weight="bold" size="16">
                     {item.name}
@@ -132,7 +132,7 @@ function Dashboard({navigation, ...props}) {
           textStyle={{
             fontSize: 13,
           }}
-          onPress={() => navigation.navigate('AddNotes')}>
+          onPress={() => navigation.navigate('AddNote')}>
           <IconMi name="note-add" color="#fff" size={30} />
         </ActionButton.Item>
       </ActionButton>

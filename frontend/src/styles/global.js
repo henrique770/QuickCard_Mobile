@@ -10,6 +10,8 @@ export const Box = styled.View`
   margin-left: 7px;
   padding: 20px;
   ${({heightFixed}) => (heightFixed ? `height: 150px;` : ``)}
+  ${({CustomHeight}) =>
+    CustomHeight ? `height: ${CustomHeight};` : ``}
   max-height: 180px;
   border-radius: 12px;
   background: ${props => props.theme.backgroundbox};

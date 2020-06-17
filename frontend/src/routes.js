@@ -8,12 +8,10 @@ import IconMc from 'react-native-vector-icons/MaterialCommunityIcons';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 import Dashboard from './pages/Dashboard';
-import AddNotes from './pages/Dashboard/_AddNotes';
-
-import NoteBlocks from './pages/Dashboard/NoteBlocks';
-import AddBlocks from './pages/Dashboard/AddBlocks';
-import Blocks from './pages/Dashboard/Blocks';
-import AddBlockNotes from './pages/Dashboard/AddBlockNotes';
+import AddNote from './pages/Dashboard/AddNote';
+import AddNotePad from './pages/Dashboard/AddNotePad';
+import NotePad from './pages/Dashboard/NotePad';
+import NotePadNotes from './pages/Dashboard/NotePadNotes';
 
 import SignIn from './pages/Auth/SignIn';
 import SignUp from './pages/Auth/SignUp';
@@ -55,8 +53,8 @@ function StackNotes() {
       />
 
       <Stack.Screen
-        name="AddNotes"
-        component={AddNotes}
+        name="AddNote"
+        component={AddNote}
         options={{
           title: '',
           headerTintColor: '#f93b10',
@@ -131,7 +129,7 @@ function StackDecks() {
   );
 }
 
-function StackNoteBlocks() {
+function StackNotePad() {
   return (
     <Stack.Navigator
       screenOptions={{
@@ -142,32 +140,32 @@ function StackNoteBlocks() {
         },
       }}>
       <Stack.Screen
-        name="NoteBlocks"
-        component={NoteBlocks}
+        name="NotePad"
+        component={NotePad}
         options={{
           title: 'Blocos de notas',
           headerTintColor: '#fff',
         }}
       />
       <Stack.Screen
-        name="Blocks"
-        component={Blocks}
+        name="NotePadNotes"
+        component={NotePadNotes}
         options={{
           title: 'Anotações do bloco',
           headerTintColor: '#fff',
         }}
       />
       <Stack.Screen
-        name="AddBlocks"
-        component={AddBlocks}
+        name="AddNotePad"
+        component={AddNotePad}
         options={{
           title: 'Adicionar Bloco de notas',
           headerTintColor: '#fff',
         }}
       />
       <Stack.Screen
-        name="AddBlockNotes"
-        component={AddBlockNotes}
+        name="AddNote"
+        component={AddNote}
         options={{
           title: '',
           headerTintColor: '#f93b10',
@@ -255,7 +253,7 @@ export default function createRouter(isSigned = false) {
           backgroundColor: '#fff',
           width: 301,
         }}
-        drawerContent={(props) => <CustomDrawerContent {...props} />}>
+        drawerContent={props => <CustomDrawerContent {...props} />}>
         <Drawer.Screen
           name="Baralhos"
           options={{
@@ -281,7 +279,7 @@ export default function createRouter(isSigned = false) {
               <IconMc color={'#fe650e'} size={20} name={'book-multiple'} />
             ),
           }}
-          component={StackNoteBlocks}
+          component={StackNotePad}
         />
 
         <Drawer.Screen

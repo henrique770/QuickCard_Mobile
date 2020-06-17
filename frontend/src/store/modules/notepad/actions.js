@@ -40,7 +40,7 @@ export function addNote(note) {
   };
 }
 
-export function addNoteState({note}) {
+export function AddNotetate({note}) {
   return {
     type: '@notepads/ADD_NOTE_STATE',
     payload: {note},

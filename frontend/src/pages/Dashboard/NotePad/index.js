@@ -1,4 +1,5 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
+import {useSelector, useDispatch} from 'react-redux';
 import Typography from '~/components/Typography';
 import Spacing from '~/components/Spacing';
 
@@ -8,11 +9,52 @@ import ActionButton from 'react-native-action-button';
 import IconMi from 'react-native-vector-icons/MaterialIcons';
 
 import * as S from '~/styles/global';
+import { getNotePads } from "~/store/modules/notepad/actions";
 
-const data = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14];
+<<<<<<< HEAD:frontend/src/pages/Dashboard/NoteBlocks/index.js
+const data = [1];
 const Text = Typography;
 
+
 function NoteBlocks({navigation, ...props}) {
+
+  const dispatch = useDispatch();
+  const notePadState = useSelector( state => state.notepad.data)
+
+  useEffect((e) => {
+    console.log('decks --- dispache')
+    dispatch(getNotePads())
+  }, []);
+
+
+=======
+const data = [
+  {
+    id: '4',
+    name: 'nojunkfood',
+  },
+  {
+    id: '2',
+    name: 'Arquitetura Flux',
+  },
+  {
+    id: '3',
+    name: 'Sistemas operacionais',
+  },
+  {
+    id: '1',
+    name: 'QuickCard',
+  },
+  {
+    id: '5',
+    name: 'fala de quinta ( 5 estratégias competitivas de poter )',
+  },
+];
+
+const Text = Typography;
+
+function NotePad({navigation, ...props}) {
+>>>>>>> develop-integration:frontend/src/pages/Dashboard/NotePad/index.js
   function deleteNotePad() {
     Alert.alert(
       'Alerta',
@@ -42,20 +84,31 @@ function NoteBlocks({navigation, ...props}) {
         </Spacing>
         <S.Margin />
         <S.List
-          data={data}
+          data={notePadState}
           numColumns={2}
           keyExtractor={item => String(item)}
           renderItem={({item}) => (
             <S.Container>
               <TouchableOpacity
-                onPress={() => navigation.navigate('Blocks')}
+                onPress={() => navigation.navigate('NotePadNotes')}
                 onLongPress={() => deleteNotePad()}>
+<<<<<<< HEAD:frontend/src/pages/Dashboard/NoteBlocks/index.js
                 <S.Box data={item}>
                   <S.Text weight="bold" size="16" maxHeight="95">
-                    Função javascript ocultar e mostrar elementos na tela Função
+                    {item.Name}
                   </S.Text>
                   <Spacing mt="4" />
-                  <Text color="#fe650e">5 Notas</Text>
+                  <Text color="#fe650e">{item.totalNotes} Notas</Text>
+=======
+                <S.Box data={item} CustomHeight="150px">
+                  <S.Text weight="bold" size="16" maxHeight="60">
+                    {item.name}
+                  </S.Text>
+                  <Spacing mt="4" />
+                  <Spacing mt="4" position="absolute" bottom={20} left={20}>
+                    <Text color="#fe650e">5 Notas</Text>
+                  </Spacing>
+>>>>>>> develop-integration:frontend/src/pages/Dashboard/NotePad/index.js
                 </S.Box>
               </TouchableOpacity>
             </S.Container>
@@ -73,7 +126,7 @@ function NoteBlocks({navigation, ...props}) {
           textStyle={{
             fontSize: 13,
           }}
-          onPress={() => navigation.navigate('AddBlocks')}>
+          onPress={() => navigation.navigate('AddNotePad')}>
           <IconMi name="library-add" color="#fff" size={30} />
         </ActionButton.Item>
       </ActionButton>
@@ -81,4 +134,4 @@ function NoteBlocks({navigation, ...props}) {
   );
 }
 
-export default withTheme(NoteBlocks);
+export default withTheme(NotePad);

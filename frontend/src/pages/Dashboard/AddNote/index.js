@@ -6,6 +6,7 @@ import {
   Text,
   KeyboardAvoidingView,
   View,
+  Picker,
 } from 'react-native';
 
 import CNEditor, {
@@ -20,13 +21,14 @@ import {Container, Title, ContainerTag, TagInput} from './styles';
 
 const defaultStyles = getDefaultStyles();
 
-export default class AddNotes extends Component {
+export default class AddNote extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
       selectedTag: 'body',
       selectedStyles: [],
+      language: 'java',
     };
 
     this.editor = null;
@@ -56,11 +58,24 @@ export default class AddNotes extends Component {
             <Spacing position="absolute" top="5" right="30" width="50">
               <ContainerTag>
                 <IconMc name="tag" size={20} color="#f93b10" />
-                <TagInput
+
+                <Picker
+                  style={{
+                    height: 50,
+                    width: '100%',
+                  }}
+                  selectedValue={this.state.language}
+                  onValueChange={(itemValue, itemIndex) =>
+                    this.setState({language: itemValue})
+                  }>
+                  <Picker.Item label="Java" value="java" />
+                  <Picker.Item label="JavaScript" value="js" />
+                </Picker>
+                {/* <TagInput
                   autoCorrect={false}
                   autoCapitalize="none"
                   placeholder="Tag Baralho"
-                />
+                /> */}
               </ContainerTag>
             </Spacing>
           </Spacing>
@@ -110,20 +125,20 @@ export default class AddNotes extends Component {
                 }}
                 size={30}
                 iconSet={[
-                  {
-                    type: 'tool',
-                    iconArray: [
-                      {
-                        buttonTypes: 'style',
-                        toolTypeText: 'image',
-                        iconComponent: (
-                          <Text style={styles.toolbarButton}>
-                            <IconMi name="image" size={30} />
-                          </Text>
-                        ),
-                      },
-                    ],
-                  },
+                  // {
+                  //   type: 'tool',
+                  //   iconArray: [
+                  //     {
+                  //       buttonTypes: 'style',
+                  //       toolTypeText: 'image',
+                  //       iconComponent: (
+                  //         <Text style={styles.toolbarButton}>
+                  //           <IconMi name="image" size={30} />
+                  //         </Text>
+                  //       ),
+                  //     },
+                  //   ],
+                  // },
                   {
                     type: 'tool',
                     iconArray: [
@@ -239,7 +254,7 @@ var styles = StyleSheet.create({
   },
 });
 
-AddNotes.propTypes = {
+AddNote.propTypes = {
   navigation: PropTypes.shape({
     navigate: PropTypes.func.isRequired,
   }).isRequired,
