@@ -240,7 +240,45 @@ function StackPomodoro() {
   );
 }
 
-export default function createRouter(isSigned = false) {
+export default function createRouter(isSigned = false, isConnected = false) {
+
+
+  let renderProfile= () => {
+    if(!isSigned)
+      return <></>
+
+    return (
+      <Drawer.Screen
+        name="Perfil"
+        options={{
+          drawerIcon: () => (
+            <Icon color={'#fe650e'} size={20} name={'user-circle-o'} />
+          ),
+        }}
+        component={StackProfile}
+      />)
+  }
+
+    , renderCreateProfile = () => {
+
+    if(isSigned && !isConnected) {
+      return <></>
+    }
+
+    return <>
+      <Drawer.Screen
+        name="Criar perfil"
+        options={{
+          drawerIcon: () => (
+            <Icon color={'#fe650e'} size={20} name={'user-circle-o'} />
+          ),
+        }}
+        component={SignUp}
+      />
+    </>
+  }
+
+
   return !isSigned ? (
     <Stack.Navigator headerMode="none">
       <Stack.Screen name="SignIn" component={SignIn} />
@@ -301,6 +339,11 @@ export default function createRouter(isSigned = false) {
           }}
           component={StackCharts}
         />
+
+        { renderProfile() }
+        { renderCreateProfile() }
+
+        {/*
         <Drawer.Screen
           name="Perfil"
           options={{
@@ -310,6 +353,12 @@ export default function createRouter(isSigned = false) {
           }}
           component={StackProfile}
         />
+        */}
+
+
+
+
+
       </Drawer.Navigator>
     </>
   );
