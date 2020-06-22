@@ -1,5 +1,7 @@
 import { typeService } from './typeService'
 import RepositoryBase from '~/store/repository/repositoryBase'
+import synchronizationService from '~/store/service/synchronizationService'
+import NetInfo from "@react-native-community/netinfo";
 
 //#region
 
@@ -32,39 +34,48 @@ const ServiceProxy = (() => {
     update : 2
   }
 
-  , repository = () => {}
+  , updateState = (operation, resource) => {
+      let source = {}
+      if (Array.isArray(resource)) {
+        state[operation].push(resource.map(ent => {
+          source = {
+            id: ent.Id
+            , type: ent.constructor.name
+          }
+          return source;
+        }))
+      } else {
+        source = {
+          id: resource.Id
+          , type: resource.constructor.name
+        }
+        state[operation].push(source)
+        return source;
+      }
+    }
 
   , dispatch = () => {
 
     console.log('state proxy' , state)
   }
-    ,
 
     /**
      *
      * @param {String} operation
-     * @param {BaseEntity | BaseEntity[]} resource
+     * @param {BaseEntity | BaseEntity[]} entity
      * @return {BaseEntity | BaseEntity[]}
      */
-   operationState = ( operation, resource ) => {
-     if(Array.isArray(resource)) {
-       state[operation].push(resource.map( ent => {
-        return {
-          id : ent.Id
-          , type : ent.constructor.name
+   , operationState = ( operation, entity ) => {
+     let source = updateState(operation, entity)
+
+      NetInfo.fetch().then( stateNet => {
+        if(stateNet.isConnected) {
+
+          synchronizationService.writeOperation(operation, source)
         }
-      }))
-    }
-    else {
-      state[operation].push({
-        id : resource.Id
-        , type : resource.constructor.name
-     })
-    }
-
+      })
     dispatch()
-
-    return resource
+    return entity
   }
 
   , handler = {

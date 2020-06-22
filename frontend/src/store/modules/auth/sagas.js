@@ -5,7 +5,7 @@ import NetInfo from "@react-native-community/netinfo";
 import api from '~/services/api';
 import { signInSuccess, signFailure } from './actions';
 import StudentEntity from '~/entities/StudentEntity'
-
+import synchronizationService from '~/store/service/synchronizationService'
 
 //#region PROCESS LOGIN REQUEST
 
@@ -84,9 +84,15 @@ export function* signIn({ payload }) {
           if(!response.ok)
             return
 
-          const { token, student } = response.data;
+          const { token, student } = response.data
+          , userEntity = new StudentEntity(student)
+
+          yield synchronizationService.scriconize(userEntity)
+
+          //return;
+
           api.defaults.headers.Authorization = `Bearer ${token}`;
-          yield put(signInSuccess(token, new StudentEntity(student)));
+          yield put(signInSuccess(token, userEntity));
 
         // history.push('/dashboard');
     } catch (err) {

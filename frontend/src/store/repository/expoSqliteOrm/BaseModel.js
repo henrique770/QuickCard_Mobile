@@ -54,8 +54,8 @@ export default class BaseModel {
     return this.repository.update(obj).then(res => new this(res))
   }
 
-  save() {
-    if (this.Id) {
+  save( checkIdValue = true) {
+    if (this.Id && checkIdValue) {
       return this.constructor.repository
         .update(this)
         .then(res => this.setProperties(res))
