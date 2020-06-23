@@ -1,4 +1,5 @@
 export default {
+  mode: 'dark',
   primaryText: '#cbcdc6',
   background: '#000',
   background2: '#000',

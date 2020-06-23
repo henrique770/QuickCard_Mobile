@@ -1,4 +1,5 @@
 export default {
+  mode: 'light',
   primaryText: '#333',
   background: '#fe650e',
   backgroundbox: '#fff',

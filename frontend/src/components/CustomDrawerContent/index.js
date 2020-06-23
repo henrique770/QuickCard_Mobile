@@ -1,16 +1,17 @@
-import React from 'react';
-import {View, Image} from 'react-native';
+import React, {useState} from 'react';
+import {View, Image, Button, Switch} from 'react-native';
 
 import Typography from '~/components/Typography';
 import Spacing from '~/components/Spacing';
-import Switch from '~/components/SwitchToggle';
+
 import {
   DrawerContentScrollView,
   DrawerItemList,
   DrawerItem,
 } from '@react-navigation/drawer';
-import {DrawerActions} from '@react-navigation/native';
 import IconIo from 'react-native-vector-icons/Ionicons';
+
+import {useTheme} from '~/components/ThemeContext';
 
 import {withTheme} from 'styled-components';
 
@@ -18,6 +19,15 @@ import * as S from './styles';
 import * as G from '~/styles/global';
 
 function CustomDrawerContent({...props}) {
+  const themeToggle = useTheme();
+
+  const [check, setCheck] = useState(true);
+
+  function toogleSwitch() {
+    themeToggle.toggleTheme();
+    setCheck(!check);
+  }
+
   return (
     <G.Sidebar>
       <Spacing mb="20">
@@ -53,7 +63,7 @@ function CustomDrawerContent({...props}) {
           navigation
           {...props}
         />
-        {/* <Spacing
+        <Spacing
           ds="flex"
           style={{
             justifyContent: 'space-between',
@@ -69,12 +79,15 @@ function CustomDrawerContent({...props}) {
               fontWeight: 'bold',
             }}
             label="Tema Escuro"
-            onPress={() =>
-              props.navigation.dispatch(DrawerActions.toggleDrawer())
-            }
           />
-          <Switch />
-        </Spacing> */}
+          <Switch
+            thumbColor="#424242"
+            trackColor="#292929"
+            value={check}
+            onValueChange={toogleSwitch}
+          />
+          {/* <Button onPress={toogleSwitch} title="Button" /> */}
+        </Spacing>
       </DrawerContentScrollView>
     </G.Sidebar>
   );
