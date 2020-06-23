@@ -25,6 +25,10 @@ export default class Repository {
     return this.databaseLayer.update(obj)
   }
 
+  fromSql(sql) {
+    return this.databaseLayer.sql(sql);
+  }
+
   destroy(id) {
     return this.databaseLayer.destroy(id)
   }

@@ -16,6 +16,9 @@ const synchronizationService = (() => {
         , Name /******/ : d.name
       }))
       , cards : ( data => {
+        if(!data)
+          return [];
+
         return data.map( card => new CardModel({
           Id /*************/ : card._id
           , IsActive /*****/ : card.isActive
@@ -60,19 +63,32 @@ const synchronizationService = (() => {
 
   let self = {};
 
+    self.clearBase = async () => {
+      return Promise.all([
+        DeckModel.fromSql("DELETE FROM DECK")
+        , DeckModel.fromSql("DELETE FROM NOTEPAD")
+      ])
+        .then( () => Promise.all([
+          DeckModel.fromSql("DELETE FROM CARD")
+          , DeckModel.fromSql("DELETE FROM NOTE")
+        ]))
+    }
+
   self.scriconize = async userEntity => {
 
     let response = await api.get(`synchronism/${userEntity.Id}`)
       , models = mapper(response.data)
 
-
-    console.log('response api' , response)
+    console.log('response api' , response.data)
     console.log(models)
 
-    await saveModel(models.decks)
-    await saveModel(models.cards)
-    //await saveModel(models.notepads)
-    //await saveModel(models.notes)
+    await self.clearBase()
+      .then( async () => {
+        await saveModel(models.decks)
+        await saveModel(models.cards)
+        //await saveModel(models.notepads)
+        //await saveModel(models.notes)
+      })
   }
 
 
@@ -94,8 +110,10 @@ const synchronizationService = (() => {
     switch (source.type) {
       case "DeckEntity":
         return DeckModel.find(source.id)
+      case "CardEntity":
+        return CardModel.find(source.id)
       default :
-        throw `Entity not mapped to write operation in api : ${source.type}`
+        throw `Entity not mapped to write operation in api - source entity : ${source.type}`
     }
   }
 
@@ -105,8 +123,11 @@ const synchronizationService = (() => {
       case "DeckEntity":
         path = '/Deck'
         break;
+      case "CardEntity":
+        path = '/Card'
+        break;
       default :
-        throw `Entity not mapped to write operation in api : ${source.type}`
+        throw `Entity not mapped to write operation in api - url entity: ${source.type}`
     }
 
     if(op == "update")

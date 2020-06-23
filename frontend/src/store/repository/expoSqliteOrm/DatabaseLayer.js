@@ -34,6 +34,15 @@ export default class DatabaseLayer {
       .catch(errors => { throw errors })
   }
 
+  async sql(sql) {
+    const database = await this.database()
+    return new Promise((txResolve, txReject) => {
+      database.transaction(tx => {
+        tx.executeSql(sql , [], txResolve, txReject)
+      })
+    })
+  }
+
   createTable(columnMapping) {
     const sql = QueryBuilder.createTable(this.tableName, columnMapping)
     return this.executeSql(sql).then(() => true)
