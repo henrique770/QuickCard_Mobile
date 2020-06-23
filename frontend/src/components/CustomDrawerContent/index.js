@@ -21,7 +21,7 @@ import * as G from '~/styles/global';
 function CustomDrawerContent({...props}) {
   const themeToggle = useTheme();
 
-  const [check, setCheck] = useState(true);
+  const [check, setCheck] = useState(false);
 
   function toogleSwitch() {
     themeToggle.toggleTheme();
@@ -86,7 +86,6 @@ function CustomDrawerContent({...props}) {
             value={check}
             onValueChange={toogleSwitch}
           />
-          {/* <Button onPress={toogleSwitch} title="Button" /> */}
         </Spacing>
       </DrawerContentScrollView>
     </G.Sidebar>

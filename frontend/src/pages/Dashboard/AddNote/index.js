@@ -57,7 +57,7 @@ export default class AddNote extends Component {
           <Spacing mb="20">
             <Spacing position="absolute" top="5" right="30" width="50">
               <ContainerTag>
-                <IconMc name="tag" size={20} color="#f93b10" />
+                <IconMc name="tag" size={20} color="#fe650e" />
 
                 <Picker
                   style={{
@@ -191,6 +191,27 @@ export default class AddNote extends Component {
                           <Text style={styles.toolbarButton}>
                             <IconMi name="format-list-numbered" size={30} />
                           </Text>
+                        ),
+                      },
+                    ],
+                  },
+                  {
+                    type: 'tool',
+                    iconArray: [
+                      {
+                        iconComponent: (
+                          <TouchableOpacity
+                            onPress={() =>
+                              this.props.navigation.navigate('AddCard')
+                            }>
+                            <Text style={styles.toolbarButton}>
+                              <IconMc
+                                name="library-plus"
+                                color="#fe650e"
+                                size={30}
+                              />
+                            </Text>
+                          </TouchableOpacity>
                         ),
                       },
                     ],
