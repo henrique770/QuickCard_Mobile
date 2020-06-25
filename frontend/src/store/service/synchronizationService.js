@@ -1,19 +1,24 @@
-
 import api from '~/services/api';
+import NetInfo from "@react-native-community/netinfo";
+
 import {
   DeckModel
   , CardModel
+  , NotePadModel
+  , UpdatePendingOperationsModel
+  , AddPendingOperationsModel
 } from '~/store/models'
 
 
 const synchronizationService = (() => {
+  let self = {};
 
   const mapper = data => {
     return {
-      decks : data.decks.map( d => new DeckModel({
-         Id /*********/ : d._id
-        , IsActive /**/ : d.isActive
-        , Name /******/ : d.name
+      decks : data.decks.map( deck => new DeckModel({
+         Id /*********/ : deck._id
+        , IsActive /**/ : deck.isActive
+        , Name /******/ : deck.name
       }))
       , cards : ( data => {
         if(!data)
@@ -25,16 +30,20 @@ const synchronizationService = (() => {
           , IdDeck  /******/ : card.deck
           , Front /********/ : card.front
           , Verse /********/ : card.verse
-          //, DateLastView : card.dateLastView
-          //, DateNextView : card.dateNextView
-          //, NumDifficultCount : card.numDifficultCount
-          //, NumEasyCount : card.numEasyCount
-          //, NumGoodCount : card.numGoodCount
-          //, IsReviewed : card.isReviewed
+          , DateLastView : card.dateLastView
+          , DateNextView : card.dateNextView
+          , NumDifficultCount : card.numDifficultCount
+          , NumEasyCount : card.numEasyCount
+          , NumGoodCount : card.numGoodCount
+          , IsReviewed : card.isReviewed
         }))
       })(...data.decks.map( deck => deck.card))
+      , notePads : data.notePads.map( notePad => new NotePadModel({
+        Id /**********/ : notePad._id
+        , IsActive /**/ : notePad.isActive
+        , Name /******/ : notePad.name
+      }))
       , notes : {}
-      , notepads : {}
     }
   }
 
@@ -61,8 +70,8 @@ const synchronizationService = (() => {
       }
   }
 
-  let self = {};
 
+    // clear database
     self.clearBase = async () => {
       return Promise.all([
         DeckModel.fromSql("DELETE FROM DECK")
@@ -86,13 +95,114 @@ const synchronizationService = (() => {
       .then( async () => {
         await saveModel(models.decks)
         await saveModel(models.cards)
-        //await saveModel(models.notepads)
+        await saveModel(models.notePads)
         //await saveModel(models.notes)
       })
   }
 
+  let stopOffileneCheckLoop = false
+    , timeLoop = 1000 * 4
+    , toSynchronize = false
+    , toSyncPendilencesOffiline = async () => {
+      const fnSync = async () => {
+        return NetInfo.fetch().then( stateNet => {
+          console.log(`to sync Pendilences offiline -- isOffile : ${!stateNet.isConnected}`);
 
-  //#region
+          // isOffline
+          if(!stateNet.isConnected) {
+            toSynchronize = true
+
+            // isOn and Synchronize
+          } else if(toSynchronize) {
+            Promise.all([
+              AddPendingOperationsModel.all()
+              , UpdatePendingOperationsModel.all()
+            ])
+              .then( async data => {
+                // disable update flag
+                toSynchronize = false
+
+                /**
+                 * @param {String} typeOperation
+                 * @param {BaseModel} baseModel
+                 * @param {AddPendingOperations[] | UpdatePendingOperations[] } models
+                 */
+                const executePending = async (typeOperation, baseModel, models, ) => {
+                  console.log(`pending -- ${typeOperation}` , models)
+
+                  for(let i = 0; i < models.length; i += 1) {
+                    let model = models[i]
+                    console.log('Model pending -- ' , model)
+
+                    await self.writeOperation(typeOperation, { id : model.Id , type : model.EntityName })
+                    await baseModel.destroy(model.Id)
+                  }
+                }
+                  , addOperations = data[0]
+                  , updateOperations = data[1]
+
+                await executePending('add', AddPendingOperationsModel, addOperations);
+                await executePending('update', UpdatePendingOperationsModel, updateOperations);
+              })
+          }
+
+          // loop trigger
+          toSyncPendilencesOffiline()
+        })
+      }
+      //stop loop trigger
+      if(!stopOffileneCheckLoop)
+        setTimeout( fnSync , timeLoop)
+  }
+
+  self.stopOffileneCheckLoop = () => {
+    stopOffileneCheckLoop = true
+  }
+
+  self.starOffileneCheckLoop = () => {
+    stopOffileneCheckLoop = false
+    toSyncPendilencesOffiline()
+  }
+
+  /**
+   *
+   * @param {String} op
+   * @param {Object} source
+   * @return {Promise<void>}
+   */
+  self.addPendingOperations = async (op , source) => {
+
+    const checkIdValue = false ,
+      /**
+       * @type {BaseModel}
+       */
+    model = (() => {
+      switch (op) {
+        case "add":
+          console.log('adding pending to API')
+          return new AddPendingOperationsModel({
+            id : source.id
+            , type : op
+            , name : source.type
+          })
+        case "update":
+          console.log('update pending to API')
+          return new UpdatePendingOperationsModel({
+            id : source.id
+            , type : op
+            , name : source.type
+          })
+        default:
+          throw `undefined operation: ${op}`;
+      }
+    })()
+
+    return model.save(checkIdValue);
+  }
+
+
+  //#region Api scripting operations
+
   let getOperationRest = op => {
     switch (op) {
       case 'add':
@@ -112,6 +222,8 @@ const synchronizationService = (() => {
         return DeckModel.find(source.id)
       case "CardEntity":
         return CardModel.find(source.id)
+      case "NotePadEntity":
+        return NotePadModel.find(source.id)
       default :
         throw `Entity not mapped to write operation in api - source entity : ${source.type}`
     }
@@ -126,6 +238,8 @@ const synchronizationService = (() => {
       case "CardEntity":
         path = '/Card'
         break;
+      case "NotePadEntity":
+        return '/NotePad'
       default :
         throw `Entity not mapped to write operation in api - url entity: ${source.type}`
     }
@@ -135,10 +249,14 @@ const synchronizationService = (() => {
 
     return path
   }
-
-  //#endregion
-
+  /**
+   *
+   * @param {String} op
+   * @param {Object} source
+   * @return {Promise<void>}
+   */
   self.writeOperation = async (op , source) => {
+    console.log(`write operation -- ${op}` , source)
     let restMethodApi = getOperationRest(op)
       , url = getUrlEntity(op, source)
       , dataSource = await getModelSource(source)
@@ -149,9 +267,9 @@ const synchronizationService = (() => {
       })
   }
 
+  //#endregion
 
   return self
-
 })()
 
 

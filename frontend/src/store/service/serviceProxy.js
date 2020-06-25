@@ -54,11 +54,6 @@ const ServiceProxy = (() => {
       }
     }
 
-  , dispatch = () => {
-
-    console.log('state proxy' , state)
-  }
-
     /**
      *
      * @param {String} operation
@@ -73,8 +68,12 @@ const ServiceProxy = (() => {
 
           synchronizationService.writeOperation(operation, source)
         }
+        // disconnected
+        else {
+          synchronizationService.addPendingOperations(operation, source)
+        }
       })
-    dispatch()
+
     return entity
   }
 
