@@ -27,9 +27,6 @@ class ExtendsModel extends BaseModel {
             console.log("SQL Error: " + e)
           })
     }
-
-
-
 }
 
 
