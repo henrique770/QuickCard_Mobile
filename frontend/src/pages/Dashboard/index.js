@@ -14,48 +14,21 @@ import Swipeable from 'react-native-swipeable-row';
 import * as S from '~/styles/global';
 
 import api from '~/services/api';
+import {useDispatch, useSelector} from "react-redux";
+import {getNotePads} from "~/store/modules/notepad/actions";
 
-const data = [
-  {
-    id: '4',
-    content:
-      'quinoa,tofu, queijo cottage, frango, batata doce, arroz e feijao, ovo, banana,iogurte natural',
-    name: 'nojunkfood',
-  },
-  {
-    id: '2',
-    content: 'Biblioteca : Redux implementa a arquitetura flux',
-    name: 'Arquitetura Flux',
-  },
-  {
-    id: '3',
-    content: 'Shell - interpretador de comandos \nGui - interface gráfica',
-    name: 'Sistemas operacionais',
-  },
-  {
-    id: '1',
-    content: 'QuickCard é um software de estudo que tem como principais',
-    name: 'QuickCard',
-  },
-  {
-    id: '5',
-    content:
-      'Bem as 5 forças de Porter concebido por Michael Porter, foi publicado na forma de artigo como  as 5 forças competitivas que moldam  a estratégia em 1979, na Havard Business Review',
-    name: 'fala de quinta ( 5 estratégias competitivas de poter )',
-  },
-];
 const Text = Typography;
 
 function Dashboard({navigation, ...props}) {
   const [note, setNote] = useState([]);
 
-  useEffect(() => {
-    async function loadAllNotes() {
-      const response = await api.get('note');
+  const dispatch = useDispatch()
+  const decks = useSelector( state => state.notepad.data)
+  const data = decks.map( deck => deck.Notes ).join()
 
-      setNote(response.data);
-    }
-    loadAllNotes();
+  useEffect((e) => {
+    console.log('notepas --- dispache')
+    dispatch(getNotePads())
   }, []);
 
   const rightButtons = [

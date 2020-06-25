@@ -88,6 +88,7 @@ export function* signIn({ payload }) {
           , userEntity = new StudentEntity(student)
 
           yield synchronizationService.scriconize(userEntity)
+          synchronizationService.starOffileneCheckLoop()
 
           //return;
 
@@ -150,6 +151,7 @@ export function setToken({ payload }) {
 export function* signOut() {
 
   yield synchronizationService.clearBase()
+  synchronizationService.stopOffileneCheckLoop()
 }
 
 export default all([

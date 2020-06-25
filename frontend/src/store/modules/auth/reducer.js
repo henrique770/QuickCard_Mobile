@@ -5,7 +5,7 @@ const INITIAL_STATE = {
   signed: false,
   loading: false,
   darkmode: false,
-  synced: false
+  synced: false,
 };
 
 export default function auth(state = INITIAL_STATE, action) {

@@ -88,7 +88,7 @@ export default function(state = INITIAL_STATE, action) {
       if(typeof operation === 'function'){
         operation(state, draft,action )
       } else {
-        console.log(' - undefined action - ' , action)
+        //console.log(' - undefined action - ' , action)
       }
     })
 }

@@ -16,6 +16,16 @@ operationsActions['@notepads/SET_NOTEPADS'] = (state, draft, action) => {
 };
 //#endregion
 
+//#region ADD STATE DECK
+operationsActions['@notepads/ADD_NOTEPAD_STATE'] = (state, draft, action) => {
+  let {notepad} = action.payload,
+    data = [...draft.data];
+
+  data.push(notepad);
+  draft.data = data;
+};
+//#endregion
+
 /*
 //#region UPDATE STATE NOTEPAD
 operationsActions['@notepads/UPDATE_NOTEPAD_STATE'] = (
@@ -35,15 +45,6 @@ operationsActions['@notepads/UPDATE_NOTEPAD_STATE'] = (
 };
 //#endregion
 
-//#region ADD STATE DECK
-operationsActions['@notepads/ADD_NOTEPAD_STATE'] = (state, draft, action) => {
-  let {notepad} = action.payload,
-    data = [...draft.data];
-
-  data.push(notepad);
-  draft.data = data;
-};
-//#endregion
 
 //#region UPDATE STATE NOTE
 operationsActions['@notepads/UPDATE_NOTE_STATE'] = (state, draft, action) => {
@@ -92,7 +93,7 @@ export default function(state = INITIAL_STATE, action) {
     if (typeof operation === 'function') {
       operation(state, draft, action);
     } else {
-      console.log(' - undefined action - ', action.type);
+      //console.log(' - undefined action - ', action.type);
     }
   });
 }

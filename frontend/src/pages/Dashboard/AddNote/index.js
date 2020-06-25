@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {useRef, useState, useEffect} from 'react';
 import Spacing from '~/components/Spacing';
 import {
   TouchableOpacity,
@@ -18,10 +18,25 @@ import PropTypes from 'prop-types';
 import IconMi from 'react-native-vector-icons/MaterialIcons';
 import IconMc from 'react-native-vector-icons/MaterialCommunityIcons';
 import {Container, Title, ContainerTag, TagInput} from './styles';
+import {useSelector} from "react-redux";
 
 const defaultStyles = getDefaultStyles();
 
-export default class AddNote extends Component {
+export default function AddNote({navigation, route}) {
+
+  let editor = null
+  const notePads = useSelector(state => state.notepad.data);
+
+  console.log(notePads)
+
+  const [selectedTag, setSelectedValue] = useState('body');
+  const [selectedStyles, setSelectedStyles] = useState([]);
+  const [notePad, setNotePad] = useState('');
+  const [title, setTitle] = useState('Título');
+
+
+
+  /*
   constructor(props) {
     super(props);
 
@@ -30,27 +45,55 @@ export default class AddNote extends Component {
       selectedStyles: [],
       language: 'java',
     };
-
+    //this.notePads = useSelector(state => state.notePad.data);
+    console.log(notePads)
     this.editor = null;
   }
+  */
 
-  onStyleKeyPress = toolType => {
-    this.editor.applyToolbar(toolType);
+  const handlerAddNote = async () => {
+    let value = await editor.getHtml()
+    console.log({
+      value
+      , notePad
+      , title
+    })
+  }
+
+  const onStyleKeyPress = toolType => {
+    editor.applyToolbar(toolType);
   };
 
-  onSelectedTagChanged = tag => {
-    this.setState({
-      selectedTag: tag,
-    });
+  const  onSelectedTagChanged = tag => {
+    //this.setState({
+    //  selectedTag: tag,
+    //});
+    setSelectedValue(tag)
   };
 
-  onSelectedStyleChanged = styles => {
-    this.setState({
-      selectedStyles: styles,
-    });
+  const onSelectedStyleChanged = styles => {
+    //this.setState({
+    //  selectedStyles: styles,
+    //});
+    setSelectedStyles(styles)
   };
 
-  render() {
+  const getListTag = () => {
+    let selectValues = [{ id : '' , name : 'Selecione' } , ...notePads.map( e => { return{ id : e.Id , name : e.Name} }) ]
+    /*
+      , response = []
+    selectValues.map(note => {
+      response.push()
+    })
+    return response;
+    */
+    console.log(selectValues)
+
+    return selectValues.map( note => {
+      return <Picker.Item label={note.name} value={note.id} />
+    })
+  }
+
     return (
       <>
         <Container>
@@ -64,12 +107,14 @@ export default class AddNote extends Component {
                     height: 50,
                     width: '100%',
                   }}
-                  selectedValue={this.state.language}
-                  onValueChange={(itemValue, itemIndex) =>
-                    this.setState({language: itemValue})
+                  selectedValue={notePad}
+                  onValueChange={(itemValue, itemIndex) => {
+                      console.log('Item value : ', itemValue);
+                      //setState({language: itemValue})
+                      setNotePad(itemValue)
+                    }
                   }>
-                  <Picker.Item label="Java" value="java" />
-                  <Picker.Item label="JavaScript" value="js" />
+                  {getListTag()}
                 </Picker>
                 {/* <TagInput
                   autoCorrect={false}
@@ -80,7 +125,7 @@ export default class AddNote extends Component {
             </Spacing>
           </Spacing>
           <Spacing ml="20" mr="20">
-            <Title>Título</Title>
+            <Title onChangeText={(value) => setTitle(value)}>{title}</Title>
           </Spacing>
 
           <KeyboardAvoidingView
@@ -95,13 +140,13 @@ export default class AddNote extends Component {
             <View
               style={{flex: 1}}
               onTouchStart={() => {
-                this.editor && this.editor.blur();
+                editor && editor.blur();
               }}>
               <View style={styles.main} onTouchStart={e => e.stopPropagation()}>
                 <CNEditor
-                  ref={input => (this.editor = input)}
-                  onSelectedTagChanged={this.onSelectedTagChanged}
-                  onSelectedStyleChanged={this.onSelectedStyleChanged}
+                  ref={input => (editor = input)}
+                  onSelectedTagChanged={onSelectedTagChanged}
+                  onSelectedStyleChanged={onSelectedStyleChanged}
                   style={{backgroundColor: '#fff'}}
                   styleList={defaultStyles}
                   initialHtml={`  `}
@@ -201,8 +246,8 @@ export default class AddNote extends Component {
                       {
                         iconComponent: (
                           <TouchableOpacity
-                            onPress={() =>
-                              this.props.navigation.navigate('AddCard')
+                            onPress={handlerAddNote
+                              //navigation.navigate('AddCard')
                             }>
                             <Text style={styles.toolbarButton}>
                               <IconMc
@@ -217,9 +262,9 @@ export default class AddNote extends Component {
                     ],
                   },
                 ]}
-                selectedTag={this.state.selectedTag}
-                selectedStyles={this.state.selectedStyles}
-                onStyleKeyPress={this.onStyleKeyPress}
+                selectedTag={selectedTag}
+                selectedStyles={selectedStyles}
+                onStyleKeyPress={onStyleKeyPress}
               />
             </View>
           </KeyboardAvoidingView>
@@ -245,7 +290,6 @@ export default class AddNote extends Component {
         </Container>
       </>
     );
-  }
 }
 var styles = StyleSheet.create({
   main: {

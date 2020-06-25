@@ -46,6 +46,7 @@ export function* addNotePadDataBase(data) {
     entity = yield serviceProxy.add(notepad);
 
   yield put(addNotePadState(entity));
+  //yield getNotePadsDataBase();
 }
 
 export function* addNoteDataBase(data) {

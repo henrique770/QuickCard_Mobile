@@ -20,6 +20,9 @@ class NotePadEntity extends BaseEntity {
   }
 
   get Notes() {
+    if(this._notes === undefined)
+      return  []
+
     return this._notes;
   }
   set Notes(value) {
