@@ -12,12 +12,9 @@ export default function App() {
   useEffect(() => {}, []);
 
   NetInfo.fetch().then(state => {
-    console.log('Connection type', state.type);
-    console.log('Is connected?', state.isConnected);
-
     isConnected = state.isConnected;
   });
 
   //const signed = useSelector(state => state.auth.signed);
-  return createRouter(signed, isConnected);
+  return createRouter(signed, isConnected , );
 }
