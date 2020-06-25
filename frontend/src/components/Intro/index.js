@@ -42,7 +42,7 @@ const data = [
   {
     title: 'Bem vindo ao QuickCard!',
     text:
-      'QuickCard É uma ferramenta que oferece muitos recursos, destinados a fazer com que as pessoas possam se organizar de forma eficaz!!',
+      'QuickCard é uma ferramenta que oferece muitos recursos, destinados a fazer com que pessoas possam se organizar de forma eficaz!!',
     image: require('../../assets/studyImage.png'),
     bg: ['#fc4a1a', '#9d1b65'],
   },
@@ -56,14 +56,14 @@ const data = [
   {
     title: 'Pomodoro!',
     text:
-      'Aproveite o recurso de pomodoro e utilize o método de repetição espaçada para estudos mais eficiêntes!!',
+      'Aproveite o recurso de pomodoro e utilize o método de repetição espaçada para estudos mais eficientes!!',
     image: require('../../assets/timer.png'),
     bg: ['#43cea2', '#185a9d'],
   },
   {
     title: 'Anotações!',
     text:
-      'Aproveite o recurso de anotações e anote trechos que poderão servir como perguntas e respostas dos cartões de memória!!',
+      'Aproveite o recurso de anotações e anote trechos que poderão servir como perguntas e respostas dos flash cards!!',
     image: require('../../assets/notes.png'),
     bg: ['#24C6DC', '#514A9D'],
   },
