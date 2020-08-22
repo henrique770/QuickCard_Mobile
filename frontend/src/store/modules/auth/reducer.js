@@ -6,6 +6,7 @@ const INITIAL_STATE = {
   loading: false,
   darkmode: false,
   synced: false,
+  firstAccess : true,
 };
 
 export default function auth(state = INITIAL_STATE, action) {
@@ -36,6 +37,11 @@ export default function auth(state = INITIAL_STATE, action) {
 
       case '@auth/TOOGLE_SWITCH': {
         draft.darkmode = true;
+        break;
+      }
+
+      case '@auth/FIRST_ACCESS' : {
+        draft.firstAccess = false;
         break;
       }
 

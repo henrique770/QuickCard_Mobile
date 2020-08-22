@@ -1,35 +1,35 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
+
+import {useSelector, useDispatch} from 'react-redux';
 
 import {createStackNavigator} from '@react-navigation/stack';
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 
+import { firstAccess } from '~/store/modules/auth/actions';
+
 import IconMc from 'react-native-vector-icons/MaterialCommunityIcons';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import Intro from '~/components/Intro';
 
+import Intro from '~/components/Intro';
 import Dashboard from './pages/Dashboard';
 import AddNote from './pages/Dashboard/AddNote';
 import AddNotePad from './pages/Dashboard/AddNotePad';
 import NotePad from './pages/Dashboard/NotePad';
 import NotePadNotes from './pages/Dashboard/NotePadNotes';
-
 import SignIn from './pages/Auth/SignIn';
 import SignUp from './pages/Auth/SignUp';
-
 import Decks from './pages/Decks';
 import AddDeck from './pages/Decks/AddDeck';
 import Card from './pages/Decks/Card';
 import AddCard from './pages/Decks/AddCard';
 import EditCard from './pages/Decks/EditCard';
-
 import PieChart from './pages/Charts';
-
 import Profile from './pages/Profile';
-
 import Pomodoro from './pages/Pomodoro';
 
 import CustomDrawerContent from '~/components/CustomDrawerContent';
+import {getDecks} from "~/store/modules/deck/actions";
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -242,146 +242,151 @@ function StackPomodoro() {
 }
 
 export default function createRouter(isSigned = false, isConnected = false) {
-  const [firstAccess, setFirstAccess] = useState(true);
+  const dispatch = useDispatch();
+  const [ isFirstAccess, setFirstAccess] = useState(useSelector( state => state.auth.firstAccess));
+
+  /*
   let renderProfile = () => {
-      if (!isSigned) return <></>;
-/*
+    if (!isSigned) return <></>;
+    /*
+          return (
+            <Drawer.Screen
+              name="Perfil"
+              options={{
+                drawerIcon: () => (
+                  <Icon color={'#fe650e'} size={20} name={'user-circle-o'} />
+                ),
+              }}
+              component={StackProfile}
+            />
+          );
+        },
+        renderCreateProfile = () => {
+          if (isSigned && !isConnected) {
+            return <></>;
+          }
+
+          return (
+            <>
+              <Drawer.Screen
+                name="Criar perfil"
+                options={{
+                  drawerIcon: () => (
+                    <Icon color={'#fe650e'} size={20} name={'user-circle-o'} />
+                  ),
+                }}
+                component={SignUp}
+              />
+            </>
+          );
+        };
+    */
+    let renderProfile = () => {
+      if (!isSigned)
+        return <></>
+
       return (
         <Drawer.Screen
           name="Perfil"
           options={{
             drawerIcon: () => (
-              <Icon color={'#fe650e'} size={20} name={'user-circle-o'} />
+              <Icon color={'#fe650e'} size={20} name={'user-circle-o'}/>
             ),
           }}
           component={StackProfile}
-        />
-      );
-    },
-    renderCreateProfile = () => {
-      if (isSigned && !isConnected) {
-        return <></>;
-      }
-
-      return (
-        <>
-          <Drawer.Screen
-            name="Criar perfil"
-            options={{
-              drawerIcon: () => (
-                <Icon color={'#fe650e'} size={20} name={'user-circle-o'} />
-              ),
-            }}
-            component={SignUp}
-          />
-        </>
-      );
-    };
-*/
-  let renderProfile= () => {
-    if(!isSigned)
-      return <></>
-
-    return (
-      <Drawer.Screen
-        name="Perfil"
-        options={{
-          drawerIcon: () => (
-            <Icon color={'#fe650e'} size={20} name={'user-circle-o'} />
-          ),
-        }}
-        component={StackProfile}
-      />)
-  }
-
-    , renderCreateProfile = () => {
-
-    if(isSigned && !isConnected) {
-      return <></>
+        />)
     }
 
-    return <>
-      <Drawer.Screen
-        name="Criar perfil"
-        options={{
-          drawerIcon: () => (
-            <Icon color={'#fe650e'} size={20} name={'user-circle-o'} />
-          ),
-        }}
-        component={SignUp}
-      />
-    </>
-  }
-//*
+      , renderCreateProfile = () => {
 
-  return !isSigned ? (
-    <Stack.Navigator headerMode="none">
-      <Stack.Screen name="SignIn" component={SignIn} />
-      <Stack.Screen name="SignUp" component={SignUp} />
-    </Stack.Navigator>
-  ) : (
-    <>
-      {firstAccess ? (
-        <Intro onDone={() => setFirstAccess(false)} />
-      ) : (
-        <Drawer.Navigator
-          drawerStyle={{
-            backgroundColor: '#fff',
-            width: 301,
+      if (isSigned && !isConnected) {
+        return <></>
+      }
+
+      return <>
+        <Drawer.Screen
+          name="Criar perfil"
+          options={{
+            drawerIcon: () => (
+              <Icon color={'#fe650e'} size={20} name={'user-circle-o'}/>
+            ),
           }}
-          drawerContent={props => <CustomDrawerContent {...props} />}>
-          <Drawer.Screen
-            name="Baralhos"
-            options={{
-              drawerIcon: () => (
-                <IconMc color={'#fe650e'} size={20} name={'cards'} />
-              ),
-            }}
-            component={StackDecks}
-          />
-          <Drawer.Screen
-            name="Todas as notas"
-            options={{
-              drawerIcon: () => (
-                <IconMc color={'#fe650e'} size={20} name={'file'} />
-              ),
-            }}
-            component={StackNotes}
-          />
-          <Drawer.Screen
-            name="Blocos de notas"
-            options={{
-              drawerIcon: () => (
-                <IconMc color={'#fe650e'} size={20} name={'book-multiple'} />
-              ),
-            }}
-            component={StackNotePad}
-          />
+          component={SignUp}
+        />
+      </>
+    }
 
-          <Drawer.Screen
-            name="Pomodoro"
-            options={{
-              drawerIcon: () => (
-                <IconMc color={'#fe650e'} size={20} name={'timer'} />
-              ),
+    return !isSigned ? (
+      <Stack.Navigator headerMode="none">
+        <Stack.Screen name="SignIn" component={SignIn}/>
+        <Stack.Screen name="SignUp" component={SignUp}/>
+      </Stack.Navigator>
+    ) : ( <>
+        {isFirstAccess ? (
+          <Intro onDone={() => {
+              dispatch(firstAccess());
+              setFirstAccess(false);
+            }
+          }/>
+        ) : (
+          <Drawer.Navigator
+            drawerStyle={{
+              backgroundColor: '#fff',
+              width: 301,
             }}
-            component={StackPomodoro}
-          />
+            drawerContent={props => <CustomDrawerContent {...props} />}>
+            <Drawer.Screen
+              name="Baralhos"
+              options={{
+                drawerIcon: () => (
+                  <IconMc color={'#fe650e'} size={20} name={'cards'}/>
+                ),
+              }}
+              component={StackDecks}
+            />
+            <Drawer.Screen
+              name="Todas as notas"
+              options={{
+                drawerIcon: () => (
+                  <IconMc color={'#fe650e'} size={20} name={'file'}/>
+                ),
+              }}
+              component={StackNotes}
+            />
+            <Drawer.Screen
+              name="Blocos de notas"
+              options={{
+                drawerIcon: () => (
+                  <IconMc color={'#fe650e'} size={20} name={'book-multiple'}/>
+                ),
+              }}
+              component={StackNotePad}
+            />
 
-          <Drawer.Screen
-            name="Estatísticas"
-            options={{
-              drawerIcon: () => (
-                <IconMc color={'#fe650e'} size={20} name={'chart-bar'} />
-              ),
-            }}
-            component={StackCharts}
-          />
+            <Drawer.Screen
+              name="Pomodoro"
+              options={{
+                drawerIcon: () => (
+                  <IconMc color={'#fe650e'} size={20} name={'timer'}/>
+                ),
+              }}
+              component={StackPomodoro}
+            />
 
-          {renderProfile()}
-          {renderCreateProfile()}
+            <Drawer.Screen
+              name="Estatísticas"
+              options={{
+                drawerIcon: () => (
+                  <IconMc color={'#fe650e'} size={20} name={'chart-bar'}/>
+                ),
+              }}
+              component={StackCharts}
+            />
 
-          {/*
+            {renderProfile()}
+            {renderCreateProfile()}
+
+            {/*
         <Drawer.Screen
           name="Perfil"
           options={{
@@ -392,8 +397,8 @@ export default function createRouter(isSigned = false, isConnected = false) {
           component={StackProfile}
         />
         */}
-        </Drawer.Navigator>
-      )}
-    </>
-  );
-}
+          </Drawer.Navigator>
+        )}
+      </>
+    )
+  }

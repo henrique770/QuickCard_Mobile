@@ -31,6 +31,13 @@ export function signOut() {
   };
 }
 
+export function  firstAccess() {
+  return {
+    type: '@auth/FIRST_ACCESS'
+  }
+}
+
+
 export function toogleDark() {
   return {
     type: '@auth/TOOGLE_SWITCH',
