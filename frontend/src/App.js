@@ -5,8 +5,8 @@ import NetInfo from '@react-native-community/netinfo';
 import createRouter from './routes';
 
 export default function App() {
-  const signed = true;
-  //const signed = useSelector(state => state.auth.signed);
+  //const signed = true;
+  const signed = useSelector(state => state.auth.signed);
   let isConnected = false;
 
   useEffect(() => {}, []);
