@@ -10,7 +10,11 @@ class NoteEntity extends BaseEntity {
 
     this.Content = args.Content;
     this.IdNotePad = args.IdNotePad;
+    this.Title = args.Title;
   }
+
+  get Title() { return this._title; }
+  set Title(value) { this._title = value; }
 
   get Content() { return this._content; }
   set Content(value) {

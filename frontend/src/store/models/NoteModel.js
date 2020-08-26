@@ -18,6 +18,10 @@ class NoteModel extends BaseModel {
         type: types.TEXT,
         not_null: true,
       },
+      Title: {
+        type: types.TEXT,
+        not_null: true,
+      },
       Content: {
         type: types.TEXT,
         not_null: true,
