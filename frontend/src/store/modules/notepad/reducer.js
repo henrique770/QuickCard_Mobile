@@ -8,15 +8,18 @@ const operationsActions = [];
 //#region ACTIONS
 
 //#region LOAD NOTEPAD TO STATE
+
 operationsActions['@notepads/SET_NOTEPADS'] = (state, draft, action) => {
   const compare = (a, b) => {
     return ('' + a.Name.toLowerCase()).localeCompare(b.Name.toLowerCase());
   };
   draft.data = [...action.payload.data];//.sort(compare);
 };
+
 //#endregion
 
 //#region ADD STATE DECK
+
 operationsActions['@notepads/ADD_NOTEPAD_STATE'] = (state, draft, action) => {
   let {notepad} = action.payload,
     data = [...draft.data];
@@ -24,6 +27,38 @@ operationsActions['@notepads/ADD_NOTEPAD_STATE'] = (state, draft, action) => {
   data.push(notepad);
   draft.data = data;
 };
+
+//#endregion
+
+//#region ADD NOTE
+
+operationsActions['@notepads/ADD_NOTE_STATE'] = (state, draft, action) => {
+  let { note } = action.payload,
+    data = draft.data.find( e => e.Id == note.IdNotePad);
+
+  data.addNote(note);
+  draft.data = data;
+};
+
+
+//#endregion
+
+
+//#region
+
+
+operationsActions['@notepads/UPDATE_NOTE_STATE'] = (state, draft, action) => {
+  let { note } = action.payload,
+    data = draft.data.find( e => e.Id == note.IdNotePad);
+
+    console.log(data)
+
+  //data.addNote(note);
+  //draft.data = data;
+};
+
+
+
 //#endregion
 
 /*

@@ -40,7 +40,20 @@ export function addNote(note) {
   };
 }
 
-export function AddNotetate({note}) {
+export function updateNote(note) {
+  return {
+    type: '@notepads/UPDATE_NOTE_DATABASE',
+    payload: {note},
+  };
+}
+export function UpdateNoteState(note) {
+  return {
+    type: '@notepads/UPDATE_NOTE_STATE',
+    payload: {note},
+  };
+}
+
+export function AddNoteState(note) {
   return {
     type: '@notepads/ADD_NOTE_STATE',
     payload: {note},
@@ -55,7 +68,7 @@ export function updateNoteState({note}) {
     payload: {note},
   };
 }
-
+/*
 // UPDATE DATABASE
 export function updateNote({note}) {
   return {
@@ -63,7 +76,7 @@ export function updateNote({note}) {
     payload: {note},
   };
 }
-
+*/
 // UPDATE STATE
 export function updateNotePadState(notepad) {
   return {

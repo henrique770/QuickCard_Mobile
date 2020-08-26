@@ -4,12 +4,14 @@ import {
   getNotePads,
   setNotePads,
   addNotePadState,
-  AddNotetate,
+  AddNoteState,
   updateNoteState,
   updateNotePadState,
+  UpdateNoteState,
 } from './actions';
 
 import {ServiceProxy, typeService} from '~/store/service';
+import NoteEntity from "~/entities/NoteEntity";
 
 const filterActive = data => {
   if (Array.isArray(data)) {
@@ -50,18 +52,30 @@ export function* addNotePadDataBase(data) {
 }
 
 export function* addNoteDataBase(data) {
-  const {note} = data.payload,
-    serviceProxy = new ServiceProxy(typeService.Note),
-    entity = yield serviceProxy.add(note);
+  const {note} = data.payload
+    , noteEntity = new NoteEntity(note)
+    , serviceProxy = new ServiceProxy(typeService.Note)
+    , model = yield serviceProxy.add(note);
 
-  entity.NotePad = {
-    Id: note.IdNotePad,
-  };
+  console.log('noteEntity', noteEntity)
+  console.log('model', model)
 
-  yield put(AddNotetate({card: entity}));
-  yield getNotePadsDataBase();
+  //entity.NotePad = {
+  //  Id: note.IdNotePad,
+  //};
+
+  yield put(AddNoteState(noteEntity));
+  //yield getNotePadsDataBase();
 }
 
+export function* updateNoteDataBase(data) {
+  const {note} = data.payload
+    , serviceProxy = new ServiceProxy(typeService.Note)
+    , model = yield serviceProxy.update(note);
+
+  yield put(UpdateNoteState(note));
+}
+/*
 export function* updateNoteDataBase(data) {
   const {note} = data.payload,
     serviceProxy = new ServiceProxy(typeService.Note),
@@ -85,7 +99,7 @@ export function* updateNoteDataBase(data) {
     yield put(updateNoteState({note: entity}));
   }
 }
-
+*/
 export function* updateNotePadDataBase(data) {
   const {notepad} = data.payload,
     serviceProxy = new ServiceProxy(typeService.NotePad),
@@ -100,6 +114,7 @@ export default all([
   takeLatest('@notepads/SET_NOTEPADS', setNotepadsDataBase),
   takeLatest('@notepads/ADD_NOTEPAD_DATABASE', addNotePadDataBase),
   takeLatest('@notepads/ADD_NOTE_DATABASE', addNoteDataBase),
+  takeLatest('@notepads/UPDATE_NOTE_DATABASE', updateNoteDataBase),
   takeLatest('@notepads/UPDATE_NOTE_DATABASE', updateNoteDataBase),
   takeLatest('@notepads/UPDATE_NOTEPAD_DATABASE', updateNotePadDataBase),
 ]);
