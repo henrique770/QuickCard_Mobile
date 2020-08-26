@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 
 import Typography from '~/components/Typography';
 import Spacing from '~/components/Spacing';
@@ -21,12 +21,16 @@ console.disableYellowBox = true;
 
 function NotePadNotes({navigation, ...props}) {
 
+  console.log('props' , props.route.params)
   const dispatch = useDispatch()
-  const data = useSelector( state => state.notepad.data)
+  //const data = useSelector( state => state.notepad.data)
+  const notePad = props.route.params
+  const data = notePad.Notes
+
 
   useEffect((e) => {
-    console.log('notepas --- dispache')
-    dispatch(getNotePads())
+    //console.log('notepas --- dispache')
+    //dispatch(getNotePads())
   }, []);
 
 
@@ -68,19 +72,11 @@ function NotePadNotes({navigation, ...props}) {
           renderItem={({item}) => (
             <Swipeable autoClose={true} rightButtons={rightButtons}>
               <TouchableWithoutFeedback
-                onPress={() => navigation.navigate('AddNote')}>
+                onPress={() => navigation.navigate('Note', item)}>
                 <S.Box data={item}>
                   <S.Text weight="bold" size="16">
-                    {item.name}
+                   Título: {item.Title}
                   </S.Text>
-                  <Spacing mt="4" mb="4">
-                    <Text size="14" color="#656565">
-                      {item.content}
-                    </Text>
-                  </Spacing>
-                  <Text color="#fe650e">
-                    {item.notepad ? item.notepad : `Primeiro Caderno`}
-                  </Text>
                 </S.Box>
               </TouchableWithoutFeedback>
             </Swipeable>

@@ -19,7 +19,7 @@ function NotePad({navigation, ...props}) {
   const notePadState = useSelector( state => state.notepad.data)
 
   useEffect((e) => {
-    console.log('decks --- dispache')
+
     dispatch(getNotePads())
   }, []);
 
@@ -42,8 +42,8 @@ function NotePad({navigation, ...props}) {
     );
   }
 
-  return (
-    <>
+  function renderListNotePads() {
+    return (
       <S.Container>
         <Spacing position="absolute" top="18" right="30">
           <TouchableOpacity onPress={() => navigation.openDrawer()}>
@@ -58,7 +58,7 @@ function NotePad({navigation, ...props}) {
           renderItem={({item}) => (
             <S.Container>
               <TouchableOpacity
-                onPress={() => navigation.navigate('NotePadNotes')}
+                onPress={() => navigation.navigate('NotePadNotes' , item)}
                 onLongPress={() => deleteNotePad()}>
                 <S.Box data={item}>
                   <S.Text weight="bold" size="16" maxHeight="95">
@@ -72,6 +72,14 @@ function NotePad({navigation, ...props}) {
           )}
         />
       </S.Container>
+    )
+  }
+
+  return (
+    <>
+      {
+        renderListNotePads()
+      }
 
       <ActionButton buttonColor={props.theme.floatButton}>
         <ActionButton.Item

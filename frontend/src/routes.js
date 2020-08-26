@@ -15,6 +15,7 @@ import Intro from '~/components/Intro';
 import Dashboard from './pages/Dashboard';
 import AddNote from './pages/Dashboard/AddNote';
 import AddNotePad from './pages/Dashboard/AddNotePad';
+import Note from './pages/Dashboard/Note';
 import NotePad from './pages/Dashboard/NotePad';
 import NotePadNotes from './pages/Dashboard/NotePadNotes';
 import SignIn from './pages/Auth/SignIn';
@@ -53,6 +54,16 @@ function StackNotes() {
         component={Dashboard}
       />
 
+
+      <Stack.Screen
+        name="Note"
+        component={Note}
+        options={{
+          title: '',
+          headerTintColor: '#f93b10',
+        }}
+      />
+
       <Stack.Screen
         name="AddNote"
         component={AddNote}
@@ -61,6 +72,7 @@ function StackNotes() {
           headerTintColor: '#f93b10',
         }}
       />
+
     </Stack.Navigator>
   );
 }
@@ -167,6 +179,14 @@ function StackNotePad() {
       <Stack.Screen
         name="AddNote"
         component={AddNote}
+        options={{
+          title: '',
+          headerTintColor: '#f93b10',
+        }}
+      />
+      <Stack.Screen
+        name="Note"
+        component={Note}
         options={{
           title: '',
           headerTintColor: '#f93b10',

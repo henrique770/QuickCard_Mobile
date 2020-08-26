@@ -18,7 +18,8 @@ import PropTypes from 'prop-types';
 import IconMi from 'react-native-vector-icons/MaterialIcons';
 import IconMc from 'react-native-vector-icons/MaterialCommunityIcons';
 import {Container, Title, ContainerTag, TagInput} from './styles';
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
+import {addNote} from "~/store/modules/notepad/actions";
 
 const defaultStyles = getDefaultStyles();
 
@@ -26,38 +27,20 @@ export default function AddNote({navigation, route}) {
 
   let editor = null
   const notePads = useSelector(state => state.notepad.data);
-
-  console.log(notePads)
-
+  const dispatch = useDispatch();
   const [selectedTag, setSelectedValue] = useState('body');
   const [selectedStyles, setSelectedStyles] = useState([]);
   const [notePad, setNotePad] = useState('');
   const [title, setTitle] = useState('Título');
 
-
-
-  /*
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      selectedTag: 'body',
-      selectedStyles: [],
-      language: 'java',
-    };
-    //this.notePads = useSelector(state => state.notePad.data);
-    console.log(notePads)
-    this.editor = null;
-  }
-  */
-
   const handlerAddNote = async () => {
     let value = await editor.getHtml()
-    console.log({
-      value
-      , notePad
-      , title
-    })
+
+    dispatch(addNote({
+      Content : value
+      , IdNotePad : notePad
+      , Title :title
+    }))
   }
 
   const onStyleKeyPress = toolType => {
@@ -65,29 +48,15 @@ export default function AddNote({navigation, route}) {
   };
 
   const  onSelectedTagChanged = tag => {
-    //this.setState({
-    //  selectedTag: tag,
-    //});
     setSelectedValue(tag)
   };
 
   const onSelectedStyleChanged = styles => {
-    //this.setState({
-    //  selectedStyles: styles,
-    //});
     setSelectedStyles(styles)
   };
 
   const getListTag = () => {
     let selectValues = [{ id : '' , name : 'Selecione' } , ...notePads.map( e => { return{ id : e.Id , name : e.Name} }) ]
-    /*
-      , response = []
-    selectValues.map(note => {
-      response.push()
-    })
-    return response;
-    */
-    console.log(selectValues)
 
     return selectValues.map( note => {
       return <Picker.Item label={note.name} value={note.id} />
