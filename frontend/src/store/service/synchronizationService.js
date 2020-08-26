@@ -8,6 +8,8 @@ import {
   , UpdatePendingOperationsModel
   , AddPendingOperationsModel
 } from '~/store/models'
+import NoteModel from "~/store/models/NoteModel";
+import {types} from "~/store/repository/expoSqliteOrm";
 
 
 const synchronizationService = (() => {
@@ -16,26 +18,26 @@ const synchronizationService = (() => {
   const mapper = data => {
     return {
       decks : data.decks.map( deck => new DeckModel({
-         Id /*********/ : deck._id
-        , IsActive /**/ : deck.isActive
-        , Name /******/ : deck.name
-      }))
+          Id /*********/ : deck._id
+          , IsActive /**/ : deck.isActive
+          , Name /******/ : deck.name
+        }))
       , cards : ( data => {
         if(!data)
           return [];
 
         return data.map( card => new CardModel({
-          Id /*************/ : card._id
-          , IsActive /*****/ : card.isActive
-          , IdDeck  /******/ : card.deck
-          , Front /********/ : card.front
-          , Verse /********/ : card.verse
-          , DateLastView : card.dateLastView
-          , DateNextView : card.dateNextView
-          , NumDifficultCount : card.numDifficultCount
-          , NumEasyCount : card.numEasyCount
-          , NumGoodCount : card.numGoodCount
-          , IsReviewed : card.isReviewed
+          Id /********************/ : card._id
+          , IsActive /************/ : card.isActive
+          , IdDeck  /*************/ : card.deck
+          , Front /***************/ : card.front
+          , Verse /***************/ : card.verse
+          , DateLastView /********/ : card.dateLastView
+          , DateNextView /********/ : card.dateNextView
+          , NumDifficultCount /***/ : card.numDifficultCount
+          , NumEasyCount /********/ : card.numEasyCount
+          , NumGoodCount /********/ : card.numGoodCount
+          , IsReviewed /**********/ : card.isReviewed
         }))
       })(...data.decks.map( deck => deck.card))
       , notePads : data.notePads.map( notePad => new NotePadModel({
@@ -43,7 +45,18 @@ const synchronizationService = (() => {
         , IsActive /**/ : notePad.isActive
         , Name /******/ : notePad.name
       }))
-      , notes : {}
+      , notes : ( data => {
+        if(!data)
+          return [];
+
+        return data.map( note => new NoteModel({
+          Id /************/ : note._id
+          , IdNotePad /***/ : note.notePad
+          , Title /*******/ : note.title
+          , Content  /****/ : note.content
+          , IsActive /****/ : note.isActive
+        }))
+      })(...data.notePads.map( notePad => notePad.note))
     }
   }
 
@@ -56,17 +69,19 @@ const synchronizationService = (() => {
     saveModel = async models => {
       const checkIdValue = false
 
+      console.log('modelos' ,  models)
+
       for(let i = 0; i < models.length; i += 1) {
         let model = models[i];
 
-        await model.save(checkIdValue)
-          .then( e => {
-            console.log(`model data save -- ${model.Id}`)
-          })
-          .catch( err => {
-            // Tratar erro
-            throw err
-          })
+          await model.save(checkIdValue)
+            .then( e => {
+              console.log(`model data save -- ${model.Id}`)
+            })
+            .catch( err => {
+              // Tratar erro
+              throw err
+            })
       }
   }
 
@@ -96,7 +111,7 @@ const synchronizationService = (() => {
         await saveModel(models.decks)
         await saveModel(models.cards)
         await saveModel(models.notePads)
-        //await saveModel(models.notes)
+        await saveModel(models.notes)
       })
   }
 
@@ -106,7 +121,7 @@ const synchronizationService = (() => {
     , toSyncPendilencesOffiline = async () => {
       const fnSync = async () => {
         return NetInfo.fetch().then( stateNet => {
-          console.log(`to sync Pendilences offiline -- isOffile : ${!stateNet.isConnected}`);
+          //console.log(`to sync Pendilences offiline -- isOffile : ${!stateNet.isConnected}`);
 
           // isOffline
           if(!stateNet.isConnected) {
@@ -218,12 +233,19 @@ const synchronizationService = (() => {
 
   , getModelSource = async source => {
     switch (source.type) {
+
       case "DeckEntity":
         return DeckModel.find(source.id)
+
       case "CardEntity":
         return CardModel.find(source.id)
+
       case "NotePadEntity":
         return NotePadModel.find(source.id)
+
+      case "NoteEntity":
+        return NoteModel.find(source.id)
+
       default :
         throw `Entity not mapped to write operation in api - source entity : ${source.type}`
     }
@@ -235,11 +257,19 @@ const synchronizationService = (() => {
       case "DeckEntity":
         path = '/Deck'
         break;
+
       case "CardEntity":
         path = '/Card'
         break;
+
       case "NotePadEntity":
-        return '/NotePad'
+        path = '/NotePad'
+        break;
+
+      case "NoteEntity":
+        path = '/Note'
+        break;
+
       default :
         throw `Entity not mapped to write operation in api - url entity: ${source.type}`
     }
@@ -264,6 +294,13 @@ const synchronizationService = (() => {
     await restMethodApi(url, dataSource)
       .then( data => {
 
+        console.log('Sucess operation url: ' + url, data.data)
+      })
+      .catch( err => {
+        console.log('Error operation url: ' + url, err)
+        if(err.response) {
+          console.log('Response Error:' , err.response.data)
+        }
       })
   }
 
