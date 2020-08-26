@@ -32,6 +32,10 @@ class NotePadEntity extends BaseEntity {
   get totalNotes() {
     return this.Notes.length;
   }
+
+  addNote(note) {
+    this.Notes.push(note);
+  }
 }
 
 export default NotePadEntity;
