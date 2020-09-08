@@ -3,13 +3,15 @@ import {useSelector, useDispatch} from 'react-redux';
 import Typography from '~/components/Typography';
 import Spacing from '~/components/Spacing';
 
-import {TouchableOpacity, Alert} from 'react-native';
+import {TouchableOpacity, Alert, TouchableWithoutFeedback} from 'react-native';
 import {withTheme} from 'styled-components';
 import ActionButton from 'react-native-action-button';
 import IconMi from 'react-native-vector-icons/MaterialIcons';
 
 import * as S from '~/styles/global';
-import { getNotePads } from "~/store/modules/notepad/actions";
+import { getNotePads , updateNotePad } from "~/store/modules/notepad/actions";
+import Swipeable from 'react-native-swipeable-row';
+import IconMc from "react-native-vector-icons/MaterialCommunityIcons";
 
 const Text = Typography;
 
@@ -22,6 +24,55 @@ function NotePad({navigation, ...props}) {
 
     dispatch(getNotePads())
   }, []);
+
+  //#region RIGHT BUTTON OPTIONS
+
+  const rightButtons = function (item) {
+    return ([
+      <S.Box
+        style={{
+          flex: 1,
+          backgroundColor: 'transparent',
+          borderRadius: 0,
+          right: 10,
+          justifyContent: 'center',
+        }}>
+        <TouchableOpacity
+          onPress={() =>
+            Alert.alert('Alerta', 'Você tem certeza que quer excluir?', [
+              {
+                text: 'Não',
+                onPress: () => {},
+                style: 'Cancelar',
+              },
+              {
+                text: 'Sim',
+                onPress: () => {
+                  item.IsActive = false
+                  console.log(item)
+                  dispatch(updateNotePad(item))
+                },
+              },
+            ])
+          }>
+          <Text>
+            <IconMc name="trash-can" color="#fff" size={30} />
+          </Text>
+        </TouchableOpacity>
+
+        <Spacing mt="6" />
+
+        <TouchableOpacity
+          onPress={() => navigation.navigate('EditNotePad', item) }>
+          <Text>
+            <IconMc name="trash-can" color="#fff" size={30} />
+          </Text>
+        </TouchableOpacity>
+      </S.Box>,
+    ])
+  }
+  //#endregion
+
 
   function deleteNotePad() {
     Alert.alert(
@@ -45,21 +96,22 @@ function NotePad({navigation, ...props}) {
   function renderListNotePads() {
     return (
       <S.Container>
+
         <Spacing position="absolute" top="18" right="30">
           <TouchableOpacity onPress={() => navigation.openDrawer()}>
             <IconMi name="menu" size={25} color="#FFF" />
           </TouchableOpacity>
         </Spacing>
         <S.Margin />
+
         <S.List
           data={notePadState}
-          numColumns={2}
-          keyExtractor={item => String(item)}
+          //numColumns={2}
+          //keyExtractor={item => String(item)}
           renderItem={({item}) => (
-            <S.Container>
-              <TouchableOpacity
-                onPress={() => navigation.navigate('NotePadNotes' , item)}
-                onLongPress={() => deleteNotePad()}>
+            <Swipeable autoClose={true} rightButtons={rightButtons(item)}>
+              <TouchableWithoutFeedback
+                onPress={() => navigation.navigate('NotePadNotes' , item)}>
                 <S.Box data={item}>
                   <S.Text weight="bold" size="16" maxHeight="95">
                     {item.Name}
@@ -67,8 +119,8 @@ function NotePad({navigation, ...props}) {
                   <Spacing mt="4" />
                   <Text color="#fe650e">{item.totalNotes} Notas</Text>
                 </S.Box>
-              </TouchableOpacity>
-            </S.Container>
+              </TouchableWithoutFeedback>
+            </Swipeable>
           )}
         />
       </S.Container>

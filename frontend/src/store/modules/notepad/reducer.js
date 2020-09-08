@@ -43,9 +43,7 @@ operationsActions['@notepads/ADD_NOTE_STATE'] = (state, draft, action) => {
 
 //#endregion
 
-
 //#region
-
 
 operationsActions['@notepads/UPDATE_NOTE_STATE'] = (state, draft, action) => {
   let { note } = action.payload,
@@ -57,7 +55,24 @@ operationsActions['@notepads/UPDATE_NOTE_STATE'] = (state, draft, action) => {
   //draft.data = data;
 };
 
+//#endregion
 
+//#region UPDATE NOT PAD
+
+operationsActions['@notepads/UPDATE_NOTEPAD_STATE'] = (state, draft, action) => {
+  let { notePad } = action.payload,
+    newData = []
+
+  for(let i = 0; i < draft.length ; i += 1) {
+    let element = draft[i]
+    if(element.Id !== notePad.Id) {
+      newData.push(element)
+    }
+  }
+
+  newData.push(notePad)
+  draft = newData;
+};
 
 //#endregion
 

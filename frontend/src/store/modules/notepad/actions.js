@@ -19,6 +19,13 @@ export function updateNotePad(notepad) {
   };
 }
 
+export function updateNotePadState(notepad) {
+  return {
+    type: '@notepads/UPDATE_NOTEPAD_STATE',
+    payload: {notepad},
+  };
+}
+
 export function addNotePadState(notepad) {
   return {
     type: '@notepads/ADD_NOTEPAD_STATE',
@@ -78,11 +85,6 @@ export function updateNote({note}) {
 }
 */
 // UPDATE STATE
-export function updateNotePadState(notepad) {
-  return {
-    type: '@notepads/UPDATE_NOTEPAD_STATE',
-    payload: {notepad},
-  };
-}
+
 
 //#endregion

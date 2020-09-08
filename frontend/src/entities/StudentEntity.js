@@ -13,6 +13,7 @@ class StudentEntity extends BaseEntity {
 
     this.Name = args.name;
     this.Email = args.email;
+    this.ImgPerfil = args.imgPerfil;
   }
 
 
@@ -22,6 +23,15 @@ class StudentEntity extends BaseEntity {
   get Email() { return this._email; }
   set Email(value) { return this._email = value; }
 
+  get ImgPerfil() { return this._imgPerfil; }
+  set ImgPerfil(value) { return this._imgPerfil = value; }
+
+  get ImgProfile() {
+    if(this.ImgPerfil == undefined)
+      return require('~/assets/profile.png')
+
+    return { uri : this.ImgPerfil}
+  }
 }
 
 export default StudentEntity

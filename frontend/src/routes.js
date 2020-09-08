@@ -13,18 +13,25 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 
 import Intro from '~/components/Intro';
 import Dashboard from './pages/Dashboard';
+
+
+import AddDeck from './pages/Decks/AddDeck';
+import AddCard from './pages/Decks/AddCard';
 import AddNote from './pages/Dashboard/AddNote';
 import AddNotePad from './pages/Dashboard/AddNotePad';
+
+import Decks from './pages/Decks';
 import Note from './pages/Dashboard/Note';
 import NotePad from './pages/Dashboard/NotePad';
 import NotePadNotes from './pages/Dashboard/NotePadNotes';
+import Card from './pages/Decks/Card';
+
+import EditCard from './pages/Decks/EditCard';
+import EditNotePad from "./pages/Dashboard/EditNotePad";
+
 import SignIn from './pages/Auth/SignIn';
 import SignUp from './pages/Auth/SignUp';
-import Decks from './pages/Decks';
-import AddDeck from './pages/Decks/AddDeck';
-import Card from './pages/Decks/Card';
-import AddCard from './pages/Decks/AddCard';
-import EditCard from './pages/Decks/EditCard';
+
 import PieChart from './pages/Charts';
 import Profile from './pages/Profile';
 import Pomodoro from './pages/Pomodoro';
@@ -70,6 +77,15 @@ function StackNotes() {
         options={{
           title: '',
           headerTintColor: '#f93b10',
+        }}
+      />
+
+      <Stack.Screen
+        name="EditNotePad"
+        component={EditNotePad}
+        options={{
+          title: 'Editar Bloco Notas',
+          headerTintColor: '#ffffff',
         }}
       />
 
@@ -192,6 +208,16 @@ function StackNotePad() {
           headerTintColor: '#f93b10',
         }}
       />
+
+      <Stack.Screen
+        name="EditNotePad"
+        component={EditNotePad}
+        options={{
+          title: 'Editar Bloco Anotação',
+          headerTintColor: '#f93b10',
+        }}
+      />
+
     </Stack.Navigator>
   );
 }

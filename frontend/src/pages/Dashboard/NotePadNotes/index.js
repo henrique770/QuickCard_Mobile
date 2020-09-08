@@ -13,7 +13,7 @@ import Swipeable from 'react-native-swipeable-row';
 
 import * as S from '~/styles/global';
 import {useDispatch, useSelector} from "react-redux";
-import { getNotePads } from '~/store/modules/notepad/actions'
+import { updateNote , getNotePads } from '~/store/modules/notepad/actions'
 
 const Text = Typography;
 
@@ -22,46 +22,52 @@ console.disableYellowBox = true;
 function NotePadNotes({navigation, ...props}) {
 
   console.log('props' , props.route.params)
+
   const dispatch = useDispatch()
-  //const data = useSelector( state => state.notepad.data)
-  const notePad = props.route.params
+  const notePad = useSelector(state => state.notepad.data.find( e => e.Id == props.route.params.Id))
   const data = notePad.Notes
 
-
   useEffect((e) => {
-    //console.log('notepas --- dispache')
-    //dispatch(getNotePads())
+
+    dispatch(getNotePads())
   }, []);
 
+  function  renderRightButtons(item) {
+    return ([
+      <S.Box
+        style={{
+          flex: 1,
+          backgroundColor: 'transparent',
+          borderRadius: 0,
+          justifyContent: 'center',
+        }}>
+        <TouchableOpacity
+          onPress={() =>
+            Alert.alert('Alerta', 'Você tem certeza que quer excluir?', [
+              {
+                text: 'Não',
+                onPress: () => {},
+                style: 'Cancelar',
+              },
+              {
+                text: 'Sim',
+                onPress: () => {
+                  console.log(item)
+                  item.IsActive = false
+                  dispatch(updateNote(item))
+                  dispatch(getNotePads())
+                },
+              },
+            ])
+          }>
+          <Text>
+            <IconMc name="trash-can" color="#fff" size={30} />
+          </Text>
+        </TouchableOpacity>
+      </S.Box>,
+    ])
+  }
 
-  const rightButtons = [
-    <S.Box
-      style={{
-        flex: 1,
-        backgroundColor: 'transparent',
-        borderRadius: 0,
-        justifyContent: 'center',
-      }}>
-      <TouchableOpacity
-        onPress={() =>
-          Alert.alert('Alerta', 'Você tem certeza que quer excluir?', [
-            {
-              text: 'Não',
-              onPress: () => console.log('Excluir'),
-              style: 'Cancelar',
-            },
-            {
-              text: 'Sim',
-              onPress: () => {},
-            },
-          ])
-        }>
-        <Text>
-          <IconMc name="trash-can" color="#fff" size={30} />
-        </Text>
-      </TouchableOpacity>
-    </S.Box>,
-  ];
   return (
     <>
       <S.Container>
@@ -70,12 +76,12 @@ function NotePadNotes({navigation, ...props}) {
           data={data}
           keyExtractor={item => String(item)}
           renderItem={({item}) => (
-            <Swipeable autoClose={true} rightButtons={rightButtons}>
+            <Swipeable autoClose={true} rightButtons={renderRightButtons(item)}>
               <TouchableWithoutFeedback
                 onPress={() => navigation.navigate('Note', item)}>
                 <S.Box data={item}>
                   <S.Text weight="bold" size="16">
-                   Título: {item.Title}
+                   {item.Title}
                   </S.Text>
                 </S.Box>
               </TouchableWithoutFeedback>

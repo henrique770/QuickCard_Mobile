@@ -115,6 +115,6 @@ export default all([
   takeLatest('@notepads/ADD_NOTEPAD_DATABASE', addNotePadDataBase),
   takeLatest('@notepads/ADD_NOTE_DATABASE', addNoteDataBase),
   takeLatest('@notepads/UPDATE_NOTE_DATABASE', updateNoteDataBase),
-  takeLatest('@notepads/UPDATE_NOTE_DATABASE', updateNoteDataBase),
+ // takeLatest('@notepads/UPDATE_NOTE_DATABASE', updateNoteDataBase),
   takeLatest('@notepads/UPDATE_NOTEPAD_DATABASE', updateNotePadDataBase),
 ]);

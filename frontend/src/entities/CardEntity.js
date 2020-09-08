@@ -74,6 +74,7 @@ class CardEntity extends  BaseEntity {
   }
 
   hitEasy() {
+
     this.DateNextView = new Date((new Date()).setHours(72))
     this.NumEasyCount += 1
     this.reviewed()

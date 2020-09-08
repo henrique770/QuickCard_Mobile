@@ -1,11 +1,11 @@
 import React, {useRef, useState} from 'react';
 import {Image, StatusBar} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
-
 import logo from '~/assets/whitelogo.png';
-
+import showImagePicker from '~/services/fileImageService'
 import Background from '~/components/Background';
 import {signUpRequest} from '~/store/modules/auth/actions';
+
 
 import {
   Container,
@@ -25,11 +25,11 @@ export default function SignUp({navigation}) {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-
+  const [dataSource, setDataSource] = useState(logo);
   const loading = useSelector(state => state.auth.loading);
 
   function handleSubmit() {
-    dispatch(signUpRequest(name, email, password));
+    dispatch(signUpRequest(name, email, password, dataSource.uri.toString()));
     navigation.navigate('SignIn');
   }
 
@@ -38,9 +38,14 @@ export default function SignUp({navigation}) {
       <StatusBar barStyle="light-content" backgroundColor="#fe650e" />
       <Background>
         <Container>
-          <Image source={logo} />
 
+          <Image source={dataSource} style={{height : 100, width: 100, borderRadius: 100 / 2 }} />
           <Form>
+
+            <SignLink onPress={() => showImagePicker((data) => setDataSource(data))}>
+              <SignLinkText>Selecionar imagem Perfil</SignLinkText>
+            </SignLink>
+
             <FormInput
               icon="account-outline"
               autoCorrect={false}

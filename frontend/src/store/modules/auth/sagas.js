@@ -3,7 +3,7 @@ import { takeLatest, call, put, all } from 'redux-saga/effects';
 import NetInfo from "@react-native-community/netinfo";
 
 import api from '~/services/api';
-import { signInSuccess, signFailure } from './actions';
+import { signInSuccess, signFailure , updateProfileRequest , updateProfile} from './actions';
 import StudentEntity from '~/entities/StudentEntity'
 import synchronizationService from '~/store/service/synchronizationService'
 
@@ -87,6 +87,8 @@ export function* signIn({ payload }) {
           const { token, student } = response.data
           , userEntity = new StudentEntity(student)
 
+          console.log('userEntity', userEntity)
+
           yield synchronizationService.scriconize(userEntity)
           synchronizationService.starOffileneCheckLoop()
 
@@ -119,14 +121,15 @@ export function* signUp({ payload }) {
         );
         return
       }
-      const { name, email, password } = payload;
+
+      const { name, email, password, imgPerfil } = payload;
         yield call(api.post, '/student', {
             name,
             email,
             password,
+            imgPerfil
         });
 
-        // history.push('/');
     } catch (err) {
         Alert.alert(
             'Falha no cadastro',
@@ -154,9 +157,66 @@ export function* signOut() {
   synchronizationService.stopOffileneCheckLoop()
 }
 
+//#region Process response update profile
+
+function processResponseUpdateProfile(response) {
+  switch (response.status) {
+    case 400:
+      if(response.message === "invalid password") {
+        Alert.alert(
+          'Falha na ataulização do perfil.',
+          'Senha inválida.'
+        );
+        break
+      }
+  }
+
+  return null;
+}
+
+
+
+//#endregion
+
+export function* updateStudantProfil({payload}) {
+  //console.log('profile', payload.profile)
+  let isConnected = yield NetInfo.fetch().then( stateNet => stateNet.isConnected)
+
+  if(!isConnected) {
+    Alert.alert(
+      '',
+      'Sem conexão com a internet.'
+    );
+    return;
+  }
+
+  let response = yield api.put(`/student/${payload.profile.id}` , {
+    Password : payload.profile.password,
+    Email : payload.profile.email,
+    Name : payload.profile.name,
+    OldPassword : payload.profile.oldPassword,
+    ImgPerfil : payload.profile.imgPerfil
+  })
+    .then( data => data.data)
+    .catch(data => processResponseUpdateProfile(data.response.data))
+
+
+  if(response != null) {
+    Alert.alert(
+      '',
+      'Pefil atualizado com sucesso.'
+    );
+
+    yield put(updateProfile(response))
+  }
+
+  //yield put(updateProfile(profile));
+}
+
 export default all([
     takeLatest('persist/REHYDRATE', setToken),
     takeLatest('@auth/SIGN_IN_REQUEST', signIn),
     takeLatest('@auth/SIGN_UP_REQUEST', signUp),
     takeLatest('@auth/SIGN_OUT', signOut),
+    takeLatest('@auth/UPDATE_PROFILE_IN_REQUEST', updateStudantProfil),
 ]);

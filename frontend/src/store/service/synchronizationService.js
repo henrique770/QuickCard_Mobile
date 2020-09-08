@@ -113,10 +113,12 @@ const synchronizationService = (() => {
         await saveModel(models.notePads)
         await saveModel(models.notes)
       })
+
+    return response.data
   }
 
   let stopOffileneCheckLoop = false
-    , timeLoop = 1000 * 4
+    , timeLoop = 1000 * 15
     , toSynchronize = false
     , toSyncPendilencesOffiline = async () => {
       const fnSync = async () => {

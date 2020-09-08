@@ -23,14 +23,14 @@ class NotePadEntity extends BaseEntity {
     if(this._notes === undefined)
       return  []
 
-    return this._notes;
+    return this._notes.filter( e => e.IsActive);
   }
   set Notes(value) {
     this._notes = value;
   }
 
   get totalNotes() {
-    return this.Notes.length;
+    return this.Notes.filter( e => e.IsActive).length;
   }
 
   addNote(note) {

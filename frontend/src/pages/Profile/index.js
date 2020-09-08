@@ -1,36 +1,38 @@
 import React, {useRef, useState, useEffect} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
-import {Image, View} from 'react-native';
+import {Alert, Image, View} from 'react-native';
 
 import * as S from '~/styles/global';
 import Spacing from '~/components/Spacing';
 
 import IconMi from 'react-native-vector-icons/MaterialIcons';
 import {TouchableOpacity} from 'react-native';
-
+import showImagePicker from '~/services/fileImageService'
 // import { updateProfileRequest } from '~/store/modules/user/actions';
-import {signOut} from '~/store/modules/auth/actions';
+import {signOut , updateProfileRequest} from '~/store/modules/auth/actions';
 
 import {Separator, Form} from './styles';
+import {SignLink, SignLinkText} from "~/pages/Auth/SignUp/styles";
 
 export default function Profile({navigation}) {
   const dispatch = useDispatch();
-  const profile = useSelector((state) => state.user.profile);
+  const profile = useSelector((state) => state.auth.profile);
 
   const emailRef = useRef();
   const oldPasswordRef = useRef();
   const passwordRef = useRef();
   const confirmPasswordRef = useRef();
 
-  const [name, setName] = useState('');
-  // const [name, setName] = useState(profile.name);
+  const [name, setName] = useState(profile.Name);
 
-  const [email, setEmail] = useState('');
-  // const [email, setEmail] = useState(profile.name);
+  const [email, setEmail] = useState(profile.Email);
+  const [isSetIamge, setImage] = useState(false)
 
   const [oldPassword, setOldPassword] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [ dataSource, setDataSource] = useState(profile.ImgProfile)
+
 
   // useEffect(() => {
   //     setOldPassword('');
@@ -38,16 +40,54 @@ export default function Profile({navigation}) {
   //     setConfirmPassword('');
   // }, [profile]);
 
-  function handleSubmit() {
-    // dispatch(
-    //     updateProfileRequest({
-    //         name,
-    //         email,
-    //         password,
-    //         oldPassword,
-    //         confirmPassword,
-    //     })
-    // );
+  function handlePasswordPerfil() {
+
+    if(!validatePasswords())
+      return;
+
+    let args = loadArgumentsHandlerPerfil()
+
+    args.oldPassword = oldPassword
+    args.password = password
+
+    dispatch(updateProfileRequest(args));
+  }
+
+  function handlePerfil() {
+    let args = loadArgumentsHandlerPerfil()
+    dispatch(updateProfileRequest(args));
+  }
+
+  function loadArgumentsHandlerPerfil() {
+    let args = { name, email, id : profile._id }
+    console.log(profile)
+    if(isSetIamge) {
+      args.imgPerfil = dataSource.uri
+    }
+    else {
+      args.imgPerfil = null
+    }
+
+    return args
+  }
+
+  function validatePasswords() {
+    if(oldPassword == "") {
+      Alert.alert('Alerta',`Informe sua senha.`)
+      return false;
+    }
+
+    if(password == "" || confirmPassword == "" ) {
+      return Alert.alert('Alerta',`Informe sua nova senha.`)
+      return false;
+    }
+
+    if(password != confirmPassword) {
+      return Alert.alert('Alerta',`Senhas inválidas.`)
+      return false;
+    }
+
+    return true;
   }
 
   function handleLogout() {
@@ -72,11 +112,21 @@ export default function Profile({navigation}) {
           }}>
           <Image
             style={{height: 100, width: 100, borderRadius: 100 / 2}}
-            source={require('~/assets/profile.png')}
+            source={dataSource}
           />
         </View>
 
         <Form>
+
+          <SignLink onPress={() => showImagePicker((data) => {
+            setImage(true)
+            setDataSource(data)
+          })}>
+            <SignLinkText>Selecionar imagem Perfil</SignLinkText>
+          </SignLink>
+
+          <Spacing mt="10" />
+
           <S.FormInput
             icon="account-outline"
             autoCorrect={false}
@@ -98,8 +148,12 @@ export default function Profile({navigation}) {
             returnKeyType="next"
             onSubmitEditing={() => oldPasswordRef.current.focus()}
             value={email}
-            onChangeText={setEmail}
+            //onChangeText={setEmail}
           />
+
+          <S.ButtonTheme onPress={handlePerfil}>
+            <S.TextButton>Atualizar perfil</S.TextButton>
+          </S.ButtonTheme>
 
           <Separator />
 
@@ -130,16 +184,18 @@ export default function Profile({navigation}) {
             secureTextEntry
             placeholder="Confirmação de senha"
             ref={confirmPasswordRef}
-            onSubmitEditing={handleSubmit}
             value={confirmPassword}
             onChangeText={setConfirmPassword}
           />
+
+          <S.ButtonTheme onPress={handlePasswordPerfil}>
+            <S.TextButton>Atualizar perfil e senha</S.TextButton>
+          </S.ButtonTheme>
+
+          <Spacing mt="10" />
+
           <Separator />
 
-          <S.ButtonTheme onPress={handleSubmit}>
-            <S.TextButton>Atualizar perfil</S.TextButton>
-          </S.ButtonTheme>
-          <Spacing mt="10" />
           <S.ButtonTheme onPress={handleLogout}>
             <S.TextButton>Sair do QuickCard</S.TextButton>
           </S.ButtonTheme>

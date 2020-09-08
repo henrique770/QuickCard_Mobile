@@ -19,7 +19,7 @@ import IconMi from 'react-native-vector-icons/MaterialIcons';
 import IconMc from 'react-native-vector-icons/MaterialCommunityIcons';
 import {Container, Title, ContainerTag, TagInput} from './styles';
 import {useDispatch, useSelector} from "react-redux";
-import {updateNote} from "~/store/modules/notepad/actions";
+import {getNotePads, updateNote} from "~/store/modules/notepad/actions";
 import {withTheme} from "styled-components";
 
 const defaultStyles = getDefaultStyles();
@@ -158,6 +158,7 @@ function Note({navigation, ...props}) {
     console.log('Note', note)
 
     dispatch(updateNote(note))
+    dispatch(getNotePads())
 
    /* dispatch(addNote({
       Content : value
