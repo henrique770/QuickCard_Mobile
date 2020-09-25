@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import Spacing from '~/components/Spacing';
 import Typography from '~/components/Typography';
 
-import {TouchableOpacity, ScrollView, View} from 'react-native';
+import {TouchableOpacity, ScrollView, View, Alert} from 'react-native';
 import * as Animatable from 'react-native-animatable';
 
 import FlipCard from 'react-native-flip-card';
@@ -32,7 +32,6 @@ export default function Card({navigation, route}) {
   const {Deck} = route.params;
   const Card = {};
 
-  console.log('route params ', route.params);
 
   const dispatch = useDispatch();
   const [cardIndex, setCardIndex] = useState(0);
@@ -40,6 +39,8 @@ export default function Card({navigation, route}) {
   const [cardsVisible, setCardsVisible] = useState(false);
   const [endQuiz, setEndQuiz] = useState(Deck.checkRevisedDeck());
   const [cardData, setCardData] = useState(Card);
+
+  //console.log('route params ', route.params);
 
   useEffect(() => {
     navigation.setOptions({title: `${Deck.Name}`});
@@ -103,9 +104,8 @@ export default function Card({navigation, route}) {
     }
 
     let card = Deck.getDeckRandom();
-    Deck.orderCards();
-
     setCardData(card);
+    //console.log('card ', card);
   }
 
   function reviewDeck() {
@@ -190,7 +190,7 @@ export default function Card({navigation, route}) {
     );
   }
 
-  function renderButtons() {
+  function renderButtons(card) {
     return (
       <>
         {isShow && (
@@ -210,7 +210,7 @@ export default function Card({navigation, route}) {
                     color="#fe650e"
                     size={10}
                   />{' '}
-                  10min
+                  {cardData.getTimeHitDifficult()}
                 </S.Text>
               </Button>
             </Animatable.View>
@@ -230,7 +230,7 @@ export default function Card({navigation, route}) {
                     color="#fe650e"
                     size={10}
                   />{' '}
-                  1d
+                  {cardData.getTimeHitGood()}
                 </S.Text>
               </Button>
             </Animatable.View>
@@ -250,7 +250,7 @@ export default function Card({navigation, route}) {
                     color="#fe650e"
                     size={10}
                   />{' '}
-                  2d
+                  {cardData.getTimeHitEasy()}
                 </S.Text>
               </Button>
             </Animatable.View>

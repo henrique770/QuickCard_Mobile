@@ -188,9 +188,9 @@ class RepositoryBase {
         }
       }
 
-      console.log('** --- UPDATE OPERATION --- **')
-      console.log('Update entity -> entity' , args)
-      console.log('Update entity -> model' , { ...model })
+      //console.log('** --- UPDATE OPERATION --- **')
+      //console.log('Update entity -> entity' , args)
+      //console.log('Update entity -> model' , { ...model })
 
       return model.save()
         .then( res => {

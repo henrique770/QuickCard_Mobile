@@ -8,37 +8,27 @@ import Spacing from '~/components/Spacing';
 import IconMi from 'react-native-vector-icons/MaterialIcons';
 import {TouchableOpacity} from 'react-native';
 import showImagePicker from '~/services/fileImageService'
-// import { updateProfileRequest } from '~/store/modules/user/actions';
 import {signOut , updateProfileRequest} from '~/store/modules/auth/actions';
 
 import {Separator, Form} from './styles';
 import {SignLink, SignLinkText} from "~/pages/Auth/SignUp/styles";
+import StudentEntity from "~/entities/StudentEntity";
 
 export default function Profile({navigation}) {
+
   const dispatch = useDispatch();
-  const profile = useSelector((state) => state.auth.profile);
+  const auth  = useSelector((state) => state.auth)
+  const student = new StudentEntity(auth.profile)
 
-  const emailRef = useRef();
-  const oldPasswordRef = useRef();
-  const passwordRef = useRef();
-  const confirmPasswordRef = useRef();
+  const [name, setName] = useState(student.Name);
+  const [email, setEmail] = useState(student.Email);
 
-  const [name, setName] = useState(profile.Name);
-
-  const [email, setEmail] = useState(profile.Email);
   const [isSetIamge, setImage] = useState(false)
+  const [dataSource, setDataSource] = useState(student.ImgProfile)
 
   const [oldPassword, setOldPassword] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [ dataSource, setDataSource] = useState(profile.ImgProfile)
-
-
-  // useEffect(() => {
-  //     setOldPassword('');
-  //     setPassword('');
-  //     setConfirmPassword('');
-  // }, [profile]);
 
   function handlePasswordPerfil() {
 
@@ -59,8 +49,8 @@ export default function Profile({navigation}) {
   }
 
   function loadArgumentsHandlerPerfil() {
-    let args = { name, email, id : profile._id }
-    console.log(profile)
+    let args = { name, email, _id : student.Id }
+    console.log(student)
     if(isSetIamge) {
       args.imgPerfil = dataSource.uri
     }
@@ -133,7 +123,6 @@ export default function Profile({navigation}) {
             autoCapitalize="none"
             placeholder="Nome completo"
             returnKeyType="next"
-            onSubmitEditing={() => emailRef.current.focus()}
             value={name}
             onChangeText={setName}
           />
@@ -144,9 +133,7 @@ export default function Profile({navigation}) {
             autoCorrect={false}
             autoCapitalize="none"
             placeholder="Digite seu e-mail"
-            ref={emailRef}
             returnKeyType="next"
-            onSubmitEditing={() => oldPasswordRef.current.focus()}
             value={email}
             //onChangeText={setEmail}
           />
@@ -161,9 +148,7 @@ export default function Profile({navigation}) {
             icon="lock-outline"
             secureTextEntry
             placeholder="Sua senha atual"
-            ref={oldPasswordRef}
             returnKeyType="next"
-            onSubmitEditing={() => passwordRef.current.focus()}
             value={oldPassword}
             onChangeText={setOldPassword}
           />
@@ -172,9 +157,7 @@ export default function Profile({navigation}) {
             icon="lock-outline"
             secureTextEntry
             placeholder="Sua nova senha"
-            ref={passwordRef}
             returnKeyType="next"
-            onSubmitEditing={() => confirmPasswordRef.current.focus()}
             value={password}
             onChangeText={setPassword}
           />
@@ -183,7 +166,6 @@ export default function Profile({navigation}) {
             icon="lock-outline"
             secureTextEntry
             placeholder="Confirmação de senha"
-            ref={confirmPasswordRef}
             value={confirmPassword}
             onChangeText={setConfirmPassword}
           />

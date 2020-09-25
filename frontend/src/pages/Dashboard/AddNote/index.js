@@ -7,19 +7,20 @@ import {
   KeyboardAvoidingView,
   View,
   Picker,
+  Alert
 } from 'react-native';
 
 import CNEditor, {
   CNToolbar,
   getDefaultStyles,
 } from 'react-native-cn-richtext-editor';
-// import ActionButton from 'react-native-action-button';
+
 import PropTypes from 'prop-types';
 import IconMi from 'react-native-vector-icons/MaterialIcons';
 import IconMc from 'react-native-vector-icons/MaterialCommunityIcons';
 import {Container, Title, ContainerTag, TagInput} from './styles';
 import {useDispatch, useSelector} from "react-redux";
-import {addNote} from "~/store/modules/notepad/actions";
+import {addNote , getNotePads } from "~/store/modules/notepad/actions";
 
 const defaultStyles = getDefaultStyles();
 
@@ -28,19 +29,40 @@ export default function AddNote({navigation, route}) {
   let editor = null
   const notePads = useSelector(state => state.notepad.data);
   const dispatch = useDispatch();
-  const [selectedTag, setSelectedValue] = useState('body');
+
+  const [noteContent , setNoteContent] = useState('');
+  const [selectedTag, setSelectedValue] = useState('');
   const [selectedStyles, setSelectedStyles] = useState([]);
   const [notePad, setNotePad] = useState('');
   const [title, setTitle] = useState('Título');
 
-  const handlerAddNote = async () => {
-    let value = await editor.getHtml()
+  dispatch(getNotePads())
+
+  const handlerAddNote = () => {
+
+    if(noteContent == ""){
+      Alert.alert('', 'A anotação não pode esta vazia')
+      return
+    }
+
+    if(notePad == '') {
+      Alert.alert('', 'Selecione um bloco de anotação')
+      return
+    }
 
     dispatch(addNote({
-      Content : value
-      , IdNotePad : notePad
-      , Title :title
+        Content : noteContent
+        , IdNotePad : notePad
+        , Title :title
     }))
+
+    setSelectedValue('')
+    setTitle('Título')
+    setNotePad('')
+    setNoteContent('')
+    editor.setHtml('')
+
+    Alert.alert('', 'Anotação adicionada com sucesso')
   }
 
   const onStyleKeyPress = toolType => {
@@ -55,8 +77,17 @@ export default function AddNote({navigation, route}) {
     setSelectedStyles(styles)
   };
 
+  const onValueChanged = value => {
+    setNoteContent(value)
+  }
+
   const getListTag = () => {
-    let selectValues = [{ id : '' , name : 'Selecione' } , ...notePads.map( e => { return{ id : e.Id , name : e.Name} }) ]
+
+    let selectValues = []
+
+    if(notePads != null && Array.isArray(notePads)) {
+      selectValues = [{ id : '' , name : 'Selecione bloco de anotação' } , ...notePads.map( e => { return{ id : e.Id , name : e.Name} }) ]
+    }
 
     return selectValues.map( note => {
       return <Picker.Item label={note.name} value={note.id} />
@@ -67,8 +98,9 @@ export default function AddNote({navigation, route}) {
       <>
         <Container>
           <Spacing mb="20">
-            <Spacing position="absolute" top="5" right="30" width="50">
+            <Spacing position="absolute" top="5" right="30" width="75">
               <ContainerTag>
+
                 <IconMc name="tag" size={20} color="#fe650e" />
 
                 <Picker
@@ -76,23 +108,18 @@ export default function AddNote({navigation, route}) {
                     height: 50,
                     width: '100%',
                   }}
-                  selectedValue={notePad}
-                  onValueChange={(itemValue, itemIndex) => {
-                      console.log('Item value : ', itemValue);
-                      //setState({language: itemValue})
-                      setNotePad(itemValue)
-                    }
+                    selectedValue={notePad}
+                    onValueChange={(itemValue, itemIndex) => { setNotePad(itemValue) }
                   }>
+
                   {getListTag()}
+
                 </Picker>
-                {/* <TagInput
-                  autoCorrect={false}
-                  autoCapitalize="none"
-                  placeholder="Tag Baralho"
-                /> */}
+
               </ContainerTag>
             </Spacing>
           </Spacing>
+
           <Spacing ml="20" mr="20">
             <Title onChangeText={(value) => setTitle(value)}>{title}</Title>
           </Spacing>
@@ -106,22 +133,25 @@ export default function AddNote({navigation, route}) {
               flexDirection: 'column',
               justifyContent: 'flex-end',
             }}>
+
             <View
               style={{flex: 1}}
               onTouchStart={() => {
                 editor && editor.blur();
               }}>
+
               <View style={styles.main} onTouchStart={e => e.stopPropagation()}>
                 <CNEditor
                   ref={input => (editor = input)}
                   onSelectedTagChanged={onSelectedTagChanged}
                   onSelectedStyleChanged={onSelectedStyleChanged}
+                  onValueChanged={onValueChanged}
                   style={{backgroundColor: '#fff'}}
                   styleList={defaultStyles}
-                  initialHtml={`  `}
+                  initialHtml={noteContent}
                 />
-                {/* <p><strong>Pellentesque habitant morbi tristique</strong> senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas semper. <em>Aenean ultricies mi vitae est.</em> Mauris placerat eleifend leo. Quisque sit amet est et sapien ullamcorper pharetra. Vestibulum erat wisi, condimentum sed, <code>commodo vitae</code>, ornare sit amet, wisi. Aenean fermentum, elit eget tincidunt condimentum, eros ipsum rutrum orci, sagittis tempus lacus enim ac dui. <a href="#">Donec non enim</a> in turpis pulvinar facilisis. Ut felis.</p> */}
               </View>
+
             </View>
 
             <View
@@ -139,20 +169,6 @@ export default function AddNote({navigation, route}) {
                 }}
                 size={30}
                 iconSet={[
-                  // {
-                  //   type: 'tool',
-                  //   iconArray: [
-                  //     {
-                  //       buttonTypes: 'style',
-                  //       toolTypeText: 'image',
-                  //       iconComponent: (
-                  //         <Text style={styles.toolbarButton}>
-                  //           <IconMi name="image" size={30} />
-                  //         </Text>
-                  //       ),
-                  //     },
-                  //   ],
-                  // },
                   {
                     type: 'tool',
                     iconArray: [
@@ -166,7 +182,8 @@ export default function AddNote({navigation, route}) {
                         ),
                       },
                     ],
-                  },
+                  }
+                  ,
                   {
                     type: 'tool',
                     iconArray: [
@@ -237,25 +254,6 @@ export default function AddNote({navigation, route}) {
               />
             </View>
           </KeyboardAvoidingView>
-
-          {/* <ActionButton
-            style={{
-              marginBottom: 30,
-            }}
-            buttonColor="#f93b10">
-            <ActionButton.Item
-              buttonColor="#333"
-              title="Adicionar Cartão"
-              textContainerStyle={{
-                height: 25,
-              }}
-              textStyle={{
-                fontSize: 13,
-              }}
-              onPress={() => this.props.navigation.navigate('AddCard')}>
-              <IconMc name="cards-outline" size={30} color="#FFF" />
-            </ActionButton.Item>
-          </ActionButton> */}
         </Container>
       </>
     );

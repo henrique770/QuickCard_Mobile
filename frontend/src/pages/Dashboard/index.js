@@ -21,29 +21,9 @@ const Text = Typography;
 function Dashboard({navigation, ...props}) {
 
   const dispatch = useDispatch()
-  const [data, setData] = useState([]);
   const notePads = useSelector( state => state.notepad.data)
 
-  function getData() {
-    let auxData = []
-
-    notePads.map( notePad => auxData.push(...((notePad) =>
-
-          notePad.Notes.map( note => { return {
-            IsActive : note.IsActive
-            , Note : note
-            , NotePadName : notePad.Name
-          }})
-      )(notePad))
-    )
-
-    setData(auxData)
-  }
-
-  useEffect((e) => {
-    dispatch(getNotePads())
-    getData()
-  }, []);
+  dispatch(getNotePads())
 
   //#region RIGHT BUTTON OPTIONS
 
@@ -56,6 +36,7 @@ function Dashboard({navigation, ...props}) {
             borderRadius: 0,
             right: 10,
             justifyContent: 'center',
+
           }}>
           <TouchableOpacity
             onPress={() =>
@@ -68,12 +49,10 @@ function Dashboard({navigation, ...props}) {
                 {
                   text: 'Sim',
                   onPress: () => {
-                    item.Note.IsActive = false
                     item.IsActive = false
-                    console.log(item.Note)
-                    dispatch(updateNote(item.Note))
-                    dispatch(getNotePads())
-
+                    dispatch(updateNote(item))
+                    //dispatch(getNotePads())
+                    navigation.navigate('Dashboard')
                   },
                 },
               ])
@@ -89,25 +68,32 @@ function Dashboard({navigation, ...props}) {
   //#endregion
 
   function renderNotes() {
-    return (
-      <S.List
-        data={data.filter( e => e.IsActive)}
-        keyExtractor={item => String(item.Note.Id)}
-        renderItem={({item}) => (
-          <Swipeable autoClose={true} rightButtons={renderRightButtons(item)}>
+
+    let notes = []
+
+    for(let i = 0; i < notePads.length; i += 1) {
+      let notePad = notePads[i]
+
+      for(let j = 0; j < notePad.Notes.length; j += 1){
+        let note = notePad.Notes[j]
+
+        notes.push(<>
+          <Swipeable autoClose={true} bounceLeft={true} rightButtons={renderRightButtons(note)}>
             <TouchableWithoutFeedback
-              onPress={() => navigation.navigate('Note' , item.Note)}>
-              <S.Box data={item}>
+              onPress={() => navigation.navigate('Note' , note)}>
+              <S.Box data={note}>
                 <S.Text weight="bold" size="16">
-                  {item.Note.Title}
+                  {note.Title}
                 </S.Text>
-                <Text color="#fe650e">{ item.NotePadName }</Text>
+                <Text color="#fe650e">{notePad.Name}</Text>
               </S.Box>
             </TouchableWithoutFeedback>
           </Swipeable>
-        )}
-      />
-    )
+        </>)
+      }
+    }
+
+    return notes
   }
 
   return (

@@ -56,15 +56,12 @@ class DeckEntity extends BaseEntity {
     if(this.totalCards() === 0)
       return
 
-    let order = (a, b) => {
-        if(a.DateNextView !== undefined && b.DateNextView !== undefined )
-          return (new Date(a.DateNextView)) < (new Date(b.DateNextView))
+    this.Cards = this.Cards.sort((a, b) => {
+      if(a.DateNextView !== undefined && b.DateNextView !== undefined )
+        return ((new Date(a.DateNextView).getTime()) - (new Date(b.DateNextView).getTime()))
 
-        return false
-      }
-      , cardsOrder = this.Cards.sort(order)
-
-    this.Cards = cardsOrder
+      return false
+    })
   }
 
   /**
@@ -113,11 +110,14 @@ class DeckEntity extends BaseEntity {
 
     for(let i = 0; i < this.totalCards(); i += 1) {
       let card = this.Cards[i]
-      card.IsReviewed = false
+      card.undoReviewCard()
     }
   }
 
   getDeckRandom() {
+
+    this.orderCards()
+
     let unreviewedCards = this.Cards.filter( card => !card.IsReviewed)
       , countCards = unreviewedCards.length
 

@@ -7,56 +7,6 @@ import { signInSuccess, signFailure , updateProfileRequest , updateProfile} from
 import StudentEntity from '~/entities/StudentEntity'
 import synchronizationService from '~/store/service/synchronizationService'
 
-//#region PROCESS LOGIN REQUEST
-
-const processLoginFailure = err => {
-  let data = err.response.data
-    , status = err.response.status
-    , title = ''
-    , mensagem = ''
-
-  switch (status) {
-    case 400:
-      title ='Falha na autenticação'
-      mensagem = 'Usuário ou senha inválido.'
-      break;
-    case 500:
-      title ='Falha no servidor'
-      mensagem = 'Error no servidor de autenticação.'
-      break;
-    default:
-      title ='Falha no processo de autenticação'
-      mensagem = 'Error desconhecido.'
-  }
-
-  Alert.alert(
-    'Falha na autenticação'
-    , 'Usuário ou senha inválidos'
-  );
-  return {
-    ok : false
-  }
-}
-
-
-const processLoginSucess = sucess => {
-  let data = sucess.data
-    , status = sucess.status
-
-  switch (status) {
-    case 200:
-      return {
-        ok : true
-        , data
-      }
-  }
-
-  return  {
-    ok : false
-  }
-}
-
-//#endregion
 
 export function* signIn({ payload }) {
     try {
@@ -87,15 +37,12 @@ export function* signIn({ payload }) {
           const { token, student } = response.data
           , userEntity = new StudentEntity(student)
 
-          console.log('userEntity', userEntity)
+          api.defaults.headers.Authorization = `Bearer ${token}`;
 
           yield synchronizationService.scriconize(userEntity)
           synchronizationService.starOffileneCheckLoop()
 
-          //return;
-
-          api.defaults.headers.Authorization = `Bearer ${token}`;
-          yield put(signInSuccess(token, userEntity));
+          yield put(signInSuccess(token, student));
 
         // history.push('/dashboard');
     } catch (err) {
@@ -157,6 +104,92 @@ export function* signOut() {
   synchronizationService.stopOffileneCheckLoop()
 }
 
+export function* updateStudantProfil({payload}) {
+  //console.log('profile', payload.profile)
+  let isConnected = yield NetInfo.fetch().then( stateNet => stateNet.isConnected)
+
+  if(!isConnected) {
+    Alert.alert(
+      '',
+      'Sem conexão com a internet.'
+    );
+    return;
+  }
+
+  let response = yield api.put(`/student/${payload.profile._id}` , {
+    Password : payload.profile.password,
+    Email : payload.profile.email,
+    Name : payload.profile.name,
+    OldPassword : payload.profile.oldPassword,
+    ImgPerfil : payload.profile.imgPerfil
+  })
+    .then( data => data.data)
+    .catch(data => processResponseUpdateProfile(data.response.data))
+
+
+  if(response != null) {
+    Alert.alert(
+      '',
+      'Pefil atualizado com sucesso.'
+    );
+
+    yield put(updateProfile(response))
+  }
+  //yield put(updateProfile(profile));
+}
+
+
+//#region PROCESS LOGIN REQUEST
+
+const processLoginFailure = err => {
+  let data = err.response.data
+    , status = err.response.status
+    , title = ''
+    , mensagem = ''
+
+  switch (status) {
+    case 400:
+      title ='Falha na autenticação'
+      mensagem = 'Usuário ou senha inválido.'
+      break;
+    case 500:
+      title ='Falha no servidor'
+      mensagem = 'Error no servidor de autenticação.'
+      break;
+    default:
+      title ='Falha no processo de autenticação'
+      mensagem = 'Error desconhecido.'
+  }
+
+  Alert.alert(
+    'Falha na autenticação'
+    , 'Usuário ou senha inválidos'
+  );
+  return {
+    ok : false
+  }
+}
+
+
+const processLoginSucess = sucess => {
+  let data = sucess.data
+    , status = sucess.status
+
+  switch (status) {
+    case 200:
+      return {
+        ok : true
+        , data
+      }
+  }
+
+  return  {
+    ok : false
+  }
+}
+
+//#endregion
+
 //#region Process response update profile
 
 function processResponseUpdateProfile(response) {
@@ -178,40 +211,7 @@ function processResponseUpdateProfile(response) {
 
 //#endregion
 
-export function* updateStudantProfil({payload}) {
-  //console.log('profile', payload.profile)
-  let isConnected = yield NetInfo.fetch().then( stateNet => stateNet.isConnected)
 
-  if(!isConnected) {
-    Alert.alert(
-      '',
-      'Sem conexão com a internet.'
-    );
-    return;
-  }
-
-  let response = yield api.put(`/student/${payload.profile.id}` , {
-    Password : payload.profile.password,
-    Email : payload.profile.email,
-    Name : payload.profile.name,
-    OldPassword : payload.profile.oldPassword,
-    ImgPerfil : payload.profile.imgPerfil
-  })
-    .then( data => data.data)
-    .catch(data => processResponseUpdateProfile(data.response.data))
-
-
-  if(response != null) {
-    Alert.alert(
-      '',
-      'Pefil atualizado com sucesso.'
-    );
-
-    yield put(updateProfile(response))
-  }
-
-  //yield put(updateProfile(profile));
-}
 
 export default all([
     takeLatest('persist/REHYDRATE', setToken),

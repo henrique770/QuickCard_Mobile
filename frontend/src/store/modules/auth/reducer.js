@@ -1,4 +1,5 @@
 import produce from 'immer';
+import StudentEntity from "~/entities/StudentEntity";
 
 const INITIAL_STATE = {
   token: null,
@@ -19,6 +20,7 @@ export default function auth(state = INITIAL_STATE, action) {
       }
 
       case '@auth/UPDATE_PROFILE': {
+
         draft.profile = action.payload.profile
         break;
       }
@@ -27,7 +29,8 @@ export default function auth(state = INITIAL_STATE, action) {
         draft.token = action.payload.token;
         draft.signed = true;
         draft.loading = false;
-        draft.profile = action.payload.student
+        draft.profile = action.payload.profile
+
         break;
       }
 

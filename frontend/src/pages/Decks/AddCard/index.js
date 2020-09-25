@@ -59,9 +59,6 @@ export default function AddCard({navigation, route}) {
       }),
     );
 
-    let data = store.getState(state => state.Deck.data);
-    console.log(data);
-
     alert(`Cartão adicionado com sucesso!`);
 
     setSelectedValue('');

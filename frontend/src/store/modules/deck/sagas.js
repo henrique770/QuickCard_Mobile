@@ -32,8 +32,7 @@ export function* getDecksDataBase() {
                         , operKey : 'IdDeck_in'
                       })
                       .all()
-
-    console.log('decks database', decks)
+    //console.log('decks database', decks)
 
     yield put(setDecks({ data : filterActive(decks) }))
 }

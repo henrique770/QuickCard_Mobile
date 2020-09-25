@@ -15,47 +15,66 @@ import {types} from "~/store/repository/expoSqliteOrm";
 const synchronizationService = (() => {
   let self = {};
 
+  //#region
+
+  const mapperDeck = function (deck) {
+    return {
+      Id /*********/ : deck._id
+      , IsActive /**/ : deck.isActive
+      , Name /******/ : deck.name
+    }
+  }
+
+  const mapperCard = function (card) {
+    return {
+      Id /********************/ : card._id
+      , IsActive /************/ : card.isActive
+      , IdDeck  /*************/ : card.deck
+      , Front /***************/ : card.front
+      , Verse /***************/ : card.verse
+      , DateLastView /********/ : card.dateLastView
+      , DateNextView /********/ : card.dateNextView
+      , NumDifficultCount /***/ : card.numDifficultCount
+      , NumEasyCount /********/ : card.numEasyCount
+      , NumGoodCount /********/ : card.numGoodCount
+      , IsReviewed /**********/ : card.isReviewed
+    }
+  }
+
+  const mapperNotPad = function (notePad) {
+    return {
+      Id /**********/ : notePad._id
+      , IsActive /**/ : notePad.isActive
+      , Name /******/ : notePad.name
+    }
+  }
+
+  const mapperNote = function (note) {
+    return {
+      Id /************/ : note._id
+      , IdNotePad /***/ : note.notePad
+      , Title /*******/ : note.title
+      , Content  /****/ : note.content
+      , IsActive /****/ : note.isActive
+    }
+  }
+
   const mapper = data => {
     return {
-      decks : data.decks.map( deck => new DeckModel({
-          Id /*********/ : deck._id
-          , IsActive /**/ : deck.isActive
-          , Name /******/ : deck.name
-        }))
+      decks : data.decks.map( deck => new DeckModel(mapperDeck(deck)))
       , cards : ( data => {
         if(!data)
           return [];
 
-        return data.map( card => new CardModel({
-          Id /********************/ : card._id
-          , IsActive /************/ : card.isActive
-          , IdDeck  /*************/ : card.deck
-          , Front /***************/ : card.front
-          , Verse /***************/ : card.verse
-          , DateLastView /********/ : card.dateLastView
-          , DateNextView /********/ : card.dateNextView
-          , NumDifficultCount /***/ : card.numDifficultCount
-          , NumEasyCount /********/ : card.numEasyCount
-          , NumGoodCount /********/ : card.numGoodCount
-          , IsReviewed /**********/ : card.isReviewed
-        }))
+        return data.map( card => new CardModel(mapperCard(card)))
+
       })(...data.decks.map( deck => deck.card))
-      , notePads : data.notePads.map( notePad => new NotePadModel({
-        Id /**********/ : notePad._id
-        , IsActive /**/ : notePad.isActive
-        , Name /******/ : notePad.name
-      }))
+      , notePads : data.notePads.map( notePad => new NotePadModel(mapperNotPad(notePad)))
       , notes : ( data => {
         if(!data)
           return [];
 
-        return data.map( note => new NoteModel({
-          Id /************/ : note._id
-          , IdNotePad /***/ : note.notePad
-          , Title /*******/ : note.title
-          , Content  /****/ : note.content
-          , IsActive /****/ : note.isActive
-        }))
+        return data.map( note => new NoteModel(mapperNote(note)))
       })(...data.notePads.map( notePad => notePad.note))
     }
   }
@@ -68,8 +87,7 @@ const synchronizationService = (() => {
      */
     saveModel = async models => {
       const checkIdValue = false
-
-      console.log('modelos' ,  models)
+      //console.log('modelos' ,  models)
 
       for(let i = 0; i < models.length; i += 1) {
         let model = models[i];
@@ -100,11 +118,8 @@ const synchronizationService = (() => {
 
   self.scriconize = async userEntity => {
 
-    let response = await api.get(`synchronism/${userEntity.Id}`)
+    let response = await api.get(`synchronism`)
       , models = mapper(response.data)
-
-    console.log('response api' , response.data)
-    console.log(models)
 
     await self.clearBase()
       .then( async () => {
@@ -149,7 +164,7 @@ const synchronizationService = (() => {
 
                   for(let i = 0; i < models.length; i += 1) {
                     let model = models[i]
-                    console.log('Model pending -- ' , model)
+                    //console.log('Model pending -- ' , model)
 
                     await self.writeOperation(typeOperation, { id : model.Id , type : model.EntityName })
                     await baseModel.destroy(model.Id)
@@ -217,6 +232,7 @@ const synchronizationService = (() => {
     return model.save(checkIdValue);
   }
 
+  //#endregion
 
   //#region Api scripting operations
 
@@ -288,15 +304,18 @@ const synchronizationService = (() => {
    * @return {Promise<void>}
    */
   self.writeOperation = async (op , source) => {
-    console.log(`write operation -- ${op}` , source)
+    //console.log(`write operation -- ${op}` , source)
     let restMethodApi = getOperationRest(op)
       , url = getUrlEntity(op, source)
       , dataSource = await getModelSource(source)
 
+    // Activate the mobile flag in the request
+    dataSource.TypeMobile = true
+
     await restMethodApi(url, dataSource)
       .then( data => {
 
-        console.log('Sucess operation url: ' + url, data.data)
+        //console.log('Sucess operation url: ' + url, data.data)
       })
       .catch( err => {
         console.log('Error operation url: ' + url, err)
@@ -307,6 +326,35 @@ const synchronizationService = (() => {
   }
 
   //#endregion
+
+
+  self.getDataSourceModel = async notification => {
+
+    console.log(notification)
+
+    switch (notification.entity) {
+
+      case 'deck':
+        let data = await api.get(`deck/${notification.id}`).then( response => response.data )
+          , model = new DeckModel(mapperDeck(data))
+
+        console.log('data', data)
+        console.log('modal', model)
+
+        return model
+    }
+
+    return {
+
+    }
+  }
+
+  self.addSourceModel = async function(notification) {
+
+    let model = await this.getDataSourceModel(notification)
+
+    await model.save(false)
+  }
 
   return self
 })()

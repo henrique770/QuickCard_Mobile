@@ -1,7 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 //import PropTypes from 'prop-types';
-//import {Alert, TouchableOpacity} from 'react-native';
 //import IconMi from 'react-native-vector-icons/MaterialIcons';
 
 import * as S from '~/styles/global';
@@ -10,7 +9,7 @@ import {withTheme} from "styled-components";
 //import Spacing from '~/components/Spacing';
 import { Separator , Form} from './styles';
 import Spacing from '~/components/Spacing';
-import {TouchableOpacity} from "react-native";
+import {Alert, TouchableOpacity} from "react-native";
 import IconMi from "react-native-vector-icons/MaterialIcons";
 
 //import {addNotePad} from '~/store/modules/notepad/actions';
@@ -24,9 +23,9 @@ function EditNotePad({navigation, ...props}) {
   const dispatch = useDispatch();
 
   function handleSubmit() {
-
     notePad.Name = blockname
     dispatch(updateNotePad(notePad))
+    Alert.alert('', 'Bloco Anotação atualizado com sucesso')
   }
 
   function renderFormNotPad () {

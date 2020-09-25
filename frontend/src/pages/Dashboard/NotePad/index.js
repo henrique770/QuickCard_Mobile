@@ -20,8 +20,7 @@ function NotePad({navigation, ...props}) {
   const dispatch = useDispatch();
   const notePadState = useSelector( state => state.notepad.data)
 
-  useEffect((e) => {
-
+  useEffect(() => {
     dispatch(getNotePads())
   }, []);
 
@@ -49,7 +48,6 @@ function NotePad({navigation, ...props}) {
                 text: 'Sim',
                 onPress: () => {
                   item.IsActive = false
-                  console.log(item)
                   dispatch(updateNotePad(item))
                 },
               },
@@ -62,8 +60,7 @@ function NotePad({navigation, ...props}) {
 
         <Spacing mt="6" />
 
-        <TouchableOpacity
-          onPress={() => navigation.navigate('EditNotePad', item) }>
+        <TouchableOpacity onPress={() => navigation.navigate('EditNotePad', item) }>
           <Text>
             <IconMc name="trash-can" color="#fff" size={30} />
           </Text>
@@ -72,26 +69,6 @@ function NotePad({navigation, ...props}) {
     ])
   }
   //#endregion
-
-
-  function deleteNotePad() {
-    Alert.alert(
-      'Alerta',
-      `Você tem certeza que quer excluir?`,
-      [
-        {
-          text: 'Não',
-          onPress: () => console.log('Excluir'),
-          style: 'Cancelar',
-        },
-        {
-          text: 'Sim',
-          onPress: () => {},
-        },
-      ],
-      {cancelable: true},
-    );
-  }
 
   function renderListNotePads() {
     return (
@@ -103,35 +80,30 @@ function NotePad({navigation, ...props}) {
           </TouchableOpacity>
         </Spacing>
         <S.Margin />
-
-        <S.List
-          data={notePadState}
-          //numColumns={2}
-          //keyExtractor={item => String(item)}
-          renderItem={({item}) => (
-            <Swipeable autoClose={true} rightButtons={rightButtons(item)}>
-              <TouchableWithoutFeedback
-                onPress={() => navigation.navigate('NotePadNotes' , item)}>
-                <S.Box data={item}>
-                  <S.Text weight="bold" size="16" maxHeight="95">
-                    {item.Name}
-                  </S.Text>
-                  <Spacing mt="4" />
-                  <Text color="#fe650e">{item.totalNotes} Notas</Text>
-                </S.Box>
-              </TouchableWithoutFeedback>
-            </Swipeable>
-          )}
-        />
+          <S.List
+                data={notePadState}
+                renderItem={({item}) => (
+                  <Swipeable autoClose={true} rightButtons={rightButtons(item)}>
+                    <TouchableWithoutFeedback
+                      onPress={() => navigation.navigate('NotePadNotes' , item)}>
+                      <S.Box data={item}>
+                        <S.Text weight="bold" size="16" maxHeight="95">
+                          {item.Name}
+                        </S.Text>
+                        <Spacing mt="4" />
+                        <Text color="#fe650e">{item.totalNotes} Notas</Text>
+                      </S.Box>
+                    </TouchableWithoutFeedback>
+                  </Swipeable>
+                )}
+              />
       </S.Container>
     )
   }
 
   return (
     <>
-      {
-        renderListNotePads()
-      }
+      { renderListNotePads() }
 
       <ActionButton buttonColor={props.theme.floatButton}>
         <ActionButton.Item

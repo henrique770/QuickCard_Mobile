@@ -10,7 +10,6 @@ import Typography from '~/components/Typography';
 import Spacing from '~/components/Spacing';
 import {withTheme} from 'styled-components';
 import * as S from '~/styles/global';
-
 import { updateDeck , getDecks } from '~/store/modules/deck/actions'
 
 const Text = Typography;
@@ -18,13 +17,11 @@ const Text = Typography;
 function Decks({navigation, ...props}) {
 
   const dispatch = useDispatch()
-  const deckState = useSelector( state => state.deck.data)
+  const decks = useSelector( state => state.deck.data)
 
-  let decks = [...deckState]
+  dispatch(getDecks())
 
-  useEffect((e) => {
-    console.log('decks --- dispache')
-    dispatch(getDecks())
+  useEffect(() => {
   }, []);
 
   //#region UI LOGIC

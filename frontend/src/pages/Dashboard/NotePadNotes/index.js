@@ -21,13 +21,11 @@ console.disableYellowBox = true;
 
 function NotePadNotes({navigation, ...props}) {
 
-  console.log('props' , props.route.params)
-
   const dispatch = useDispatch()
   const notePad = useSelector(state => state.notepad.data.find( e => e.Id == props.route.params.Id))
   const data = notePad.Notes
 
-  useEffect((e) => {
+  useEffect(() => {
 
     dispatch(getNotePads())
   }, []);

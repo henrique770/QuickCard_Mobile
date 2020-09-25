@@ -34,6 +34,18 @@ class CardModel extends BaseModel {
         type: types.DATE,
         not_null: false,
       },
+      DisplayDeadline : {
+        type: types.DATE,
+        not_null: false,
+      } ,
+      CodEnumHit : {
+        type: types.NUMERIC,
+        not_null: false,
+      } ,
+      BaseHours : {
+        type: types.NUMERIC,
+        not_null: false,
+      },
       NumDifficultCount: {
         type: types.NUMERIC,
         not_null: false,

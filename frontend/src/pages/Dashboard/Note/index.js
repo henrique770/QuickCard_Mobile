@@ -13,7 +13,6 @@ import CNEditor, {
   CNToolbar,
   getDefaultStyles,
 } from 'react-native-cn-richtext-editor';
-// import ActionButton from 'react-native-action-button';
 import PropTypes from 'prop-types';
 import IconMi from 'react-native-vector-icons/MaterialIcons';
 import IconMc from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -59,9 +58,6 @@ function Note({navigation, ...props}) {
   const note = props.route.params
   const notePad = useSelector(state => state.notepad.data.find( e => e.Id == note.IdNotePad));
   const dispatch = useDispatch();
-
-  console.log('note' , note)
-  console.log('notePad' , notePad)
 
   const [selectedStyles, setSelectedStyles] = useState([]);
 

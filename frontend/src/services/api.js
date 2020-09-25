@@ -1,8 +1,8 @@
 import axios from 'axios';
+import ConstantsBusiness from '~/constants/ConstantsBusiness'
 
 const api = axios.create({
-  baseURL: 'http://192.168.1.6:3000/api/v1/',
-  //baseURL: 'https://quickcard-io.herokuapp.com/api/v1/',
+  baseURL: ConstantsBusiness.Url,
 });
 
 export default api;

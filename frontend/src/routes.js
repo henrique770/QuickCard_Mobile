@@ -288,45 +288,10 @@ function StackPomodoro() {
 }
 
 export default function createRouter(isSigned = false, isConnected = false) {
+
   const dispatch = useDispatch();
   const [ isFirstAccess, setFirstAccess] = useState(useSelector( state => state.auth.firstAccess));
 
-  /*
-  let renderProfile = () => {
-    if (!isSigned) return <></>;
-    /*
-          return (
-            <Drawer.Screen
-              name="Perfil"
-              options={{
-                drawerIcon: () => (
-                  <Icon color={'#fe650e'} size={20} name={'user-circle-o'} />
-                ),
-              }}
-              component={StackProfile}
-            />
-          );
-        },
-        renderCreateProfile = () => {
-          if (isSigned && !isConnected) {
-            return <></>;
-          }
-
-          return (
-            <>
-              <Drawer.Screen
-                name="Criar perfil"
-                options={{
-                  drawerIcon: () => (
-                    <Icon color={'#fe650e'} size={20} name={'user-circle-o'} />
-                  ),
-                }}
-                component={SignUp}
-              />
-            </>
-          );
-        };
-    */
     let renderProfile = () => {
       if (!isSigned)
         return <></>

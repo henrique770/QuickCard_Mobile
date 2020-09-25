@@ -35,8 +35,6 @@ export function* getNotePadsDataBase() {
                           })
                           .all();
 
-  console.log('notepads database', notepads);
-
   yield put(setNotePads({data: filterActive(notepads)}));
 }
 
@@ -48,8 +46,7 @@ export function* addNotePadDataBase(data) {
     entity = yield serviceProxy.add(notepad);
 
   yield put(addNotePadState(entity));
-  //yield getNotePadsDataBase();
-}
+x}
 
 export function* addNoteDataBase(data) {
   const {note} = data.payload
@@ -57,15 +54,10 @@ export function* addNoteDataBase(data) {
     , serviceProxy = new ServiceProxy(typeService.Note)
     , model = yield serviceProxy.add(note);
 
-  console.log('noteEntity', noteEntity)
-  console.log('model', model)
-
-  //entity.NotePad = {
-  //  Id: note.IdNotePad,
-  //};
-
   yield put(AddNoteState(noteEntity));
-  //yield getNotePadsDataBase();
+
+  console.log(model)
+
 }
 
 export function* updateNoteDataBase(data) {
@@ -75,31 +67,7 @@ export function* updateNoteDataBase(data) {
 
   yield put(UpdateNoteState(note));
 }
-/*
-export function* updateNoteDataBase(data) {
-  const {note} = data.payload,
-    serviceProxy = new ServiceProxy(typeService.Note),
-    update = async note => {
-      let entity = await serviceProxy.update(note);
-      entity.NotePad = {
-        Id: note.IdNotePad,
-      };
-      return entity;
-    };
 
-  if (Array.isArray(note)) {
-    for (let i = 0; i < note.length; i += 1) {
-      let itemNote = note[i];
-
-      let entity = yield update(itemNote);
-      yield put(updateNoteState({note: entity}));
-    }
-  } else {
-    let entity = yield update(note);
-    yield put(updateNoteState({note: entity}));
-  }
-}
-*/
 export function* updateNotePadDataBase(data) {
   const {notepad} = data.payload,
     serviceProxy = new ServiceProxy(typeService.NotePad),

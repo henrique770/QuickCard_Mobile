@@ -1,5 +1,7 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {View, Image, Button, Switch} from 'react-native';
+
+import {useSelector, useDispatch} from 'react-redux';
 
 import Typography from '~/components/Typography';
 import Spacing from '~/components/Spacing';
@@ -17,10 +19,13 @@ import {withTheme} from 'styled-components';
 
 import * as S from './styles';
 import * as G from '~/styles/global';
+import StudentEntity from "~/entities/StudentEntity";
 
 function CustomDrawerContent({...props}) {
-  const themeToggle = useTheme();
 
+  const themeToggle = useTheme();
+  const auth = useSelector((state) => state.auth)
+  const profile = new StudentEntity(auth.profile)
   const [check, setCheck] = useState(false);
 
   function toogleSwitch() {
@@ -39,16 +44,16 @@ function CustomDrawerContent({...props}) {
           <S.Container>
             <Image
               style={{width: 58, height: 58, borderRadius: 58 / 2}}
-              source={require('~/assets/profile.png')}
+              source={profile.ImgProfile}
             />
 
             <Spacing mt="15" />
             <Typography weight="bold" color="#fff">
-              Henrique Araújo
+              {profile.Name}
             </Typography>
             <Spacing mt="5" />
             <Typography color="#fff" size="12">
-              henrique.1360@gmail.com
+              {profile.Email}
             </Typography>
           </S.Container>
         </View>
