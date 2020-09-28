@@ -1,5 +1,5 @@
 
-const __DEV_MODE__ = true
+const __DEV_MODE__ = false
 
 // disabled console.error
 console.reportErrorsAsExceptions = false;
