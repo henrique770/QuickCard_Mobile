@@ -25,9 +25,9 @@ function NotePadNotes({navigation, ...props}) {
   const notePad = useSelector(state => state.notepad.data.find( e => e.Id == props.route.params.Id))
   const data = notePad.Notes
 
-  useEffect(() => {
+  dispatch(getNotePads())
 
-    dispatch(getNotePads())
+  useEffect(() => {
   }, []);
 
   function  renderRightButtons(item) {

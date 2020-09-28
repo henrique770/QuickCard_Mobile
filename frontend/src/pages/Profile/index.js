@@ -7,7 +7,7 @@ import Spacing from '~/components/Spacing';
 
 import IconMi from 'react-native-vector-icons/MaterialIcons';
 import {TouchableOpacity} from 'react-native';
-import showImagePicker from '~/services/fileImageService'
+import showImagePicker from '~/store/service/fileImageService'
 import {signOut , updateProfileRequest} from '~/store/modules/auth/actions';
 
 import {Separator, Form} from './styles';

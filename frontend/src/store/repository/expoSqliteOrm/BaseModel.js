@@ -96,6 +96,10 @@ export default class BaseModel {
     return this.repository.all()
   }
 
+  static anyById(id) {
+    return this.repository.anyById(id)
+  }
+
   /**
    * @param {columns: '*', page: 1, limit: 30, where: {}, order: 'id DESC'} options
    */

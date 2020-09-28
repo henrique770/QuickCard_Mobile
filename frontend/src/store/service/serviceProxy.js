@@ -1,7 +1,8 @@
 import { typeService } from './typeService'
 import RepositoryBase from '~/store/repository/repositoryBase'
-import synchronizationService from '~/store/service/synchronizationService'
+import {getInstanceSynchronizationService} from '~/store/service/synchronizationService'
 import NetInfo from "@react-native-community/netinfo";
+const synchronizationService = getInstanceSynchronizationService()
 
 //#region
 

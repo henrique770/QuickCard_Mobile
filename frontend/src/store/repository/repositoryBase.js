@@ -12,9 +12,10 @@ import factoryEntity from "~/store/factory/factoryEntity";
 class RepositoryBase {
 
     /**
-     * @param {types} type model instance type
+     * @param {string} type model instance type
      */
-    constructor(type ){
+    constructor(type){
+
       this._model = factoryModel.get(`${type}Model`)
       this._entity = factoryEntity.get(`${type}Entity`)
       this._extds = undefined
@@ -234,6 +235,15 @@ class RepositoryBase {
       return this._model.query(query)
         .then( model => self._solveTypeResultOutPut(model))
     }
+
+  /**
+   *
+   */
+  async anyById(id) {
+    let self = this
+
+    return this._model.anyById(id)
+  }
 
 }
 

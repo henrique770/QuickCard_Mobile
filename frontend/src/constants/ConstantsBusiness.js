@@ -8,10 +8,14 @@ const ConstantsBusiness = {
 
   IsDev : __DEV_MODE__ ,
 
-  Url : __DEV_MODE__ ? 'http://192.168.1.8:3000/api/v1/' : 'https://quickcard-io.herokuapp.com/api/v1/' ,
+  Url : __DEV_MODE__ ? 'http://192.168.1.12:3000/api/v1/' : 'https://quickcard-io.herokuapp.com/api/v1/' ,
+
+  Path : Object.freeze({
+    pending : '/pending'
+  }) ,
 
   Hub : __DEV_MODE__ ? Object.freeze({
-    host : '192.168.1.8' ,
+    host : '192.168.1.12' ,
     port : '3000',
     pathPeer : '/webrtc',
     api: 'api/v1/',

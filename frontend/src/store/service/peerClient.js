@@ -1,7 +1,10 @@
 import Peer from './react-native-peerjs';
 import axios from 'axios';
 import ConstantsBusiness from '~/constants/ConstantsBusiness'
-import NetInfo, {useNetInfo} from "@react-native-community/netinfo";
+import NetInfo from "@react-native-community/netinfo";
+
+import { getInstanceNetInfoObserver , notificationsType } from '~/store/service/netInfoObserverService'
+const netInfoObserver = getInstanceNetInfoObserver()
 
 class PeerClient {
 
@@ -69,8 +72,25 @@ class PeerClient {
 
   //#region VALIDADE STATUS CONNECT TO HUB INTERNET
 
-  async _validadeConnectInternet(profile) {
+  _validadeConnectInternet(profile) {
+    let self = this
 
+    NetInfo.fetch().then( stateNet => {
+
+      if(stateNet.isConnected && !self.IsHubConnect) {
+        self._createConnect(profile)
+      }
+    })
+
+    netInfoObserver.subscribe(notificationsType.IS_CONNECTED, () => {
+      if(!self.IsHubConnect) {
+
+        self._createConnect(profile)
+      }
+    })
+
+
+    /*
     let self = this
       , isListen = false
       , validate = async function () {
@@ -104,6 +124,8 @@ class PeerClient {
     }
 
    validate()
+
+     */
   }
 
   //#endregion
@@ -145,7 +167,7 @@ class PeerClient {
       self.IdHub = id
       self.Api.get(`registreConnect/${self.IdHub}/${self.IdClient}/1`)
         console.log('record peer is ID: ' + id)
-        self._validadeConnectInternet(profile)
+        //self._validadeConnectInternet(profile)
       })
 
     this.Peer.on('data', function(data) {
@@ -155,7 +177,18 @@ class PeerClient {
   }
 
   connect(profile) {
-    this._createConnect(profile)
+
+    let self = this
+
+
+
+
+    netInfoObserver.subscribe(notificationsType.IS_CONNECTED, () => {
+      //if(self.IsHubConnect) {
+      self._createConnect(profile)
+      //}
+    })
+    //this._createConnect(profile)
   }
 }
 

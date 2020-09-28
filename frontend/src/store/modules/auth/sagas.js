@@ -2,11 +2,15 @@ import { Alert } from 'react-native';
 import { takeLatest, call, put, all } from 'redux-saga/effects';
 import NetInfo from "@react-native-community/netinfo";
 
-import api from '~/services/api';
+import api from '~/store/service/api';
 import { signInSuccess, signFailure , updateProfileRequest , updateProfile} from './actions';
 import StudentEntity from '~/entities/StudentEntity'
-import synchronizationService from '~/store/service/synchronizationService'
 
+import {getInstanceSynchronizationService} from '~/store/service/synchronizationService'
+import { getInstanceNetInfoObserver , notificationsType } from '~/store/service/netInfoObserverService'
+
+const netInfoObserver = getInstanceNetInfoObserver()
+const synchronizationService = getInstanceSynchronizationService()
 
 export function* signIn({ payload }) {
     try {
@@ -38,9 +42,7 @@ export function* signIn({ payload }) {
           , userEntity = new StudentEntity(student)
 
           api.defaults.headers.Authorization = `Bearer ${token}`;
-
           yield synchronizationService.scriconize(userEntity)
-          synchronizationService.starOffileneCheckLoop()
 
           yield put(signInSuccess(token, student));
 
@@ -101,7 +103,8 @@ export function setToken({ payload }) {
 export function* signOut() {
 
   yield synchronizationService.clearBase()
-  synchronizationService.stopOffileneCheckLoop()
+  netInfoObserver.stop()
+
 }
 
 export function* updateStudantProfil({payload}) {

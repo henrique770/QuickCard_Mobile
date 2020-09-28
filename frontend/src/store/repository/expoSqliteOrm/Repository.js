@@ -53,6 +53,10 @@ export default class Repository {
     return this.databaseLayer.all().then(res => res.map(p => DataTypes.toModelValue(this.columnMapping, p)))
   }
 
+  anyById(id) {
+    return this.databaseLayer.anyById(id)
+  }
+
   _sanitize(obj) {
     const allowedKeys = Object.keys(this.columnMapping)
     return Object.keys(obj).reduce((ret, key) => {

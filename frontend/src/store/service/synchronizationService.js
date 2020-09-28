@@ -1,5 +1,15 @@
-import api from '~/services/api';
+import api from '~/store/service/api';
+import ConstantsBusiness from '~/constants/ConstantsBusiness'
 import NetInfo from "@react-native-community/netinfo";
+import RepositoryBase from '~/store/repository/repositoryBase'
+import {
+  mapper
+  , mapperDeck
+  , mapperCard
+  , mapperNotPad
+  , mapperNote
+} from './mapperResponse'
+import { getInstanceNetInfoObserver , notificationsType } from './netInfoObserverService'
 
 import {
   DeckModel
@@ -10,84 +20,49 @@ import {
 } from '~/store/models'
 import NoteModel from "~/store/models/NoteModel";
 import {types} from "~/store/repository/expoSqliteOrm";
+import Card from "~/pages/Decks/Card";
 
+const netInfoObserver = getInstanceNetInfoObserver()
 
-const synchronizationService = (() => {
-  let self = {};
+class synchronizationService {
 
-  //#region
+  constructor() {
+    this._IsmonitorPending = false
+  }
 
-  const mapperDeck = function (deck) {
-    return {
-      Id /*********/ : deck._id
-      , IsActive /**/ : deck.isActive
-      , Name /******/ : deck.name
+  /**
+   * mapper to data in to ModelBase
+   * @param type {string}
+   * @param source {Object}
+   * @return {BaseModel}
+   */
+  getMapperModel(type, source) {
+    switch (type) {
+      case 'deck':
+        return new DeckModel(mapperDeck(source))
+
+      case 'card':
+        return new CardModel(mapperCard(source))
+
+      case 'notepad':
+        return new NotePadModel(mapperNotPad(source))
+
+      case 'note':
+        return new NoteModel(mapperNote(source))
+
+      default:
+        throw 'unsupported type for mapping in getMapperModel: ' + type
     }
   }
 
-  const mapperCard = function (card) {
-    return {
-      Id /********************/ : card._id
-      , IsActive /************/ : card.isActive
-      , IdDeck  /*************/ : card.deck
-      , Front /***************/ : card.front
-      , Verse /***************/ : card.verse
-      , DateLastView /********/ : card.dateLastView
-      , DateNextView /********/ : card.dateNextView
-      , NumDifficultCount /***/ : card.numDifficultCount
-      , NumEasyCount /********/ : card.numEasyCount
-      , NumGoodCount /********/ : card.numGoodCount
-      , IsReviewed /**********/ : card.isReviewed
-    }
-  }
-
-  const mapperNotPad = function (notePad) {
-    return {
-      Id /**********/ : notePad._id
-      , IsActive /**/ : notePad.isActive
-      , Name /******/ : notePad.name
-    }
-  }
-
-  const mapperNote = function (note) {
-    return {
-      Id /************/ : note._id
-      , IdNotePad /***/ : note.notePad
-      , Title /*******/ : note.title
-      , Content  /****/ : note.content
-      , IsActive /****/ : note.isActive
-    }
-  }
-
-  const mapper = data => {
-    return {
-      decks : data.decks.map( deck => new DeckModel(mapperDeck(deck)))
-      , cards : ( data => {
-        if(!data)
-          return [];
-
-        return data.map( card => new CardModel(mapperCard(card)))
-
-      })(...data.decks.map( deck => deck.card))
-      , notePads : data.notePads.map( notePad => new NotePadModel(mapperNotPad(notePad)))
-      , notes : ( data => {
-        if(!data)
-          return [];
-
-        return data.map( note => new NoteModel(mapperNote(note)))
-      })(...data.notePads.map( notePad => notePad.note))
-    }
-  }
-
-  ,
     /**
-     *
+     * save to entity in to model base
      * @param {BaseModel[]} models
      * @return {Promise<void>}
      */
-    saveModel = async models => {
+    async saveModel(models){
       const checkIdValue = false
-      //console.log('modelos' ,  models)
+        , self = this
 
       for(let i = 0; i < models.length; i += 1) {
         let model = models[i];
@@ -103,9 +78,11 @@ const synchronizationService = (() => {
       }
   }
 
-
-    // clear database
-    self.clearBase = async () => {
+  /**
+   * clear to database
+   * @return {Promise<unknown[]>}
+   */
+  async clearBase(){
       return Promise.all([
         DeckModel.fromSql("DELETE FROM DECK")
         , DeckModel.fromSql("DELETE FROM NOTEPAD")
@@ -114,104 +91,158 @@ const synchronizationService = (() => {
           DeckModel.fromSql("DELETE FROM CARD")
           , DeckModel.fromSql("DELETE FROM NOTE")
         ]))
-    }
+  }
 
-  self.scriconize = async userEntity => {
+  /**
+   * retrieve all student information saved in the ap
+   * @param userEntity {StudentEntity}
+   * @return {Promise<any>}
+   */
+  async scriconize(userEntity){
 
     let response = await api.get(`synchronism`)
       , models = mapper(response.data)
+      , self = this
 
     await self.clearBase()
       .then( async () => {
-        await saveModel(models.decks)
-        await saveModel(models.cards)
-        await saveModel(models.notePads)
-        await saveModel(models.notes)
+        await self.saveModel(models.decks)
+        await self.saveModel(models.cards)
+        await self.saveModel(models.notePads)
+        await self.saveModel(models.notes)
       })
 
     return response.data
   }
 
-  let stopOffileneCheckLoop = false
-    , timeLoop = 1000 * 15
-    , toSynchronize = false
-    , toSyncPendilencesOffiline = async () => {
-      const fnSync = async () => {
-        return NetInfo.fetch().then( stateNet => {
-          //console.log(`to sync Pendilences offiline -- isOffile : ${!stateNet.isConnected}`);
+  /**
+   * monitor pending update data
+   * @return {Promise<void>}
+   * @private
+   */
+  async monitorPending() {
 
-          // isOffline
-          if(!stateNet.isConnected) {
-            toSynchronize = true
+    let self = this
 
-            // isOn and Synchronize
-          } else if(toSynchronize) {
-            Promise.all([
-              AddPendingOperationsModel.all()
-              , UpdatePendingOperationsModel.all()
-            ])
-              .then( async data => {
-                // disable update flag
-                toSynchronize = false
+    if(this._IsmonitorPending) {
+      return
+    }
 
-                /**
-                 * @param {String} typeOperation
-                 * @param {BaseModel} baseModel
-                 * @param {AddPendingOperations[] | UpdatePendingOperations[] } models
-                 */
-                const executePending = async (typeOperation, baseModel, models, ) => {
-                  console.log(`pending -- ${typeOperation}` , models)
+    netInfoObserver.subscribe(notificationsType.IS_CONNECTED, () => {
+      self._getPendingOperationsApi().then( dataApi => {
+        self._getPendingOperationsModel().then( async data => {
+             let addOperations = data[0]
+               , updateOperations = data[1]
 
-                  for(let i = 0; i < models.length; i += 1) {
-                    let model = models[i]
-                    //console.log('Model pending -- ' , model)
-
-                    await self.writeOperation(typeOperation, { id : model.Id , type : model.EntityName })
-                    await baseModel.destroy(model.Id)
-                  }
-                }
-                  , addOperations = data[0]
-                  , updateOperations = data[1]
-
-                await executePending('add', AddPendingOperationsModel, addOperations);
-                await executePending('update', UpdatePendingOperationsModel, updateOperations);
-              })
-          }
-
-          // loop trigger
-          toSyncPendilencesOffiline()
+            await self._sendPendingData('add', AddPendingOperationsModel, addOperations, dataApi);
+            await self._sendPendingData('update', UpdatePendingOperationsModel, updateOperations, dataApi);
+            await self._receivePendingData(dataApi)
+          })
         })
-      }
-      //stop loop trigger
-      if(!stopOffileneCheckLoop)
-        setTimeout( fnSync , timeLoop)
-  }
+      })
 
-  self.stopOffileneCheckLoop = () => {
-    stopOffileneCheckLoop = true
-  }
-
-  self.starOffileneCheckLoop = () => {
-    stopOffileneCheckLoop = false
-    toSyncPendilencesOffiline()
+    this._IsmonitorPending = true
   }
 
   /**
-   *
+   * send pending data to api
+   * @param typeOperation {string}
+   * @param baseModel {BaseModel}
+   * @param models {BaseModel[]}
+   * @param dataApi {any[]}
+   * @return {Promise<void>}
+   * @private
+   */
+  async _sendPendingData(typeOperation, baseModel, models, dataApi) {
+    let self = this
+      , _existPendingDataToApi = (id) => dataApi.findIndex( e => e.target._id === id) > -1
+
+    for(let i = 0; i < models.length; i += 1) {
+      let model = models[i]
+      console.log('Model pending -- ' , model)
+
+      if(!_existPendingDataToApi(model.Id)) {
+
+        // send to api
+        await self.writeOperation(typeOperation, { id : model.Id , type : model.EntityName })
+      }
+
+      await baseModel.destroy(model.Id)
+   }
+  }
+
+  /**
+   * processing receive pending data to api
+   * @param data {{ target : Object , source : Object}[]}
+   * @return {Promise<void>}
+   * @private
+   */
+  async _receivePendingData(data) {
+
+    console.log('data receive', data)
+
+    for(let i = 0; i < data.length; i += 1){
+      let item = data[i]
+        , model = this.getMapperModel(item.target.EntityName, item.source)
+        , type =  item.target.EntityName.charAt(0).toUpperCase() + item.target.EntityName.slice(1)
+        , repository = new RepositoryBase(type)
+
+        // UPDATE - PUT
+      if(item.target.TypeOperation === 'PUT'){
+        await repository.update(model).catch( err => {
+          console.log(err)
+          throw 'Error during update of entity received from api'
+        })
+
+        // CREATE - POST
+      } else {
+        await model.save(false).catch( err => {
+          console.log(err)
+          throw 'Error during add of entity received from api'
+        })
+      }
+    }
+    // clear to pending to api
+    await api.delete(ConstantsBusiness.Path.pending)
+  }
+
+  /**
+   * retrieve list<BaseModel> of entities pending update
+   * @return {Promise<BaseModel[][]>}
+   * @private
+   */
+  async _getPendingOperationsModel() {
+    return Promise.all([
+       AddPendingOperationsModel.all()
+       , UpdatePendingOperationsModel.all()
+    ])
+  }
+
+  /**
+   * retrieve list<BaseModel> of entities pending update
+   * @return {Promise<BaseModel[][]>}
+   * @private
+   */
+  async _getPendingOperationsApi() {
+    let data = await api(ConstantsBusiness.Path.pending).then( data => data.data)
+
+    return data
+  }
+
+  /**
+   * add entity to the pending operations stack
    * @param {String} op
    * @param {Object} source
    * @return {Promise<void>}
    */
-  self.addPendingOperations = async (op , source) => {
+  async addPendingOperations(op , source){
 
-    const checkIdValue = false ,
-      /**
-       * @type {BaseModel}
-       */
-    model = (() => {
+    let checkIdValue = false
+      , self = this
+      , model = (() => {
       switch (op) {
         case "add":
-          console.log('adding pending to API')
+          console.log('adding pending to API', source)
           return new AddPendingOperationsModel({
             id : source.id
             , type : op
@@ -232,44 +263,59 @@ const synchronizationService = (() => {
     return model.save(checkIdValue);
   }
 
-  //#endregion
-
-  //#region Api scripting operations
-
-  let getOperationRest = op => {
+  /**
+   * retrieve request method
+   * @param {string} op
+   * @return {(<T=any, R=AxiosResponse<T>>(url: string, data?: any, config?: AxiosRequestConfig) => Promise<R>)|(function(): void)}
+   */
+  getOperationRest(op){
     switch (op) {
       case 'add':
         return api.post;
       case 'update':
         return api.put
       default:
-        return () => {
-          throw 'method not defined'
-        }
+        throw 'method not defined'
     }
   }
 
-  , getModelSource = async source => {
-    switch (source.type) {
+  /**
+   * retrieve model by id
+   * @param {string} id
+   * @param {string} type
+   * @return {Promise<BaseModel>}
+   */
+  async getModelSource(id , type){
+    switch (type) {
 
+      case "deck":
       case "DeckEntity":
-        return DeckModel.find(source.id)
+        return DeckModel.find(id)
 
+      case "card":
       case "CardEntity":
-        return CardModel.find(source.id)
+        return CardModel.find(id)
 
+      case "notepad":
       case "NotePadEntity":
-        return NotePadModel.find(source.id)
+        return NotePadModel.find(id)
 
+      case "note":
       case "NoteEntity":
-        return NoteModel.find(source.id)
+        return NoteModel.find(id)
 
       default :
-        throw `Entity not mapped to write operation in api - source entity : ${source.type}`
+        throw `Entity not mapped to write operation in api - source entity : ${type}`
     }
   }
 
-  , getUrlEntity = (op, source) => {
+  /**
+   * retrieve url the entity
+   * @param {string} op
+   * @param {Object} source
+   * @return {string}
+   */
+  getUrlEntity(op, source){
     let path = ''
     switch (source.type) {
       case "DeckEntity":
@@ -297,25 +343,26 @@ const synchronizationService = (() => {
 
     return path
   }
+
   /**
-   *
+   * write operation - proxy for sending to api
    * @param {String} op
    * @param {Object} source
    * @return {Promise<void>}
    */
-  self.writeOperation = async (op , source) => {
+  async writeOperation(op , source){
     //console.log(`write operation -- ${op}` , source)
-    let restMethodApi = getOperationRest(op)
-      , url = getUrlEntity(op, source)
-      , dataSource = await getModelSource(source)
+    let self = this
+      , restMethodApi = self.getOperationRest(op)
+      , url = self.getUrlEntity(op, source)
+      , dataSource = await self.getModelSource(source.id, source.type)
 
     // Activate the mobile flag in the request
     dataSource.TypeMobile = true
 
     await restMethodApi(url, dataSource)
       .then( data => {
-
-        //console.log('Sucess operation url: ' + url, data.data)
+        console.log('Success operation url: ' + url, data.data)
       })
       .catch( err => {
         console.log('Error operation url: ' + url, err)
@@ -325,40 +372,80 @@ const synchronizationService = (() => {
       })
   }
 
-  //#endregion
-
-
-  self.getDataSourceModel = async notification => {
+  /**
+   * recover data the api - transform data to model
+   * @param {Object} notification
+   * @return {Promise<BaseModel>}
+   */
+  async getDataSourceModel(notification){
 
     console.log(notification)
 
     switch (notification.entity) {
-
       case 'deck':
-        let data = await api.get(`deck/${notification.id}`).then( response => response.data )
-          , model = new DeckModel(mapperDeck(data))
+        let deckData = await api.get(`deck/${notification.id}`).then( response => response.data )
+        return this.getMapperModel('deck', deckData)
 
-        console.log('data', data)
-        console.log('modal', model)
+      case 'card':
+        let carData = await api.get(`card/${notification.id}`).then( response => response.data )
+        return this.getMapperModel('card', carData)
 
-        return model
-    }
+      case 'notepad':
+        let notePadData = await api.get(`notepad/${notification.id}`).then( response => response.data )
+        return this.getMapperModel('notepad', notePadData)
 
-    return {
-
+      case 'note':
+        let noteData = await api.get(`note/${notification.id}`).then( response => response.data )
+        return this.getMapperModel('note', noteData)
     }
   }
 
-  self.addSourceModel = async function(notification) {
 
+  /**
+   * add API data to the database
+   * @param {Object} notification
+   * @return {Promise<void>}
+   */
+  async addSourceModel(notification) {
     let model = await this.getDataSourceModel(notification)
-
+    console.log('Add model in notification: ' , model)
     await model.save(false)
   }
 
-  return self
-})()
+  /**
+   * update API data to the database
+   * @param {Object} notification
+   * @return {Promise<void>}
+   */
+  async updateSourceModel(notification){
+    let model = await this.getDataSourceModel(notification)
+      , type =  notification.entity.charAt(0).toUpperCase() + notification.entity.slice(1)
+      , repository = new RepositoryBase(type)
+      , isAny = await repository.anyById(notification.id)
+
+    //entity exists?
+    if(isAny){
+      console.log('Update (broke - to add) model in notification: ' , model)
+      await repository.update(model)
+    } else {
+      console.log('Update model in notification: ' , model)
+      await model.save(false)
+    }
+
+  }
+}
 
 
 
-export default synchronizationService;
+let _instance = null
+
+const getInstanceSynchronizationService = function () {
+
+  if(_instance === null) {
+    _instance = new synchronizationService()
+  }
+
+  return _instance
+}
+
+export { getInstanceSynchronizationService };

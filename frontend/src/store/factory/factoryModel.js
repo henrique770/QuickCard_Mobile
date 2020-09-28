@@ -10,28 +10,35 @@ const factoryModel = (() => {
 
   models.push(
     {
-      name: 'DeckModel',
+      name: 'deckmodel',
       service: DeckModel,
     },
     {
-      name: 'CardModel',
+      name: 'cardmodel',
       service: CardModel,
     },
     {
-      name: 'NotePadModel',
+      name: 'notepadmodel',
       service: NotePadModel,
     },
     {
-      name: 'NoteModel',
+      name: 'notemodel',
       service: NoteModel,
     },
   );
 
   return {
     /**
+     * @param name {string}
      * @returns {BaseEntity}
      */
-    get: name => models.find(e => e.name == name).service,
+    get: name => {
+      if(models.findIndex(e => e.name == name.toLowerCase()) > -1) {
+        return models.find(e => e.name == name.toLowerCase()).service
+      }
+
+      throw `type models name ${name} not supported in factoryModel`
+    },
   };
 })();
 

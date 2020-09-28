@@ -11,6 +11,11 @@ export function find(tableName) {
   return `SELECT * FROM ${tableName} WHERE id = ? LIMIT 1;`
 }
 
+export function anyById(tableName) {
+  return `SELECT count(Id) AS COUNT FROM ${tableName} `
+}
+
+
 /* Creates the "SELECT" sql statement for query records
  * Ex: qb.query({
  *   columns: 'id, nome, status',
@@ -89,4 +94,4 @@ export function queryWhere(options) {
   return list.length > 0 ? `WHERE ${list.join(' AND ')}` : ''
 }
 
-export default { find, query }
+export default { find, anyById, query }

@@ -2,7 +2,7 @@ import React, {useRef, useState} from 'react';
 import {Image, StatusBar} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import logo from '~/assets/whitelogo.png';
-import showImagePicker from '~/services/fileImageService'
+import showImagePicker from '~/store/service/fileImageService'
 import Background from '~/components/Background';
 import {signUpRequest} from '~/store/modules/auth/actions';
 

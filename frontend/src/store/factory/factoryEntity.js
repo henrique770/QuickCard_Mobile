@@ -12,22 +12,22 @@ const factoryEntity = (() => {
   //#region REGISTRE
 
   entities.push({
-    name: 'DeckEntity',
+    name: 'deckentity',
     service: DeckEntity,
   });
 
   entities.push({
-    name: 'CardEntity',
+    name: 'cardentity',
     service: CardEntity,
   });
 
   entities.push({
-    name: 'NotePadEntity',
+    name: 'notepadentity',
     service: NotePadEntity,
   });
 
   entities.push({
-    name: 'NoteEntity',
+    name: 'noteentity',
     service: NoteEntity,
   });
 
@@ -35,9 +35,17 @@ const factoryEntity = (() => {
 
   return {
     /**
+     * @param name {string}
      * @returns {BaseEntity}
      */
-    get: name => entities.find(e => e.name == name).service,
+    get: name => {
+      if(entities.findIndex(e => e.name == name.toLowerCase()) > -1) {
+        return entities.find(e => e.name == name.toLowerCase()).service
+      }
+
+      throw `type entities name ${name} not supported in factoryEntity`
+    },
+
   };
 })();
 
