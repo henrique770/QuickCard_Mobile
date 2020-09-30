@@ -11,5 +11,5 @@
 ### `prototype`
 https://github.com/henrique770/QuickCard-Project
 ### `web version`
-https://github.com/henrique770/Frontend-QuickCard
+https://github.com/henrique770/new-frontend-quickcard
 
