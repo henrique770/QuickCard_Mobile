@@ -8,6 +8,7 @@ import StudentEntity from '~/entities/StudentEntity'
 
 import {getInstanceSynchronizationService} from '~/store/service/synchronizationService'
 import { getInstanceNetInfoObserver , notificationsType } from '~/store/service/netInfoObserverService'
+import { Messenger } from '~constants/ConstantsBusiness'
 
 const netInfoObserver = getInstanceNetInfoObserver()
 const synchronizationService = getInstanceSynchronizationService()
@@ -20,8 +21,8 @@ export function* signIn({ payload }) {
       // connect in internet?
       if(!netState.isConnected) {
         Alert.alert(
-          'Falha na conexão'
-          , 'verifique sua conexão com a internet.'
+          Messenger.MSG019
+          , Messenger.MSG020
         );
         return
       }
@@ -49,7 +50,7 @@ export function* signIn({ payload }) {
         // history.push('/dashboard');
     } catch (err) {
         Alert.alert(
-            'Falha na autenticação'
+            Messenger.MSG021
              , err.message
         );
         console.log(err.message)
@@ -65,8 +66,8 @@ export function* signUp({ payload }) {
       // connect in internet?
       if(!netState.isConnected) {
         Alert.alert(
-          'Falha na conexão'
-          , 'verifique sua conexão com a internet.'
+          Messenger.MSG019
+          , Messenger.MSG020
         );
         return
       }
@@ -81,8 +82,8 @@ export function* signUp({ payload }) {
 
     } catch (err) {
         Alert.alert(
-            'Falha no cadastro',
-            'Houve um erro no cadastro, verifique seus dados.'
+          Messenger.MSG022
+          , Messenger.MSG020
         );
         yield put(signFailure());
     }
@@ -113,8 +114,8 @@ export function* updateStudantProfil({payload}) {
 
   if(!isConnected) {
     Alert.alert(
-      '',
-      'Sem conexão com a internet.'
+      Messenger.MSG019
+      , Messenger.MSG020
     );
     return;
   }
@@ -132,8 +133,8 @@ export function* updateStudantProfil({payload}) {
 
   if(response != null) {
     Alert.alert(
-      '',
-      'Pefil atualizado com sucesso.'
+      Messenger.MSG000
+      , Messenger.MSG023
     );
 
     yield put(updateProfile(response))
@@ -145,29 +146,40 @@ export function* updateStudantProfil({payload}) {
 //#region PROCESS LOGIN REQUEST
 
 const processLoginFailure = err => {
-  let data = err.response.data
-    , status = err.response.status
-    , title = ''
-    , mensagem = ''
+  let title = ''
+  , mensagem = ''
 
-  switch (status) {
-    case 400:
-      title ='Falha na autenticação'
-      mensagem = 'Usuário ou senha inválido.'
-      break;
-    case 500:
-      title ='Falha no servidor'
-      mensagem = 'Error no servidor de autenticação.'
-      break;
-    default:
-      title ='Falha no processo de autenticação'
-      mensagem = 'Error desconhecido.'
+  // network error
+  if(!err.status) {
+    
+    title = Messenger.MSG019
+    mensagem = Messenger.MSG025
   }
 
-  Alert.alert(
-    'Falha na autenticação'
-    , 'Usuário ou senha inválidos'
-  );
+  else {
+
+    let data = err.response.data
+    , status = err.response.status
+   
+
+    switch (status) {
+      case 400:
+        title = Messenger.MSG021
+        mensagem = 'Usuário ou senha inválido.'
+        break;
+      case 500:
+        title = Messenger.MSG016
+        mensagem = 'Error no servidor de autenticação.'
+        break;
+      default:
+        title = Messenger.MSG024
+        mensagem = 'Error desconhecido.'
+    }
+
+  }
+
+  Alert.alert( title ,mensagem );
+
   return {
     ok : false
   }

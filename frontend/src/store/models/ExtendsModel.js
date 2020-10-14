@@ -1,6 +1,6 @@
 import { BaseModel, types } from '~/store/repository/expoSqliteOrm/index'
 import SqLite  from 'react-native-sqlite-storage'
-import ConstantsBusiness from '~constants/ConstantsBusiness'
+import * as ConstantsBusiness from '~constants/ConstantsBusiness'
 
 const __databaseName__ = ConstantsBusiness.DataBase.databaseName
  , __createLocation__ = ConstantsBusiness.DataBase.databasePath

@@ -21,6 +21,7 @@ import IconMc from 'react-native-vector-icons/MaterialCommunityIcons';
 import {Container, Title, ContainerTag, TagInput} from './styles';
 import {useDispatch, useSelector} from "react-redux";
 import {addNote , getNotePads } from "~/store/modules/notepad/actions";
+import { Note as NoteConstantsBusiness } from '~constants/ConstantsBusiness'
 
 const defaultStyles = getDefaultStyles();
 
@@ -34,7 +35,7 @@ export default function AddNote({navigation, route}) {
   const [selectedTag, setSelectedValue] = useState('');
   const [selectedStyles, setSelectedStyles] = useState([]);
   const [notePad, setNotePad] = useState('');
-  const [title, setTitle] = useState('Título');
+  const [title, setTitle] = useState(NoteConstantsBusiness.defaultTitle);
 
   dispatch(getNotePads())
 
@@ -45,15 +46,16 @@ export default function AddNote({navigation, route}) {
       return
     }
 
-    if(notePad == '') {
-      Alert.alert('', 'Selecione um bloco de anotação')
-      return
-    }
+    //if(notePad == '') {
+    //  Alert.alert('', 'Selecione um bloco de anotação')
+    //  return
+    //}
 
     dispatch(addNote({
         Content : noteContent
         , IdNotePad : notePad
-        , Title :title
+        , Title : title === NoteConstantsBusiness.defaultTitle ? '' : title
+        , IsEmptyTitle : title === NoteConstantsBusiness.defaultTitle
     }))
 
     setSelectedValue('')

@@ -30,6 +30,10 @@ class NoteModel extends BaseModel {
         type: types.BOOLEAN,
         not_null: true,
       },
+      IsEmptyTitle : {
+        type: types.BOOLEAN,
+        not_null: true,
+      }
     };
   }
 

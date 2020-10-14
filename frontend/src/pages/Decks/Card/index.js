@@ -20,12 +20,14 @@ import Lottie from 'lottie-react-native';
 
 import {updateCard, updateDeck} from '~/store/modules/deck/actions';
 
+import { Card as CardConstants, Messenger } from '~constants/ConstantsBusiness'
+
 const Text = Typography;
 
 const typesOfHits = {
-  difficult: 1,
-  easy: 2,
-  good: 3,
+  difficult: CardConstants.codDifficult,
+  easy: CardConstants.codEasy,
+  good: CardConstants.codGood,
 };
 
 export default function Card({navigation, route}) {

@@ -1,5 +1,5 @@
 import BaseEntity from "~/entities/BaseEntity";
-import ConstantsBusiness from "~/constants/ConstantsBusiness"
+import * as ConstantsBusiness from "~/constants/ConstantsBusiness"
 
 /**
  * @type Card

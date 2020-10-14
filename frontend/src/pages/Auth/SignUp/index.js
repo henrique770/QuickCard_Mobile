@@ -1,5 +1,5 @@
 import React, {useRef, useState} from 'react';
-import {Image, StatusBar} from 'react-native';
+import {Image, StatusBar, Alert} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import logo from '~/assets/whitelogo.png';
 import showImagePicker from '~/store/service/fileImageService'
@@ -16,6 +16,8 @@ import {
   SignLinkText,
 } from './styles';
 
+import { Validators , Messenger } from '~constants/ConstantsBusiness'
+
 export default function SignUp({navigation}) {
   const dispatch = useDispatch();
 
@@ -29,6 +31,19 @@ export default function SignUp({navigation}) {
   const loading = useSelector(state => state.auth.loading);
 
   function handleSubmit() {
+
+    if(!Validators.email(email)) {
+      // invalid email
+      Alert.alert( Messenger.MSG000, Messenger.MSG002 );
+      return
+    }
+
+    if(!Validators.password(password)) {
+      // invalid password
+      Alert.alert( Messenger.MSG000, Messenger.MSG004 );
+      return
+    }
+
     dispatch(signUpRequest(name, email, password, dataSource.uri.toString()));
     navigation.navigate('SignIn');
   }

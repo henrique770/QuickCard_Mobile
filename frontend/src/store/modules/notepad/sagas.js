@@ -12,6 +12,8 @@ import {
 
 import {ServiceProxy, typeService} from '~/store/service';
 import NoteEntity from "~/entities/NoteEntity";
+import NotePadEntity from "~/entities/NotePadEntity";
+
 
 const filterActive = data => {
   if (Array.isArray(data)) {
@@ -27,13 +29,32 @@ const filterActive = data => {
 
 export function* getNotePadsDataBase() {
   const serviceProxyNotePad = new ServiceProxy(typeService.NotePad);
+        serviceProxyNote = new ServiceProxy(typeService.Note);
 
   let notepads = yield serviceProxyNotePad
                           .include(typeService.Note, 'Notes', {
                             foryKey: 'Id',
                             operKey: 'IdNotePad_in',
                           })
-                          .all();
+                          .all()
+                          
+    , noteEmptyNotePad = yield serviceProxyNote.query({ IdNotePad : ''})
+
+    , notePadDefault = new NotePadEntity({
+      Name : 'Default Blog'
+      , Notes : [...noteEmptyNotePad]
+      , IsActive : true
+      , Id : ''
+    })
+    
+    if(notepads === undefined) {
+      notepads = []
+    }
+
+    notepads.push(notePadDefault)
+
+    //console.log(notepads)
+
 
   yield put(setNotePads({data: filterActive(notepads)}));
 }

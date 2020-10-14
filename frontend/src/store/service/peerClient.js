@@ -1,6 +1,6 @@
 import Peer from './react-native-peerjs';
 import axios from 'axios';
-import ConstantsBusiness from '~/constants/ConstantsBusiness'
+import * as ConstantsBusiness from '~/constants/ConstantsBusiness'
 import NetInfo from "@react-native-community/netinfo";
 
 import { getInstanceNetInfoObserver , notificationsType } from '~/store/service/netInfoObserverService'

@@ -11,6 +11,7 @@ import { getNotePads } from "~/store/modules/notepad/actions";
 import { getInstanceNetInfoObserver , notificationsType } from './store/service/netInfoObserverService'
 
 import {Alert} from "react-native";
+
 const peerClient = getInstancia()
 
 const netInfoObserver = getInstanceNetInfoObserver()

@@ -42,11 +42,12 @@ export { mapperNotPad }
 
 const mapperNote = function (note) {
   return {
-    Id /************/ : note._id
-    , IdNotePad /***/ : note.notePad
-    , Title /*******/ : note.title
-    , Content  /****/ : note.content
-    , IsActive /****/ : note.isActive
+    Id /**************/ : note._id
+    , IdNotePad /*****/ : note.notePad
+    , Title /*********/ : note.title
+    , Content  /******/ : note.content
+    , IsActive /******/ : note.isActive
+    , IsEmptyTitle /**/ : note.IsEmptyTitle
   }
 }
 

@@ -11,6 +11,7 @@ import Spacing from '~/components/Spacing';
 import {withTheme} from 'styled-components';
 import * as S from '~/styles/global';
 import { updateDeck , getDecks } from '~/store/modules/deck/actions'
+import { Messenger } from '~constants/ConstantsBusiness'
 
 const Text = Typography;
 
@@ -32,22 +33,22 @@ function Decks({navigation, ...props}) {
   }
 
   function alertDeleteDeck(deck) {
-    Alert.alert(
-      'Alerta',
-      `Você tem certeza que quer excluir?`,
+    Alert.alert( Messenger.MSG000, Messenger.MSG017,
       [
         {
-          text: 'Não',
+          // no
+          text: Messenger.MSG027,
           onPress: () => {},
           style: 'Cancelar',
         },
         {
-          text: 'Sim',
+          // yes
+          text: Messenger.MSG026,
           onPress: () => deleteDeck(deck),
         },
       ],
-      {cancelable: true},
-    );
+      { cancelable: true },
+    )
   }
 
   //#endregion

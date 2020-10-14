@@ -20,9 +20,8 @@ function NotePad({navigation, ...props}) {
   const dispatch = useDispatch();
   const notePadState = useSelector( state => state.notepad.data)
 
-  dispatch(getNotePads())
-
   useEffect(() => {
+    dispatch(getNotePads())
   }, []);
 
   //#region RIGHT BUTTON OPTIONS

@@ -1,5 +1,5 @@
 import axios from 'axios';
-import ConstantsBusiness from '~/constants/ConstantsBusiness'
+import * as ConstantsBusiness from '~/constants/ConstantsBusiness'
 
 const api = axios.create({
   baseURL: ConstantsBusiness.Url,
