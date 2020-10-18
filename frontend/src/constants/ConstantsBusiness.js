@@ -42,7 +42,7 @@ const Card = {
   //hits
   hitEasyTime : 24 * 3 , // hours * day -- value in hours
   hitGoodTime : 24 * 1 , // hours * day -- value in hours
-  hitDifficultTime : 10 , // minutes
+  hitDifficultTime : 10, // minutes
 
   //enum hit
   codDefault : 0,
@@ -58,13 +58,18 @@ export { Card }
 
 const Note = { 
 
-  maxLengthTitle : 3
+  maxLengthTitle : 25
   , defaultTitle : 'Título'
-  , getTitleByContent : (content) => content.replace(/<[^>]*>/g, '').substring(0, Note.maxLengthTitle) + '...'
 }
 
 export { Note }
 
+
+const NotePad = {
+  defaultNotePadName : 'bloco padrão'
+}
+
+export { NotePad }
 
 const Validators = {
 
@@ -112,8 +117,8 @@ const Messenger = {
   , MSG025 : /**/ 'Falha ao se comunicar com o servidor'
   , MSG026 : /**/ 'Sim'
   , MSG027 : /**/ 'Não'
-
-  
+  , MSG028 : /**/ 'A anotação não pode esta vazia'
+  , MSG029 : /**/ 'Anotação adicionada com sucesso'
 }
 
 export { Messenger }

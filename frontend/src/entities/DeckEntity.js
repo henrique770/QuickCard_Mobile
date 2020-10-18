@@ -105,16 +105,28 @@ class DeckEntity extends BaseEntity {
    * Change cards to view
    */
   reviewCards() {
-    if(!this.checkRevisedDeck())
-      return
+    //if(!this.checkRevisedDeck())
+    //  return
+    
+    let cards = this.Cards
 
     for(let i = 0; i < this.totalCards(); i += 1) {
-      let card = this.Cards[i]
+      let card = cards[i]
       card.undoReviewCard()
+      console.log(card)
     }
   }
 
-  getDeckRandom() {
+
+  isNextVisibleCard() {
+    let card = this.getNextCard()
+    , date = new Date(card.DateNextView)
+    , nowDate = new Date()
+
+    return nowDate < date
+  }
+
+  getNextCard() {
 
     this.orderCards()
 

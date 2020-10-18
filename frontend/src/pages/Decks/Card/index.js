@@ -40,12 +40,14 @@ export default function Card({navigation, route}) {
   const [isShow, setIsShow] = useState(false);
   const [cardsVisible, setCardsVisible] = useState(false);
   const [endQuiz, setEndQuiz] = useState(Deck.checkRevisedDeck());
+  const [isCardNotViewing, setIsCardNotViewing] = useState(false);
   const [cardData, setCardData] = useState(Card);
 
   //console.log('route params ', route.params);
 
   useEffect(() => {
     navigation.setOptions({title: `${Deck.Name}`});
+
     getNextCard();
 
     if (Card) {
@@ -96,6 +98,7 @@ export default function Card({navigation, route}) {
   }
 
   function getNextCard() {
+
     if (Deck.checkRevisedDeck()) {
       setEndQuiz(true);
       return;
@@ -105,14 +108,23 @@ export default function Card({navigation, route}) {
       return;
     }
 
-    let card = Deck.getDeckRandom();
-    setCardData(card);
-    //console.log('card ', card);
+    if(Deck.isNextVisibleCard()) {
+      setIsCardNotViewing(true)
+      return;
+    }
+
+    setIsCardNotViewing(Deck.isNextVisibleCard())
+
+    if(!isCardNotViewing) {
+      let card = Deck.getNextCard();
+      setCardData(card);
+    }
   }
 
   function reviewDeck() {
     Deck.reviewCards();
     update(Deck.Cards);
+    getNextCard()
   }
 
   function update(card) {
@@ -283,17 +295,17 @@ export default function Card({navigation, route}) {
     );
   }
 
-  function renderEndQuiz() {
+  function renderEndQuizOrCardNotViewing(text) {
     return (
       <>
-        {endQuiz && (
+        {
           <S.StyledContainer>
             <Lottie style={{bottom: 190}} source={successAnimation} autoPlay />
             <View
               style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
               <Spacing mt={100} mb={30}>
                 <S.Text size={25} weight="bold" width={300} textAlign="center">
-                  Parabéns!! você terminou de responder o baralho
+                 {text}
                 </S.Text>
               </Spacing>
 
@@ -304,15 +316,16 @@ export default function Card({navigation, route}) {
               {endButton('Revisar novamente o baralho', () => reviewDeck())}
             </View>
           </S.StyledContainer>
-        )}
+        } 
       </>
     );
   }
+  
 
   function endButton(text, onPress) {
     return (
       <>
-        <Spacing mb={20}>
+        <Spacing mb={20} mr={10} ml={10}>
           <EndButton onPress={onPress}>
             <Text size={18} weight="bold" color="#fff" textAlign="center">
               {text}
@@ -335,6 +348,29 @@ export default function Card({navigation, route}) {
 
   //#endregion
 
+
+  function renderComponent() {
+    // deck empty
+    if(Deck.isEmpty()) {
+      
+      return renderDeckEmpty()
+    } 
+    // deck in card not view
+    else if(isCardNotViewing) {
+      let text = 'Nenhum cartão para revisar no momento'
+      return renderEndQuizOrCardNotViewing(text)
+    }
+    // deck review cards
+    else if(endQuiz) {
+      let text = 'Parabéns!! você terminou de responder o baralho'
+      return renderEndQuizOrCardNotViewing(text)
+    } 
+    else {
+
+      return renderBody()
+    }
+  }
+
   return (
     <>
       <S.Container align={endQuiz || Deck.isEmpty() ? `` : 'center'}>
@@ -347,11 +383,15 @@ export default function Card({navigation, route}) {
         </Spacing>
         <S.Margin />
 
-        {Deck.isEmpty() && renderDeckEmpty()}
+        { renderComponent() }
+
+        {/* Deck.isEmpty() && renderDeckEmpty() 
 
         {!endQuiz && !Deck.isEmpty() && renderBody()}
 
         {endQuiz && !Deck.isEmpty() && renderEndQuiz()}
+
+        */}
       </S.Container>
     </>
   );

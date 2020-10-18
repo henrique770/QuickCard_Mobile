@@ -13,7 +13,7 @@ import {
 import {ServiceProxy, typeService} from '~/store/service';
 import NoteEntity from "~/entities/NoteEntity";
 import NotePadEntity from "~/entities/NotePadEntity";
-
+import { NotePad as NotePadConstantsBusiness  } from '~constants/ConstantsBusiness'
 
 const filterActive = data => {
   if (Array.isArray(data)) {
@@ -41,8 +41,8 @@ export function* getNotePadsDataBase() {
     , noteEmptyNotePad = yield serviceProxyNote.query({ IdNotePad : ''})
 
     , notePadDefault = new NotePadEntity({
-      Name : 'Default Blog'
-      , Notes : [...noteEmptyNotePad]
+      Name : NotePadConstantsBusiness.defaultNotePadName
+      , Notes : [...noteEmptyNotePad.filter( e => e.IdNotePad === '')]
       , IsActive : true
       , Id : ''
     })
@@ -51,10 +51,9 @@ export function* getNotePadsDataBase() {
       notepads = []
     }
 
-    notepads.push(notePadDefault)
-
-    //console.log(notepads)
-
+    if(notePadDefault.totalNotes > 0) {
+      notepads.unshift(notePadDefault)
+    }
 
   yield put(setNotePads({data: filterActive(notepads)}));
 }

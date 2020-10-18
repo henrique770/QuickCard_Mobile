@@ -21,7 +21,7 @@ import IconMc from 'react-native-vector-icons/MaterialCommunityIcons';
 import {Container, Title, ContainerTag, TagInput} from './styles';
 import {useDispatch, useSelector} from "react-redux";
 import {addNote , getNotePads } from "~/store/modules/notepad/actions";
-import { Note as NoteConstantsBusiness } from '~constants/ConstantsBusiness'
+import { Messenger, Note as NoteConstantsBusiness, NotePad as NotePadConstantsBusiness } from '~constants/ConstantsBusiness'
 
 const defaultStyles = getDefaultStyles();
 
@@ -42,7 +42,7 @@ export default function AddNote({navigation, route}) {
   const handlerAddNote = () => {
 
     if(noteContent == ""){
-      Alert.alert('', 'A anotação não pode esta vazia')
+      Alert.alert(Messenger.MSG000, Messenger.MSG028)
       return
     }
 
@@ -54,17 +54,17 @@ export default function AddNote({navigation, route}) {
     dispatch(addNote({
         Content : noteContent
         , IdNotePad : notePad
-        , Title : title === NoteConstantsBusiness.defaultTitle ? '' : title
-        , IsEmptyTitle : title === NoteConstantsBusiness.defaultTitle
+        , Title : title
+        , IsEmptyTitle : false
     }))
 
     setSelectedValue('')
-    setTitle('Título')
+    setTitle(NoteConstantsBusiness.defaultTitle)
     setNotePad('')
     setNoteContent('')
     editor.setHtml('')
 
-    Alert.alert('', 'Anotação adicionada com sucesso')
+    Alert.alert(Messenger.MSG000, Messenger.MSG028)
   }
 
   const onStyleKeyPress = toolType => {
@@ -88,7 +88,10 @@ export default function AddNote({navigation, route}) {
     let selectValues = []
 
     if(notePads != null && Array.isArray(notePads)) {
-      selectValues = [{ id : '' , name : 'Selecione bloco de anotação' } , ...notePads.map( e => { return{ id : e.Id , name : e.Name} }) ]
+      selectValues = [
+        { id : '' , name : NotePadConstantsBusiness.defaultNotePadName } 
+          , ...notePads.filter( e => e.Id !== '' ).map( e => { return{ id : e.Id , name : e.Name} }) 
+      ]
     }
 
     return selectValues.map( note => {

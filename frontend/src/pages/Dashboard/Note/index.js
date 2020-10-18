@@ -7,6 +7,7 @@ import {
   KeyboardAvoidingView,
   View,
   Picker,
+  Alert,
 } from 'react-native';
 
 import CNEditor, {
@@ -20,6 +21,7 @@ import {Container, Title, ContainerTag, TagInput} from './styles';
 import {useDispatch, useSelector} from "react-redux";
 import {getNotePads, updateNote} from "~/store/modules/notepad/actions";
 import {withTheme} from "styled-components";
+import { Messenger , NotePad as NotePadConstantsBusiness} from '~constants/ConstantsBusiness'
 
 const defaultStyles = getDefaultStyles();
 
@@ -56,13 +58,16 @@ function Note({navigation, ...props}) {
   let editor = null
 
   const note = props.route.params
+  const notePads = useSelector(state => state.notepad.data);
   const notePad = useSelector(state => state.notepad.data.find( e => e.Id == note.IdNotePad));
+
   const dispatch = useDispatch();
 
   const [selectedStyles, setSelectedStyles] = useState([]);
 
   const [title, setTitle] = useState(note.Title);
   const [content, setContent] = useState(note.Content);
+  const [notePadSelected, setNotePadSelected] = useState(notePad.Id);
 
   //#region EDITOR TOOL OPTIONS
 
@@ -145,23 +150,69 @@ function Note({navigation, ...props}) {
 
   //#endregion
 
+  const onSelectedTagChanged = async () => {
+    
+    let value = await editor.getHtml()
+    note.Content = value
+
+    if(note.processTitleEmpty(value) === title) {
+
+    }
+
+    if(note.IsEmptyTitle) {
+
+      setTitle(note.Title)
+    }
+  }
+
+  const onSelectedTitleChanged = title => {
+
+    if(note.IsEmptyTitle) {
+      
+      note.IsEmptyTitle = false
+      setTitle('')
+      
+      return
+    }
+
+    setTitle(title)
+    return
+  }
+
+  const getListTag = () => {
+
+
+    let selectValues = []
+
+    if(notePads != null && Array.isArray(notePads)) {
+      selectValues = [
+        { id : '' , name : NotePadConstantsBusiness.defaultNotePadName } 
+        , ...notePads.filter( e => e.Id !== '' ).map( e => { return{ id : e.Id , name : e.Name} }) 
+      ]
+    }
+
+    return selectValues.map( note => {
+      return <Picker.Item label={note.name} value={note.id} />
+    })
+  }
+
   const handlerUpdateNote = async () => {
     let value = await editor.getHtml()
 
     note.Content = value;
     note.Title = title;
+    note.IsEmptyTitle = false;
+    note.IdNotePad = notePadSelected;
 
     console.log('Note', note)
 
+    if(note.Content === '') {
+      Alert.alert(Messenger.MSG000, Messenger.MSG028)
+      return
+    }
+
     dispatch(updateNote(note))
     dispatch(getNotePads())
-
-   /* dispatch(addNote({
-      Content : value
-      , IdNotePad : notePad
-      , Title :title
-    }))
-    */
   }
 
   const onStyleKeyPress = toolType => {
@@ -169,22 +220,36 @@ function Note({navigation, ...props}) {
   };
 
   function renderHead() {
-    return(
+    return (
       <Spacing mb="20">
-        <Spacing position="absolute" top="5" right="35" width="50">
-          <ContainerTag>
-            <IconMc name="tag" size={20} color="#fe650e" />
-            <Text> Bloco: { notePad.Name } </Text>
-          </ContainerTag>
-        </Spacing>
+      <Spacing position="absolute" top="5" right="30" width="75">
+        <ContainerTag>
+
+          <IconMc name="tag" size={20} color="#fe650e" />
+
+          <Picker
+            style={{
+              height: 50,
+              width: '100%',
+            }}
+              selectedValue={notePadSelected}
+              onValueChange={(itemValue, itemIndex) => { setNotePadSelected(itemValue) }
+            }>
+
+            {getListTag()}
+
+          </Picker>
+
+        </ContainerTag>
       </Spacing>
+    </Spacing>
     )
   }
 
   function renderTitle() {
     return(
       <Spacing ml="20" mr="20">
-        <Title onChangeText={(value) => setTitle(value)}>{title}</Title>
+        <Title onChangeText={onSelectedTitleChanged}>{title}</Title>
       </Spacing>
     )
   }
@@ -240,11 +305,12 @@ function Note({navigation, ...props}) {
 
               <CNEditor
                 ref={input => (editor = input)}
-                //onSelectedTagChanged={onSelectedTagChanged}
+                onSelectedTagChanged={onSelectedTagChanged}
                 //onSelectedStyleChanged={onSelectedStyleChanged}
                 style={{backgroundColor: '#fff'}}
                 styleList={defaultStyles}
                 initialHtml={content}
+                
               />
             </View>
           </View>

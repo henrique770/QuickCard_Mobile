@@ -131,6 +131,7 @@ class CardEntity extends  BaseEntity {
 
   /**
    * remover markings for card review for  possible
+   * @returns {CardEntity}
    */
   undoReviewCard() {
     this.BaseHours = 0
@@ -139,6 +140,8 @@ class CardEntity extends  BaseEntity {
     this.CodEnumHit = ConstantsBusiness.Card.codDefault
     this._resetDisplayDeadline()
     this._resetHit()
+
+    return this;
   }
 
   /**
@@ -161,7 +164,7 @@ class CardEntity extends  BaseEntity {
    * @returns {string}
    */
   getTimeHitDifficult() {
-    return '10 min'
+    return `${ConstantsBusiness.Card.hitDifficultTime} min`
   }
 
   hitEasy() {
