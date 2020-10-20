@@ -177,6 +177,9 @@ class PeerClient {
   }
 
   connect(profile) {
+    if(!ConstantsBusiness.Hub.isActive) {
+      return;
+    }
 
     let self = this
 

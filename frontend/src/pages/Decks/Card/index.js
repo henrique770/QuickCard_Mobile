@@ -18,7 +18,7 @@ import atentionAnimation from '~/assets/testanimation.json';
 
 import Lottie from 'lottie-react-native';
 
-import {updateCard, updateDeck} from '~/store/modules/deck/actions';
+import {updateCard, updateDeck, getDecks} from '~/store/modules/deck/actions';
 
 import { Card as CardConstants, Messenger } from '~constants/ConstantsBusiness'
 
@@ -109,16 +109,14 @@ export default function Card({navigation, route}) {
     }
 
     if(Deck.isNextVisibleCard()) {
-      setIsCardNotViewing(true)
-      return;
-    }
-
-    setIsCardNotViewing(Deck.isNextVisibleCard())
-
-    if(!isCardNotViewing) {
+      setIsCardNotViewing(false)
       let card = Deck.getNextCard();
       setCardData(card);
+      return true
     }
+
+    setIsCardNotViewing(true)
+    return false
   }
 
   function reviewDeck() {
@@ -141,10 +139,13 @@ export default function Card({navigation, route}) {
     }
 
     dispatch(updateCard({card}));
+    dispatch(getDecks());
 
-    getNextCard();
-    setIsShow(false);
-    setEndQuiz(false);
+    if(getNextCard()) {
+      setIsShow(false);
+      setEndQuiz(false);
+      setIsCardNotViewing(false);
+    }
   }
 
   //#endregion

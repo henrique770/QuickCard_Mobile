@@ -1,5 +1,6 @@
 
 import BaseEntity  from './BaseEntity'
+import moment from 'moment'
 
 /**
  * @type Deck
@@ -120,10 +121,15 @@ class DeckEntity extends BaseEntity {
 
   isNextVisibleCard() {
     let card = this.getNextCard()
-    , date = new Date(card.DateNextView)
-    , nowDate = new Date()
+    , date = moment(card.DateNextView)
+    , nowDate = moment()
 
-    return nowDate < date
+    console.log('next date', date)
+    console.log('atual date', nowDate)
+
+
+    // true - data is past
+    return nowDate > date
   }
 
   getNextCard() {

@@ -54,7 +54,6 @@ operationsActions['@decks/UPDATE_CARD_STATE'] = (state, draft, action) => {
 
     data.splice(indexOfDeck, 1)
     data.push(deck)
-    ADD_CARD_DATABASE
     draft.data = data
   }
 }

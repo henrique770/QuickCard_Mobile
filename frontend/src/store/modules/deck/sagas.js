@@ -64,6 +64,7 @@ export function* addCardDataBase(data) {
 }
 
 export function* updateCardDataBase(data) {
+
     const { card } = data.payload
       , serviceProxy = new ServiceProxy(typeService.Card)
       , update = async card => {
