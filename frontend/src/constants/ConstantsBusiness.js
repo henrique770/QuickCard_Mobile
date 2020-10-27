@@ -4,7 +4,7 @@ const __DEV_MODE__ = true
   , PORT_HOST_DEV = 3000
 
 // disabled console.error
-console.reportErrorsAsExceptions = true;
+console.reportErrorsAsExceptions = false;
 
 const Url = __DEV_MODE__ ? `http://${URL_HOST_DEV}:${PORT_HOST_DEV}/api/v1/` : 'https://quickcard-io.herokuapp.com/api/v1/' 
 
@@ -26,7 +26,7 @@ const Hub = __DEV_MODE__ ? {
   port : '80',
   pathPeer : '/webrtc/peerjs',
   api: 'api/v1/',
-  isActive : false
+  isActive : true
 }
 
 export { Hub }
