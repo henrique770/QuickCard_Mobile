@@ -12,10 +12,16 @@ import {Title, Separator, Form, SelectContainer} from './styles';
 export default function Charts({navigation}) {
   
   const decks = useSelector(state => state.deck.data);
+  const defaultValueData = [0, 0, 0, 0]
 
-  const [selectedDeck, setSelectedDeck] = useState('');
+  const [deckSelected, setDeckSelected] = useState('');
   const [data, setData] = useState([50, 10, 20])
-  const [cards, setCards] = useState([])
+  const [cards, setCards] = useState(defaultValueData)
+
+  const [totalAccountant, setTotalAccountant] = useState(0)
+  const [cardsGoodCount, setCardsGoodCount] = useState(0)
+  const [cardsEasyCount, setCardsEasyCount] = useState(0)
+  const [cardsDifficult, setCardsDifficult] = useState(0)
 
 
   const randomColor = () =>
@@ -60,43 +66,63 @@ export default function Charts({navigation}) {
   }
 
   function loadCards(idDeck) {
+    setDeckSelected(idDeck);
 
     let deck = decks.find( e => e.Id === idDeck) 
+
+    console.log('deck', deck)
 
     if(deck && deck.Cards.length > 0) {
 
       setCards(deck.Cards)
-      console.log('cards', cards)
+      //console.log('cards', cards)
 
       let cardsGoodCount = cards.map( c => c.NumGoodCount ).reduce((total, number) => { return total + number } , 0)
       , cardsEasyCount = cards.map( c => c.NumEasyCount ).reduce((total, number) => { return total + number } , 0)
       , cardsDifficult = cards.map( c => c.NumDifficultCount ).reduce((total, number) => { return total + number } , 0)
       , total = deck.Cards.length
 
-      console.log('count cardsGoodCount', cardsGoodCount)
-      console.log('count cardsEasyCount', cardsEasyCount)
-      console.log('count cardsDifficult', cardsDifficult)
+      const castNan = (value) => isNaN(value) ? 0 : value
+    
+      console.log('count total', total)
+      console.log('count cardsGoodCount', castNan(cardsGoodCount))
+      console.log('count cardsEasyCount', castNan(cardsEasyCount))
+      console.log('count cardsDifficult', castNan(cardsDifficult))
+
+      setTotalAccountant(total)
+      setCardsGoodCount(cardsGoodCount)
+      setCardsEasyCount(cardsEasyCount)
+      setCardsDifficult(cardsDifficult)
 
       setData([total, cardsGoodCount, cardsEasyCount, cardsDifficult])
+
+    } else {
+
+      setData(defaultValueData)
     }
   }
 
-  function renderSelectDeck() {
+  function renderDeckLabels() {
+    return (<>
+       <Text color="#656565" size="15">Teste</Text>
+    </>)
+  }
+
+  function renderDeckPicker() {
     return (
       <>
         <SelectContainer>
           <Picker
             name="idDeck"
-            selectedDeck={selectedDeck}
+            selectedValue={deckSelected}
             style={{
               height: 50,
               width: '100%',
               color: 'rgba(0, 0, 0, 0.8)',
             }}
             onValueChange={(itemValue, itemIndex) => {
-              console.log('Item value : ', itemValue);
               loadCards(itemValue)
-              setSelectedDeck(itemValue);
+              console.log('Item value : ', deckSelected);
             }}>
             {renderOptionsDeck()}
           </Picker>
@@ -118,10 +144,12 @@ export default function Charts({navigation}) {
         <S.Margin />
         <S.StyledContainer
           style={{flex: 1, justifyContent: 'center', padding: 30}}>
-         
-          { renderSelectDeck() }
 
-          { selectedDeck !== '' && 
+          { renderDeckPicker() }
+
+          { deckSelected !== '' && renderDeckLabels()}
+
+          { deckSelected !== '' && 
             <PieChart style={{height: 400}} data={pieData}>
               <Label>{data.value}</Label>
             </PieChart>
