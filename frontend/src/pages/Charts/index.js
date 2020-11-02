@@ -7,30 +7,36 @@ import {Text} from 'react-native-svg';
 import Spacing from '~/components/Spacing';
 
 import * as S from '~/styles/global';
-import {Title, Separator, Form, SelectContainer} from './styles';
+import {Title, Text as TextStyle, Separator, Form, SelectContainer} from './styles';
+import { Card as CardConstatnts } from '~constants/ConstantsBusiness'
+
+const calculatePercentage = (total, perc) => ((perc * 100 ) / total).toFixed(1)
 
 export default function Charts({navigation}) {
   
   const decks = useSelector(state => state.deck.data);
+  const defaultValueData = [0, 0, 0, 0, 0]
 
-  const [selectedDeck, setSelectedDeck] = useState('');
+  const [deckSelected, setDeckSelected] = useState('');
   const [data, setData] = useState([50, 10, 20])
-  const [cards, setCards] = useState([])
+  const [cards, setCards] = useState(defaultValueData)
 
+  const [totalAccountant, setTotalAccountant] = useState(0)
+  const [CardsUnanswered, setCardsUnanswered] = useState(0)
+  const [cardsGoodCount, setCardsGoodCount] = useState(0)
+  const [cardsEasyCount, setCardsEasyCount] = useState(0)
+  const [cardsDifficult, setCardsDifficult] = useState(0)
 
-  const randomColor = () =>
-    ('#' + ((Math.random() * 0xffffff) << 0).toString(16) + '000000').slice(
-      0,
-      7,
-    );
+  const colors = [ '#006400' ,'#969A24', '#FF0000' , '#000' ]
 
   const pieData = data.map((value, index) => ({
     value,
     key: `${index}-${value}`,
     svg: {
-      fill: '#000'//randomColor(),
+      fill: colors[index]
     },
   }));
+  
 
   const Label = ({slices}) => {
     return slices.map((slice, index) => {
@@ -60,43 +66,72 @@ export default function Charts({navigation}) {
   }
 
   function loadCards(idDeck) {
+    setDeckSelected(idDeck);
 
     let deck = decks.find( e => e.Id === idDeck) 
 
-    if(deck && deck.Cards.length > 0) {
+    if(deck && deck.totalCards() > 0) {
 
       setCards(deck.Cards)
-      console.log('cards', cards)
+      //, cardsUnanswered = cards.map( c => c.CodEnumHit === CardConstatnts.codDefault).reduce((total, number) => { return total + number } , 0)
 
-      let cardsGoodCount = cards.map( c => c.NumGoodCount ).reduce((total, number) => { return total + number } , 0)
-      , cardsEasyCount = cards.map( c => c.NumEasyCount ).reduce((total, number) => { return total + number } , 0)
-      , cardsDifficult = cards.map( c => c.NumDifficultCount ).reduce((total, number) => { return total + number } , 0)
-      , total = deck.Cards.length
+      let cardsGoodCount = deck.totalCardsGood()
+      , cardsEasyCount = deck.totalCardsEasy()
+      , cardsDifficult = deck.totalCardsDifficult()
+      , cardsUnanswered = deck.totalCardsReviewMoment() 
+      , total = deck.totalCards()
 
-      console.log('count cardsGoodCount', cardsGoodCount)
-      console.log('count cardsEasyCount', cardsEasyCount)
-      console.log('count cardsDifficult', cardsDifficult)
+      const castNan = (value) => isNaN(value) ? 0 : value
+     
+      console.log('count total', total)
+      console.log('count sem resposta', castNan(cardsUnanswered))
+      console.log('count cardsGoodCount', castNan(cardsGoodCount))
+      console.log('count cardsEasyCount', castNan(cardsEasyCount))
+      console.log('count cardsDifficult', castNan(cardsDifficult))
 
-      setData([total, cardsGoodCount, cardsEasyCount, cardsDifficult])
+      setTotalAccountant(total)
+      setCardsUnanswered(cardsUnanswered)
+      setCardsGoodCount(cardsGoodCount)
+      setCardsEasyCount(cardsEasyCount)
+      setCardsDifficult(cardsDifficult)
+      setData([
+        calculatePercentage(total, cardsGoodCount)
+        , calculatePercentage(total, cardsEasyCount)
+        , calculatePercentage(total, cardsDifficult)
+        , calculatePercentage(total, cardsUnanswered)
+      ])
+    } else {
+
+      setData(defaultValueData)
     }
   }
+  //style={{color: 'rgba(0, 0, 0, 0.8)'}
 
-  function renderSelectDeck() {
+  function renderDeckLabels() {
+    return (<>
+       <TextStyle><TextStyle style={{color: colors[1]}}>'Fácil':</TextStyle> {cardsEasyCount} ({calculatePercentage(totalAccountant, cardsEasyCount)}%)</TextStyle>
+       <TextStyle><TextStyle style={{color: colors[0]}}>'Bom':</TextStyle> {cardsGoodCount} ({calculatePercentage(totalAccountant, cardsGoodCount)}%)</TextStyle>
+       <TextStyle><TextStyle style={{color: colors[2]}}>'Difícil':</TextStyle> {cardsDifficult} ({calculatePercentage(totalAccountant, cardsDifficult)}%)</TextStyle>
+       <TextStyle><TextStyle style={{color: colors[3]}}>'Disponível':</TextStyle> {CardsUnanswered} ({calculatePercentage(totalAccountant, CardsUnanswered)}%)</TextStyle>
+
+    </>)
+  }
+
+  function renderDeckPicker() {
     return (
       <>
         <SelectContainer>
           <Picker
             name="idDeck"
-            selectedDeck={selectedDeck}
+            selectedValue={deckSelected}
             style={{
               height: 50,
               width: '100%',
               color: 'rgba(0, 0, 0, 0.8)',
             }}
             onValueChange={(itemValue, itemIndex) => {
-              console.log('Item value : ', itemValue);
               loadCards(itemValue)
-              setSelectedDeck(itemValue);
+              console.log('Item value : ', deckSelected);
             }}>
             {renderOptionsDeck()}
           </Picker>
@@ -105,9 +140,9 @@ export default function Charts({navigation}) {
     );
   }
 
-
   return (
     <>
+
       <S.Container>
 
         <Spacing position="absolute" top="18" right="30">
@@ -115,18 +150,23 @@ export default function Charts({navigation}) {
             <IconMi name="menu" size={25} color="#fff" />
           </TouchableOpacity>
         </Spacing>
+
         <S.Margin />
         <S.StyledContainer
-          style={{flex: 1, justifyContent: 'center', padding: 30}}>
-         
-          { renderSelectDeck() }
+          style={{padding: 30}}>
+           
+          { renderDeckPicker() }
 
-          { selectedDeck !== '' && 
+          { deckSelected !== '' && renderDeckLabels()}
+
+          { deckSelected !== '' && 
             <PieChart style={{height: 400}} data={pieData}>
               <Label>{data.value}</Label>
             </PieChart>
           }
         </S.StyledContainer>
+
+       
       </S.Container>
     </>
   );

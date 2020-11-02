@@ -25,6 +25,13 @@ export const Title = styled.Text`
   margin-bottom: 20px;
 `;
 
+export const Text = styled.Text `
+  font-size: 18px;
+  color: #000;
+  font-weight: bold;
+  align-self: center;
+`;
+
 export const Form = styled.ScrollView.attrs({
   showsVerticalScrollIndicator: false,
   contentContainerStyle: {padding: 20},

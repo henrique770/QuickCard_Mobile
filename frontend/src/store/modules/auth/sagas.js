@@ -150,7 +150,7 @@ const processLoginFailure = err => {
   , mensagem = ''
 
   // network error
-  if(!err.status) {
+  if(err.response == null) {
     
     title = Messenger.MSG019
     mensagem = Messenger.MSG025
@@ -161,19 +161,28 @@ const processLoginFailure = err => {
     let data = err.response.data
     , status = err.response.status
    
+    console.log(`status erro login ${status}`)
 
     switch (status) {
+      
+      case 401:
+        title = Messenger.MSG021
+        mensagem = Messenger.MSG015
+        break;
+
       case 400:
         title = Messenger.MSG021
-        mensagem = 'Usuário ou senha inválido.'
+        mensagem = Messenger.MSG009
         break;
+
       case 500:
-        title = Messenger.MSG016
-        mensagem = 'Error no servidor de autenticação.'
+        title = Messenger.MSG021
+        mensagem = Messenger.MSG016
         break;
+
       default:
         title = Messenger.MSG024
-        mensagem = 'Error desconhecido.'
+        mensagem = Messenger.MSG016
     }
 
   }
@@ -189,6 +198,8 @@ const processLoginFailure = err => {
 const processLoginSucess = sucess => {
   let data = sucess.data
     , status = sucess.status
+
+  console.log(`status sucesso login ${status}`)
 
   switch (status) {
     case 200:

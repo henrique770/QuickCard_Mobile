@@ -1,6 +1,6 @@
 
-const __DEV_MODE__ = true
-  , URL_HOST_DEV = '192.168.1.2'
+const __DEV_MODE__ = false
+  , URL_HOST_DEV = '192.168.1.11'
   , PORT_HOST_DEV = 3000
 
 // disabled console.error

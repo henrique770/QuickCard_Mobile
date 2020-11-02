@@ -1,6 +1,7 @@
 
 import BaseEntity  from './BaseEntity'
 import moment from 'moment'
+import { Card as CardConstatnts } from '~constants/ConstantsBusiness'
 
 /**
  * @type Deck
@@ -92,6 +93,48 @@ class DeckEntity extends BaseEntity {
   }
 
   /**
+   * total cards to review moment
+   * @return {number}
+   */
+  totalCardsReviewMoment() {
+    let self = this
+      , cardsNoteReview = this.Cards.filter( e => !e.IsReviewed)
+
+      if(cardsNoteReview.length < 1)
+        return 0
+
+      let cardsAvailable = cardsNoteReview.filter( card => self._isNextVisibleCard(card))
+      return cardsAvailable.length
+  }
+
+  /**
+   * total cards to cod Good
+   * @return {number}
+   */
+  totalCardsGood() {
+
+    return this.Cards.filter(c => c.CodEnumHit === CardConstatnts.codGood).length
+  }
+
+   /**
+   * total cards to cod Easy
+   * @return {number}
+   */
+  totalCardsEasy() {
+
+    return this.Cards.filter( c => c.CodEnumHit === CardConstatnts.codEasy).length
+  }
+
+   /**
+   * total cards to cod Difficult
+   * @return {number}
+   */
+  totalCardsDifficult() {
+
+    return this.Cards.filter( c => c.CodEnumHit === CardConstatnts.codDifficult).length
+  }
+
+  /**
    * check that all cards have been reviewed
    * @return {boolean}
    */
@@ -118,18 +161,13 @@ class DeckEntity extends BaseEntity {
     }
   }
 
-
+  /**
+   * check if the next card is available
+   * @returns {boolean}
+   */
   isNextVisibleCard() {
-    let card = this.getNextCard()
-    , date = moment(card.DateNextView)
-    , nowDate = moment()
-
-    console.log('next date', date)
-    console.log('atual date', nowDate)
-
-
-    // true - data is past
-    return nowDate > date
+    
+    return this._isNextVisibleCard(this.getNextCard())
   }
 
   getNextCard() {
@@ -169,6 +207,14 @@ class DeckEntity extends BaseEntity {
 
     this.Cards.push(card)
   }
+
+  _isNextVisibleCard(card) {
+    let date = moment(card.DateNextView)
+    , nowDate = moment()
+
+    // true - data is past
+    return nowDate > date
+  } 
 }
 
 export default DeckEntity

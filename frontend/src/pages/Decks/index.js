@@ -106,6 +106,9 @@ function Decks({navigation, ...props}) {
           { renderTextCard('A revisar', deck.totalUnreviewedCards()) }
 
           { renderTextCard('Revisados', deck.totalCardsReviewed()) }
+
+          { renderTextCard('Disponíveis', deck.totalCardsReviewMoment()) }
+
         </Spacing>
       </S.Box>
     )
