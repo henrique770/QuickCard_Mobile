@@ -1,11 +1,11 @@
-import React, {useRef, useState} from 'react'
-import {Image, StatusBar, Alert} from 'react-native'
-import {useDispatch, useSelector} from 'react-redux'
+import React, {useRef, useState} from 'react';
+import {Image, StatusBar, Alert} from 'react-native';
+import {useDispatch, useSelector} from 'react-redux';
 
-import logo from '~/assets/whitelogo.png'
+import logo from '~/assets/whitelogo.png';
 
-import Background from '~/components/Background'
-import {signInRequest} from '~/store/modules/auth/actions'
+import Background from '~/components/Background';
+import {signInRequest} from '~/store/modules/auth/actions';
 
 import {
   Container,
@@ -14,34 +14,33 @@ import {
   SubmitButton,
   SignLink,
   SignLinkText,
-} from './styles'
+} from './styles';
 
-import { Validators , Messenger } from '~constants/ConstantsBusiness'
+import {Validators, Messenger} from '~constants/ConstantsBusiness';
 
 export default function SignIn({navigation}) {
-  const dispatch = useDispatch()
-  const passwordRef = useRef()
+  const dispatch = useDispatch();
+  const passwordRef = useRef();
 
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
-  const loading = useSelector(state => state.auth.loading)
+  const loading = useSelector(state => state.auth.loading);
 
   function handleSubmit() {
-
-    if(!Validators.email(email)) {
+    if (!Validators.email(email)) {
       // invalid email
-      Alert.alert( Messenger.MSG000, Messenger.MSG002 );
-      return
+      Alert.alert(Messenger.MSG000, Messenger.MSG002);
+      return;
     }
 
-    if(!Validators.password(password)) {
+    if (!Validators.password(password)) {
       // invalid password
-      Alert.alert( Messenger.MSG000, Messenger.MSG004 );
-      return
+      Alert.alert(Messenger.MSG000, Messenger.MSG004);
+      return;
     }
 
-    dispatch(signInRequest(email, password))
+    dispatch(signInRequest(email, password));
   }
 
   return (
@@ -61,7 +60,7 @@ export default function SignIn({navigation}) {
               returnKeyType="next"
               onSubmitEditing={() => passwordRef.current.focus()}
               value={email}
-              onChangeText={(setEmail)}
+              onChangeText={setEmail}
             />
 
             <FormInput

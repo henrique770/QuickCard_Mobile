@@ -12,10 +12,10 @@ export function signInSuccess(token, profile) {
   };
 }
 
-export function signUpRequest(name, email, password, imgPerfil) {
+export function signUpRequest(name, email, password) {
   return {
     type: '@auth/SIGN_UP_REQUEST',
-    payload: {name, email, password , imgPerfil},
+    payload: {name, email, password},
   };
 }
 
@@ -31,24 +31,24 @@ export function signOut() {
   };
 }
 
-export function  firstAccess() {
+export function firstAccess() {
   return {
-    type: '@auth/FIRST_ACCESS'
-  }
+    type: '@auth/FIRST_ACCESS',
+  };
 }
 
 export function updateProfileRequest(profile) {
   return {
     type: '@auth/UPDATE_PROFILE_IN_REQUEST',
-    payload : { profile }
-  }
+    payload: {profile},
+  };
 }
 
 export function updateProfile(profile) {
   return {
     type: '@auth/UPDATE_PROFILE',
-    payload : { profile }
-  }
+    payload: {profile},
+  };
 }
 
 export function toogleDark() {

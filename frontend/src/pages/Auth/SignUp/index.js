@@ -2,10 +2,9 @@ import React, {useRef, useState} from 'react';
 import {Image, StatusBar, Alert} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import logo from '~/assets/whitelogo.png';
-import showImagePicker from '~/store/service/fileImageService'
+import showImagePicker from '~/store/service/fileImageService';
 import Background from '~/components/Background';
 import {signUpRequest} from '~/store/modules/auth/actions';
-
 
 import {
   Container,
@@ -16,7 +15,7 @@ import {
   SignLinkText,
 } from './styles';
 
-import { Validators , Messenger } from '~constants/ConstantsBusiness'
+import {Validators, Messenger} from '~constants/ConstantsBusiness';
 
 export default function SignUp({navigation}) {
   const dispatch = useDispatch();
@@ -31,20 +30,19 @@ export default function SignUp({navigation}) {
   const loading = useSelector(state => state.auth.loading);
 
   function handleSubmit() {
-
-    if(!Validators.email(email)) {
+    if (!Validators.email(email)) {
       // invalid email
-      Alert.alert( Messenger.MSG000, Messenger.MSG002 );
-      return
+      Alert.alert(Messenger.MSG000, Messenger.MSG002);
+      return;
     }
 
-    if(!Validators.password(password)) {
+    if (!Validators.password(password)) {
       // invalid password
-      Alert.alert( Messenger.MSG000, Messenger.MSG004 );
-      return
+      Alert.alert(Messenger.MSG000, Messenger.MSG004);
+      return;
     }
 
-    dispatch(signUpRequest(name, email, password, dataSource.uri.toString()));
+    dispatch(signUpRequest(name, email, password));
     navigation.navigate('SignIn');
   }
 
@@ -53,14 +51,8 @@ export default function SignUp({navigation}) {
       <StatusBar barStyle="light-content" backgroundColor="#fe650e" />
       <Background>
         <Container>
-
-          <Image source={dataSource} style={{height : 100, width: 100, borderRadius: 100 / 2 }} />
+          <Image source={dataSource} />
           <Form>
-
-            <SignLink onPress={() => showImagePicker((data) => setDataSource(data))}>
-              <SignLinkText>Selecionar imagem Perfil</SignLinkText>
-            </SignLink>
-
             <FormInput
               icon="account-outline"
               autoCorrect={false}

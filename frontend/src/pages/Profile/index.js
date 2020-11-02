@@ -7,73 +7,69 @@ import Spacing from '~/components/Spacing';
 
 import IconMi from 'react-native-vector-icons/MaterialIcons';
 import {TouchableOpacity} from 'react-native';
-import showImagePicker from '~/store/service/fileImageService'
-import {signOut , updateProfileRequest} from '~/store/modules/auth/actions';
-
-import {Separator, Form} from './styles';
-import {SignLink, SignLinkText} from "~/pages/Auth/SignUp/styles";
-import StudentEntity from "~/entities/StudentEntity";
+import showImagePicker from '~/store/service/fileImageService';
+import {signOut, updateProfileRequest} from '~/store/modules/auth/actions';
+import Typography from '~/components/Typography';
+import {Separator, Form, ButtonDelete} from './styles';
+import {SignLink, SignLinkText} from '~/pages/Auth/SignUp/styles';
+import StudentEntity from '~/entities/StudentEntity';
 
 export default function Profile({navigation}) {
-
   const dispatch = useDispatch();
-  const auth  = useSelector((state) => state.auth)
-  const student = new StudentEntity(auth.profile)
+  const auth = useSelector(state => state.auth);
+  const student = new StudentEntity(auth.profile);
 
   const [name, setName] = useState(student.Name);
   const [email, setEmail] = useState(student.Email);
 
-  const [isSetIamge, setImage] = useState(false)
-  const [dataSource, setDataSource] = useState(student.ImgProfile)
+  const [isSetIamge, setImage] = useState(false);
+  const [dataSource, setDataSource] = useState(student.ImgProfile);
 
   const [oldPassword, setOldPassword] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
 
   function handlePasswordPerfil() {
+    if (!validatePasswords()) return;
 
-    if(!validatePasswords())
-      return;
+    let args = loadArgumentsHandlerPerfil();
 
-    let args = loadArgumentsHandlerPerfil()
-
-    args.oldPassword = oldPassword
-    args.password = password
+    args.oldPassword = oldPassword;
+    args.password = password;
 
     dispatch(updateProfileRequest(args));
   }
 
   function handlePerfil() {
-    let args = loadArgumentsHandlerPerfil()
+    let args = loadArgumentsHandlerPerfil();
     dispatch(updateProfileRequest(args));
   }
 
   function loadArgumentsHandlerPerfil() {
-    let args = { name, email, _id : student.Id }
-    console.log(student)
-    if(isSetIamge) {
-      args.imgPerfil = dataSource.uri
-    }
-    else {
-      args.imgPerfil = null
+    let args = {name, email, _id: student.Id};
+    console.log(student);
+    if (isSetIamge) {
+      args.imgPerfil = dataSource.uri;
+    } else {
+      args.imgPerfil = null;
     }
 
-    return args
+    return args;
   }
 
   function validatePasswords() {
-    if(oldPassword == "") {
-      Alert.alert('Alerta',`Informe sua senha.`)
+    if (oldPassword == '') {
+      Alert.alert('Alerta', `Informe sua senha.`);
       return false;
     }
 
-    if(password == "" || confirmPassword == "" ) {
-      return Alert.alert('Alerta',`Informe sua nova senha.`)
+    if (password == '' || confirmPassword == '') {
+      return Alert.alert('Alerta', `Informe sua nova senha.`);
       return false;
     }
 
-    if(password != confirmPassword) {
-      return Alert.alert('Alerta',`Senhas inválidas.`)
+    if (password != confirmPassword) {
+      return Alert.alert('Alerta', `Senhas inválidas.`);
       return false;
     }
 
@@ -107,11 +103,13 @@ export default function Profile({navigation}) {
         </View>
 
         <Form>
-
-          <SignLink onPress={() => showImagePicker((data) => {
-            setImage(true)
-            setDataSource(data)
-          })}>
+          <SignLink
+            onPress={() =>
+              showImagePicker(data => {
+                setImage(true);
+                setDataSource(data);
+              })
+            }>
             <SignLinkText>Selecionar imagem Perfil</SignLinkText>
           </SignLink>
 
@@ -178,6 +176,10 @@ export default function Profile({navigation}) {
 
           <Separator />
 
+          <ButtonDelete onPress={() => {}}>
+            <Typography color="#fff">Deletar</Typography>
+          </ButtonDelete>
+          <Spacing mt="10" />
           <S.ButtonTheme onPress={handleLogout}>
             <S.TextButton>Sair do QuickCard</S.TextButton>
           </S.ButtonTheme>

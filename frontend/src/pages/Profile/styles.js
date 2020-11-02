@@ -1,4 +1,5 @@
 import styled from 'styled-components/native';
+import Button from '~/components/Button';
 
 export const Separator = styled.View`
   height: 1px;
@@ -11,4 +12,9 @@ export const Form = styled.ScrollView.attrs({
   contentContainerStyle: {padding: 20},
 })`
   align-self: stretch;
+`;
+
+export const ButtonDelete = styled(Button)`
+  background: #f00;
+  border-radius: 10px;
 `;

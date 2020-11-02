@@ -80,30 +80,34 @@ function NotePad({navigation, ...props}) {
           </TouchableOpacity>
         </Spacing>
         <S.Margin />
-        <S.List
-          data={notePadState}
-          renderItem={({item}) => (
-            <Swipeable autoClose={true} rightButtons={rightButtons(item)}>
-              <TouchableWithoutFeedback
-                onPress={() => navigation.navigate('NotePadNotes', item)}>
-                <S.Box data={item}>
-                  <S.Text weight="bold" size="16" maxHeight="95">
-                    {item.Name}
-                  </S.Text>
-                  <Spacing mt="4" />
-                  <Text color="#fe650e">{item.totalNotes} Notas</Text>
-                </S.Box>
-              </TouchableWithoutFeedback>
-            </Swipeable>
-          )}
-        />
+        {notePadState.length === 0 ? (
+          <Empty />
+        ) : (
+          <S.List
+            data={notePadState}
+            renderItem={({item}) => (
+              <Swipeable autoClose={true} rightButtons={rightButtons(item)}>
+                <TouchableWithoutFeedback
+                  onPress={() => navigation.navigate('NotePadNotes', item)}>
+                  <S.Box data={item}>
+                    <S.Text weight="bold" size="16" maxHeight="95">
+                      {item.Name}
+                    </S.Text>
+                    <Spacing mt="4" />
+                    <Text color="#fe650e">{item.totalNotes} Notas</Text>
+                  </S.Box>
+                </TouchableWithoutFeedback>
+              </Swipeable>
+            )}
+          />
+        )}
       </S.Container>
     );
   }
 
   return (
     <>
-      {notePadState.length === 0 ? <Empty /> : renderListNotePads()}
+      {renderListNotePads()}
 
       <ActionButton buttonColor={props.theme.floatButton}>
         <ActionButton.Item
