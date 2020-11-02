@@ -9,26 +9,25 @@ import ActionButton from 'react-native-action-button';
 import IconMi from 'react-native-vector-icons/MaterialIcons';
 
 import * as S from '~/styles/global';
-import { getNotePads , updateNotePad } from "~/store/modules/notepad/actions";
+import {getNotePads, updateNotePad} from '~/store/modules/notepad/actions';
 import Swipeable from 'react-native-swipeable-row';
-import IconMc from "react-native-vector-icons/MaterialCommunityIcons";
+import IconMc from 'react-native-vector-icons/MaterialCommunityIcons';
+import Empty from '~/components/Empty';
 
 const Text = Typography;
 
 function NotePad({navigation, ...props}) {
-
   const dispatch = useDispatch();
-  const notePadState = useSelector( state => state.notepad.data)
+  const notePadState = useSelector(state => state.notepad.data);
 
-  dispatch(getNotePads())
+  dispatch(getNotePads());
 
-  useEffect(() => {
-  }, []);
+  useEffect(() => {}, []);
 
   //#region RIGHT BUTTON OPTIONS
 
-  const rightButtons = function (item) {
-    return ([
+  const rightButtons = function(item) {
+    return [
       <S.Box
         style={{
           flex: 1,
@@ -48,8 +47,8 @@ function NotePad({navigation, ...props}) {
               {
                 text: 'Sim',
                 onPress: () => {
-                  item.IsActive = false
-                  dispatch(updateNotePad(item))
+                  item.IsActive = false;
+                  dispatch(updateNotePad(item));
                 },
               },
             ])
@@ -61,50 +60,50 @@ function NotePad({navigation, ...props}) {
 
         <Spacing mt="6" />
 
-        <TouchableOpacity onPress={() => navigation.navigate('EditNotePad', item) }>
+        <TouchableOpacity
+          onPress={() => navigation.navigate('EditNotePad', item)}>
           <Text>
             <IconMc name="trash-can" color="#fff" size={30} />
           </Text>
         </TouchableOpacity>
       </S.Box>,
-    ])
-  }
+    ];
+  };
   //#endregion
 
   function renderListNotePads() {
     return (
       <S.Container>
-
         <Spacing position="absolute" top="18" right="30">
           <TouchableOpacity onPress={() => navigation.openDrawer()}>
             <IconMi name="menu" size={25} color="#FFF" />
           </TouchableOpacity>
         </Spacing>
         <S.Margin />
-          <S.List
-                data={notePadState}
-                renderItem={({item}) => (
-                  <Swipeable autoClose={true} rightButtons={rightButtons(item)}>
-                    <TouchableWithoutFeedback
-                      onPress={() => navigation.navigate('NotePadNotes' , item)}>
-                      <S.Box data={item}>
-                        <S.Text weight="bold" size="16" maxHeight="95">
-                          {item.Name}
-                        </S.Text>
-                        <Spacing mt="4" />
-                        <Text color="#fe650e">{item.totalNotes} Notas</Text>
-                      </S.Box>
-                    </TouchableWithoutFeedback>
-                  </Swipeable>
-                )}
-              />
+        <S.List
+          data={notePadState}
+          renderItem={({item}) => (
+            <Swipeable autoClose={true} rightButtons={rightButtons(item)}>
+              <TouchableWithoutFeedback
+                onPress={() => navigation.navigate('NotePadNotes', item)}>
+                <S.Box data={item}>
+                  <S.Text weight="bold" size="16" maxHeight="95">
+                    {item.Name}
+                  </S.Text>
+                  <Spacing mt="4" />
+                  <Text color="#fe650e">{item.totalNotes} Notas</Text>
+                </S.Box>
+              </TouchableWithoutFeedback>
+            </Swipeable>
+          )}
+        />
       </S.Container>
-    )
+    );
   }
 
   return (
     <>
-      { renderListNotePads() }
+      {notePadState.length === 0 ? <Empty /> : renderListNotePads()}
 
       <ActionButton buttonColor={props.theme.floatButton}>
         <ActionButton.Item

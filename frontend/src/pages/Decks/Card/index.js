@@ -15,12 +15,12 @@ import {FlipCardBox, Button, EndButton, ContainerFlashCard} from './styles';
 import * as S from '~/styles/global';
 import successAnimation from '~/assets/animation-success.json';
 import atentionAnimation from '~/assets/testanimation.json';
-
+import Empty from '~/components/Empty';
 import Lottie from 'lottie-react-native';
 
 import {updateCard, updateDeck, getDecks} from '~/store/modules/deck/actions';
 
-import { Card as CardConstants, Messenger } from '~constants/ConstantsBusiness'
+import {Card as CardConstants, Messenger} from '~constants/ConstantsBusiness';
 
 const Text = Typography;
 
@@ -33,7 +33,6 @@ const typesOfHits = {
 export default function Card({navigation, route}) {
   const {Deck} = route.params;
   const Card = {};
-
 
   const dispatch = useDispatch();
   const [cardIndex, setCardIndex] = useState(0);
@@ -98,7 +97,6 @@ export default function Card({navigation, route}) {
   }
 
   function getNextCard() {
-
     if (Deck.checkRevisedDeck()) {
       setEndQuiz(true);
       return;
@@ -108,21 +106,21 @@ export default function Card({navigation, route}) {
       return;
     }
 
-    if(Deck.isNextVisibleCard()) {
-      setIsCardNotViewing(false)
+    if (Deck.isNextVisibleCard()) {
+      setIsCardNotViewing(false);
       let card = Deck.getNextCard();
       setCardData(card);
-      return true
+      return true;
     }
 
-    setIsCardNotViewing(true)
-    return false
+    setIsCardNotViewing(true);
+    return false;
   }
 
   function reviewDeck() {
     Deck.reviewCards();
     update(Deck.Cards);
-    getNextCard()
+    getNextCard();
   }
 
   function update(card) {
@@ -141,7 +139,7 @@ export default function Card({navigation, route}) {
     dispatch(updateCard({card}));
     dispatch(getDecks());
 
-    if(getNextCard()) {
+    if (getNextCard()) {
       setIsShow(false);
       setEndQuiz(false);
       setIsCardNotViewing(false);
@@ -276,24 +274,7 @@ export default function Card({navigation, route}) {
   }
 
   function renderDeckEmpty() {
-    return (
-      <>
-        <S.StyledContainer>
-          <Lottie style={{bottom: 190}} source={atentionAnimation} autoPlay />
-          <View
-            style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-            <Spacing mt={80} mb={30}>
-              <S.Text size={25} weight="bold" width={300} textAlign="center">
-                Baralho não possui nenhum cartão registrado!
-              </S.Text>
-            </Spacing>
-            {endButton('Adicionar Cartões', () =>
-              navigation.navigate('AddCard'),
-            )}
-          </View>
-        </S.StyledContainer>
-      </>
-    );
+    return <Empty />;
   }
 
   function renderEndQuizOrCardNotViewing(text) {
@@ -306,7 +287,7 @@ export default function Card({navigation, route}) {
               style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
               <Spacing mt={100} mb={30}>
                 <S.Text size={25} weight="bold" width={300} textAlign="center">
-                 {text}
+                  {text}
                 </S.Text>
               </Spacing>
 
@@ -317,11 +298,10 @@ export default function Card({navigation, route}) {
               {endButton('Revisar novamente o baralho', () => reviewDeck())}
             </View>
           </S.StyledContainer>
-        } 
+        }
       </>
     );
   }
-  
 
   function endButton(text, onPress) {
     return (
@@ -349,26 +329,22 @@ export default function Card({navigation, route}) {
 
   //#endregion
 
-
   function renderComponent() {
     // deck empty
-    if(Deck.isEmpty()) {
-      
-      return renderDeckEmpty()
-    } 
+    if (Deck.isEmpty()) {
+      return renderDeckEmpty();
+    }
     // deck in card not view
-    else if(isCardNotViewing) {
-      let text = 'Nenhum cartão para revisar no momento'
-      return renderEndQuizOrCardNotViewing(text)
+    else if (isCardNotViewing) {
+      let text = 'Nenhum cartão para revisar no momento';
+      return renderEndQuizOrCardNotViewing(text);
     }
     // deck review cards
-    else if(endQuiz) {
-      let text = 'Parabéns!! você terminou de responder o baralho'
-      return renderEndQuizOrCardNotViewing(text)
-    } 
-    else {
-
-      return renderBody()
+    else if (endQuiz) {
+      let text = 'Parabéns!! você terminou de responder o baralho';
+      return renderEndQuizOrCardNotViewing(text);
+    } else {
+      return renderBody();
     }
   }
 
@@ -384,9 +360,9 @@ export default function Card({navigation, route}) {
         </Spacing>
         <S.Margin />
 
-        { renderComponent() }
+        {renderComponent()}
 
-        {/* Deck.isEmpty() && renderDeckEmpty() 
+        {/* Deck.isEmpty() && renderDeckEmpty()
 
         {!endQuiz && !Deck.isEmpty() && renderBody()}
 

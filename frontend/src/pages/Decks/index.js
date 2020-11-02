@@ -5,35 +5,35 @@ import IconMi from 'react-native-vector-icons/MaterialIcons';
 import IconMc from 'react-native-vector-icons/MaterialCommunityIcons';
 import ActionButton from 'react-native-action-button';
 import {TouchableOpacity, Alert} from 'react-native';
-
+import Empty from '~/components/Empty';
 import Typography from '~/components/Typography';
 import Spacing from '~/components/Spacing';
 import {withTheme} from 'styled-components';
 import * as S from '~/styles/global';
-import { updateDeck , getDecks } from '~/store/modules/deck/actions'
-import { Messenger } from '~constants/ConstantsBusiness'
+import {updateDeck, getDecks} from '~/store/modules/deck/actions';
+import {Messenger} from '~constants/ConstantsBusiness';
 
 const Text = Typography;
 
 function Decks({navigation, ...props}) {
+  const dispatch = useDispatch();
+  const decks = useSelector(state => state.deck.data);
 
-  const dispatch = useDispatch()
-  const decks = useSelector( state => state.deck.data)
+  dispatch(getDecks());
 
-  dispatch(getDecks())
-
-  useEffect(() => {
-  }, []);
+  useEffect(() => {}, []);
 
   //#region UI LOGIC
 
   function deleteDeck(deck) {
-    deck.IsActive = false
-    dispatch(updateDeck(deck))
+    deck.IsActive = false;
+    dispatch(updateDeck(deck));
   }
 
   function alertDeleteDeck(deck) {
-    Alert.alert( Messenger.MSG000, Messenger.MSG017,
+    Alert.alert(
+      Messenger.MSG000,
+      Messenger.MSG017,
       [
         {
           // no
@@ -47,15 +47,15 @@ function Decks({navigation, ...props}) {
           onPress: () => deleteDeck(deck),
         },
       ],
-      { cancelable: true },
-    )
+      {cancelable: true},
+    );
   }
 
   //#endregion
 
   //#region UI COMPONENTS
 
-  function renderAction(title, icon , navigate) {
+  function renderAction(title, icon, navigate) {
     return (
       <ActionButton.Item
         buttonColor="#333"
@@ -69,28 +69,30 @@ function Decks({navigation, ...props}) {
         onPress={() => navigation.navigate(navigate)}>
         <IconMc name={icon} size={30} color="#FFF" />
       </ActionButton.Item>
-    )
+    );
   }
 
   function renderActionButton() {
-    return (<>
-      <ActionButton buttonColor={props.theme.floatButton}>
-        { renderAction('Adicionar Cartão', 'cards-outline' , 'AddCard') }
+    return (
+      <>
+        <ActionButton buttonColor={props.theme.floatButton}>
+          {renderAction('Adicionar Cartão', 'cards-outline', 'AddCard')}
 
-        { renderAction('Adicionar Baralho', 'cards', 'AddDeck') }
-      </ActionButton>
-    </>)
+          {renderAction('Adicionar Baralho', 'cards', 'AddDeck')}
+        </ActionButton>
+      </>
+    );
   }
 
   function renderTextCard(firstText, secondText) {
     return (
       <Text color="#656565" size="14">
-        { firstText }:{' '}
+        {firstText}:{' '}
         <Text color="#f93b10" weight="bold">
-          { secondText }
+          {secondText}
         </Text>
       </Text>
-    )
+    );
   }
 
   function renderBodyCard(deck) {
@@ -101,14 +103,14 @@ function Decks({navigation, ...props}) {
         </S.Text>
 
         <Spacing mt="4" position="absolute" bottom={20} left={20}>
-          { renderTextCard('Cartões', deck.totalCards()) }
+          {renderTextCard('Cartões', deck.totalCards())}
 
-          { renderTextCard('A revisar', deck.totalUnreviewedCards()) }
+          {renderTextCard('A revisar', deck.totalUnreviewedCards())}
 
-          { renderTextCard('Revisados', deck.totalCardsReviewed()) }
+          {renderTextCard('Revisados', deck.totalCardsReviewed())}
         </Spacing>
       </S.Box>
-    )
+    );
   }
 
   function renderListCard() {
@@ -116,21 +118,18 @@ function Decks({navigation, ...props}) {
       <S.List
         data={decks}
         numColumns={2}
-        keyExtractor={(item) => String(item.Id)}
+        keyExtractor={item => String(item.Id)}
         renderItem={({item: deck}) => (
           <S.Container>
             <TouchableOpacity
-              onPress={() => navigation.navigate('Card', { Deck : deck })}
-              onLongPress={() => alertDeleteDeck(deck)}
-            >
-
-              { renderBodyCard(deck) }
-
+              onPress={() => navigation.navigate('Card', {Deck: deck})}
+              onLongPress={() => alertDeleteDeck(deck)}>
+              {renderBodyCard(deck)}
             </TouchableOpacity>
           </S.Container>
         )}
       />
-    )
+    );
   }
 
   //#endregion
@@ -145,11 +144,10 @@ function Decks({navigation, ...props}) {
         </Spacing>
         <S.Margin />
 
-        { renderListCard() }
-
+        {decks.length === 0 ? <Empty /> : renderListCard()}
       </S.Container>
 
-      { renderActionButton() }
+      {renderActionButton()}
     </>
   );
 }
