@@ -70,6 +70,7 @@ export const Margin = styled(Spacing)`
 
 export const StyledContainer = styled.View`
   flex: 1;
+  width: 100%;
   background: ${props => props.theme.backgroundbox};
   border-top-left-radius: 25px;
   border-top-right-radius: 25px;
