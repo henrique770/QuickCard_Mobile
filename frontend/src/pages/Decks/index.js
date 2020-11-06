@@ -5,7 +5,7 @@ import IconMi from 'react-native-vector-icons/MaterialIcons';
 import IconMc from 'react-native-vector-icons/MaterialCommunityIcons';
 import ActionButton from 'react-native-action-button';
 import {TouchableOpacity, Alert} from 'react-native';
-
+import Empty from '~/components/Empty';
 import Typography from '~/components/Typography';
 import Spacing from '~/components/Spacing';
 import {withTheme} from 'styled-components';
@@ -148,8 +148,8 @@ function Decks({navigation, ...props}) {
         </Spacing>
         <S.Margin />
 
-        { renderListCard() }
-
+        { decks.length === 0 ? <Empty /> : renderListCard()}
+        
       </S.Container>
 
       { renderActionButton() }

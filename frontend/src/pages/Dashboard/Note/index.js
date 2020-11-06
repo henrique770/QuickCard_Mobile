@@ -206,7 +206,7 @@ function Note({navigation, ...props}) {
 
     console.log('Note', note)
 
-    if(note.Content === '') {
+    if(value === '') {
       Alert.alert(Messenger.MSG000, Messenger.MSG028)
       return
     }

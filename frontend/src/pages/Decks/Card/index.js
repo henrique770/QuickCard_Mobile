@@ -19,7 +19,7 @@ import atentionAnimation from '~/assets/testanimation.json';
 import Lottie from 'lottie-react-native';
 
 import {updateCard, updateDeck, getDecks} from '~/store/modules/deck/actions';
-
+import Empty from '~/components/Empty';
 import { Card as CardConstants, Messenger } from '~constants/ConstantsBusiness'
 
 const Text = Typography;
@@ -276,6 +276,9 @@ export default function Card({navigation, route}) {
   }
 
   function renderDeckEmpty() {
+
+    return <Empty/>
+
     return (
       <>
         <S.StyledContainer>
@@ -386,13 +389,6 @@ export default function Card({navigation, route}) {
 
         { renderComponent() }
 
-        {/* Deck.isEmpty() && renderDeckEmpty() 
-
-        {!endQuiz && !Deck.isEmpty() && renderBody()}
-
-        {endQuiz && !Deck.isEmpty() && renderEndQuiz()}
-
-        */}
       </S.Container>
     </>
   );

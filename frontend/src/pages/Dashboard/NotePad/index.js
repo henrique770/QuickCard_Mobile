@@ -12,6 +12,7 @@ import * as S from '~/styles/global';
 import { getNotePads , updateNotePad } from "~/store/modules/notepad/actions";
 import Swipeable from 'react-native-swipeable-row';
 import IconMc from "react-native-vector-icons/MaterialCommunityIcons";
+import Empty from '~/components/Empty';
 
 const Text = Typography;
 
@@ -74,32 +75,35 @@ function NotePad({navigation, ...props}) {
   function renderListNotePads() {
     return (
       <S.Container>
-
         <Spacing position="absolute" top="18" right="30">
           <TouchableOpacity onPress={() => navigation.openDrawer()}>
             <IconMi name="menu" size={25} color="#FFF" />
           </TouchableOpacity>
         </Spacing>
         <S.Margin />
+        {notePadState.length === 0 ? (
+          <Empty />
+        ) : (
           <S.List
-                data={notePadState}
-                renderItem={({item}) => (
-                  <Swipeable autoClose={true} rightButtons={rightButtons(item)}>
-                    <TouchableWithoutFeedback
-                      onPress={() => navigation.navigate('NotePadNotes' , item)}>
-                      <S.Box data={item}>
-                        <S.Text weight="bold" size="16" maxHeight="95">
-                          {item.Name}
-                        </S.Text>
-                        <Spacing mt="4" />
-                        <Text color="#fe650e">{item.totalNotes} Notas</Text>
-                      </S.Box>
-                    </TouchableWithoutFeedback>
-                  </Swipeable>
-                )}
-              />
+            data={notePadState}
+            renderItem={({item}) => (
+              <Swipeable autoClose={true} rightButtons={rightButtons(item)}>
+                <TouchableWithoutFeedback
+                  onPress={() => navigation.navigate('NotePadNotes', item)}>
+                  <S.Box data={item}>
+                    <S.Text weight="bold" size="16" maxHeight="95">
+                      {item.Name}
+                    </S.Text>
+                    <Spacing mt="4" />
+                    <Text color="#fe650e">{item.totalNotes} Notas</Text>
+                  </S.Box>
+                </TouchableWithoutFeedback>
+              </Swipeable>
+            )}
+          />
+        )}
       </S.Container>
-    )
+    );
   }
 
   return (

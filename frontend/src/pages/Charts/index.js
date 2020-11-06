@@ -5,7 +5,7 @@ import IconMi from 'react-native-vector-icons/MaterialIcons';
 import {PieChart} from 'react-native-svg-charts';
 import {Text} from 'react-native-svg';
 import Spacing from '~/components/Spacing';
-
+import Empty from '~/components/Empty';
 import * as S from '~/styles/global';
 import {Title, Text as TextStyle, Separator, Form, SelectContainer} from './styles';
 import { Card as CardConstatnts } from '~constants/ConstantsBusiness'
@@ -15,7 +15,7 @@ const calculatePercentage = (total, perc) => ((perc * 100 ) / total).toFixed(1)
 export default function Charts({navigation}) {
   
   const decks = useSelector(state => state.deck.data);
-  const defaultValueData = [0, 0, 0, 0, 0]
+  const defaultValueData = [0, 0, 0, 0]
 
   const [deckSelected, setDeckSelected] = useState('');
   const [data, setData] = useState([50, 10, 20])
@@ -27,7 +27,7 @@ export default function Charts({navigation}) {
   const [cardsEasyCount, setCardsEasyCount] = useState(0)
   const [cardsDifficult, setCardsDifficult] = useState(0)
 
-  const colors = [ '#006400' ,'#969A24', '#FF0000' , '#000' ]
+  const colors = [ '#006400' ,'#969A24', '#FF0000' ]
 
   const pieData = data.map((value, index) => ({
     value,
@@ -98,7 +98,7 @@ export default function Charts({navigation}) {
         calculatePercentage(total, cardsGoodCount)
         , calculatePercentage(total, cardsEasyCount)
         , calculatePercentage(total, cardsDifficult)
-        , calculatePercentage(total, cardsUnanswered)
+        //, calculatePercentage(total, cardsUnanswered)
       ])
     } else {
 
@@ -156,6 +156,8 @@ export default function Charts({navigation}) {
           style={{padding: 30}}>
            
           { renderDeckPicker() }
+
+          { deckSelected === '' && <Empty /> }
 
           { deckSelected !== '' && renderDeckLabels()}
 

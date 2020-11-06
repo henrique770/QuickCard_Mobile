@@ -1,5 +1,5 @@
 
-const __DEV_MODE__ = false
+const __DEV_MODE__ = true
   , URL_HOST_DEV = '192.168.1.11'
   , PORT_HOST_DEV = 3000
 
@@ -55,7 +55,6 @@ const Card = {
 }
 
 export { Card }
-
 
 const Note = { 
 
@@ -120,6 +119,7 @@ const Messenger = {
   , MSG027 : /**/ 'Não'
   , MSG028 : /**/ 'A anotação não pode esta vazia'
   , MSG029 : /**/ 'Anotação adicionada com sucesso'
+  , MSG030 : /**/ 'Ops! No momento, não temos dados para mostrar.'
 }
 
 export { Messenger }

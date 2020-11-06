@@ -64,7 +64,7 @@ export default function AddNote({navigation, route}) {
     setNoteContent('')
     editor.setHtml('')
 
-    Alert.alert(Messenger.MSG000, Messenger.MSG028)
+    Alert.alert(Messenger.MSG000, Messenger.MSG029)
   }
 
   const onStyleKeyPress = toolType => {

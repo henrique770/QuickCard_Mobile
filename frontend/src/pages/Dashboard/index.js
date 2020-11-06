@@ -7,7 +7,7 @@ import Spacing from '~/components/Spacing';
 
 import IconMi from 'react-native-vector-icons/MaterialIcons';
 import IconMc from 'react-native-vector-icons/MaterialCommunityIcons';
-
+import Empty from '~/components/Empty';
 import {withTheme} from 'styled-components';
 import ActionButton from 'react-native-action-button';
 import Swipeable from 'react-native-swipeable-row';
@@ -93,7 +93,11 @@ function Dashboard({navigation, ...props}) {
       }
     }
 
-    return notes
+    if (notes.length === 0) {
+      return <Empty />;
+    } else {
+      return notes;
+    }
   }
 
   return (
