@@ -137,9 +137,23 @@ function Note({navigation, ...props}) {
       iconArray: [
         {
           iconComponent: (
+            <TouchableOpacity onPress={() => navigation.navigate('AddCard')}>
+              <Text style={styles.toolbarButton}>
+                <IconMc name="library-plus" color="#fe650e" size={30} />
+              </Text>
+            </TouchableOpacity>
+          ),
+        },
+      ],
+    },
+    {
+      type: 'tool',
+      iconArray: [
+        {
+          iconComponent: (
             <TouchableOpacity onPress={() => handlerUpdateNote()}>
               <Text style={styles.toolbarButton}>
-                <IconMc name="content-save" color="#fe650e" size={30} />
+                <IconMc name="check" color="#fe650e" size={30} />
               </Text>
             </TouchableOpacity>
           ),
