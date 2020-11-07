@@ -7,7 +7,7 @@ import {
   KeyboardAvoidingView,
   View,
   Picker,
-  Alert
+  Alert,
 } from 'react-native';
 
 import CNEditor, {
@@ -19,31 +19,33 @@ import PropTypes from 'prop-types';
 import IconMi from 'react-native-vector-icons/MaterialIcons';
 import IconMc from 'react-native-vector-icons/MaterialCommunityIcons';
 import {Container, Title, ContainerTag, TagInput} from './styles';
-import {useDispatch, useSelector} from "react-redux";
-import {addNote , getNotePads } from "~/store/modules/notepad/actions";
-import { Messenger, Note as NoteConstantsBusiness, NotePad as NotePadConstantsBusiness } from '~constants/ConstantsBusiness'
+import {useDispatch, useSelector} from 'react-redux';
+import {addNote, getNotePads} from '~/store/modules/notepad/actions';
+import {
+  Messenger,
+  Note as NoteConstantsBusiness,
+  NotePad as NotePadConstantsBusiness,
+} from '~constants/ConstantsBusiness';
 
 const defaultStyles = getDefaultStyles();
 
 export default function AddNote({navigation, route}) {
-
-  let editor = null
+  let editor = null;
   const notePads = useSelector(state => state.notepad.data);
   const dispatch = useDispatch();
 
-  const [noteContent , setNoteContent] = useState('');
+  const [noteContent, setNoteContent] = useState('');
   const [selectedTag, setSelectedValue] = useState('');
   const [selectedStyles, setSelectedStyles] = useState([]);
   const [notePad, setNotePad] = useState('');
   const [title, setTitle] = useState(NoteConstantsBusiness.defaultTitle);
 
-  dispatch(getNotePads())
+  dispatch(getNotePads());
 
   const handlerAddNote = () => {
-
-    if(noteContent == ""){
-      Alert.alert(Messenger.MSG000, Messenger.MSG028)
-      return
+    if (noteContent == '') {
+      Alert.alert(Messenger.MSG000, Messenger.MSG028);
+      return;
     }
 
     //if(notePad == '') {
@@ -51,217 +53,228 @@ export default function AddNote({navigation, route}) {
     //  return
     //}
 
-    dispatch(addNote({
-        Content : noteContent
-        , IdNotePad : notePad
-        , Title : title
-        , IsEmptyTitle : false
-    }))
+    dispatch(
+      addNote({
+        Content: noteContent,
+        IdNotePad: notePad,
+        Title: title,
+        IsEmptyTitle: false,
+      }),
+    );
 
-    setSelectedValue('')
-    setTitle(NoteConstantsBusiness.defaultTitle)
-    setNotePad('')
-    setNoteContent('')
-    editor.setHtml('')
+    setSelectedValue('');
+    setTitle(NoteConstantsBusiness.defaultTitle);
+    setNotePad('');
+    setNoteContent('');
+    editor.setHtml('');
 
-    Alert.alert(Messenger.MSG000, Messenger.MSG028)
-  }
+    Alert.alert(Messenger.MSG000, Messenger.MSG028);
+  };
 
   const onStyleKeyPress = toolType => {
     editor.applyToolbar(toolType);
   };
 
-  const  onSelectedTagChanged = tag => {
-    setSelectedValue(tag)
+  const onSelectedTagChanged = tag => {
+    setSelectedValue(tag);
   };
 
   const onSelectedStyleChanged = styles => {
-    setSelectedStyles(styles)
+    setSelectedStyles(styles);
   };
 
   const onValueChanged = value => {
-    setNoteContent(value)
-  }
+    setNoteContent(value);
+  };
 
   const getListTag = () => {
+    let selectValues = [];
 
-    let selectValues = []
-
-    if(notePads != null && Array.isArray(notePads)) {
+    if (notePads != null && Array.isArray(notePads)) {
       selectValues = [
-        { id : '' , name : NotePadConstantsBusiness.defaultNotePadName } 
-          , ...notePads.filter( e => e.Id !== '' ).map( e => { return{ id : e.Id , name : e.Name} }) 
-      ]
+        {id: '', name: NotePadConstantsBusiness.defaultNotePadName},
+        ...notePads
+          .filter(e => e.Id !== '')
+          .map(e => {
+            return {id: e.Id, name: e.Name};
+          }),
+      ];
     }
 
-    return selectValues.map( note => {
-      return <Picker.Item label={note.name} value={note.id} />
-    })
-  }
+    return selectValues.map(note => {
+      return <Picker.Item label={note.name} value={note.id} />;
+    });
+  };
 
-    return (
-      <>
-        <Container>
-          <Spacing mb="20">
-            <Spacing position="absolute" top="5" right="30" width="75">
-              <ContainerTag>
+  return (
+    <>
+      <Container>
+        <Spacing mb="20">
+          <Spacing position="absolute" top="5" right="30" width="75">
+            <ContainerTag>
+              <IconMc name="tag" size={20} color="#fe650e" />
 
-                <IconMc name="tag" size={20} color="#fe650e" />
-
-                <Picker
-                  style={{
-                    height: 50,
-                    width: '100%',
-                  }}
-                    selectedValue={notePad}
-                    onValueChange={(itemValue, itemIndex) => { setNotePad(itemValue) }
-                  }>
-
-                  {getListTag()}
-
-                </Picker>
-
-              </ContainerTag>
-            </Spacing>
-          </Spacing>
-
-          <Spacing ml="20" mr="20">
-            <Title onChangeText={(value) => setTitle(value)}>{title}</Title>
-          </Spacing>
-
-          <KeyboardAvoidingView
-            enabled
-            keyboardVerticalOffset={0}
-            style={{
-              flex: 1,
-              backgroundColor: '#fff',
-              flexDirection: 'column',
-              justifyContent: 'flex-end',
-            }}>
-
-            <View
-              style={{flex: 1}}
-              onTouchStart={() => {
-                editor && editor.blur();
-              }}>
-
-              <View style={styles.main} onTouchStart={e => e.stopPropagation()}>
-                <CNEditor
-                  ref={input => (editor = input)}
-                  onSelectedTagChanged={onSelectedTagChanged}
-                  onSelectedStyleChanged={onSelectedStyleChanged}
-                  onValueChanged={onValueChanged}
-                  style={{backgroundColor: '#fff'}}
-                  styleList={defaultStyles}
-                  initialHtml={noteContent}
-                />
-              </View>
-
-            </View>
-
-            <View
-              style={{
-                minHeight: 35,
-              }}>
-              <CNToolbar
+              <Picker
                 style={{
-                  height: 45,
+                  height: 50,
+                  width: '100%',
                 }}
-                iconSetContainerStyle={{
-                  flexGrow: 1,
-                  justifyContent: 'space-evenly',
-                  alignItems: 'center',
-                }}
-                size={30}
-                iconSet={[
-                  {
-                    type: 'tool',
-                    iconArray: [
-                      {
-                        toolTypeText: 'bold',
-                        buttonTypes: 'style',
-                        iconComponent: (
-                          <Text style={styles.toolbarButton}>
-                            <IconMi name="format-bold" size={30} />
-                          </Text>
-                        ),
-                      },
-                    ],
-                  }
-                  ,
-                  {
-                    type: 'tool',
-                    iconArray: [
-                      {
-                        toolTypeText: 'italic',
-                        buttonTypes: 'tag',
-                        iconComponent: (
-                          <Text style={styles.toolbarButton}>
-                            <IconMi name="format-italic" size={30} />
-                          </Text>
-                        ),
-                      },
-                    ],
-                  },
-                  {
-                    type: 'tool',
-                    iconArray: [
-                      {
-                        toolTypeText: 'ul',
-                        buttonTypes: 'tag',
-                        iconComponent: (
-                          <Text style={styles.toolbarButton}>
-                            <IconMi name="format-list-bulleted" size={30} />
-                          </Text>
-                        ),
-                      },
-                    ],
-                  },
-                  {
-                    type: 'tool',
-                    iconArray: [
-                      {
-                        toolTypeText: 'ol',
-                        buttonTypes: 'tag',
-                        iconComponent: (
-                          <Text style={styles.toolbarButton}>
-                            <IconMi name="format-list-numbered" size={30} />
-                          </Text>
-                        ),
-                      },
-                    ],
-                  },
-                  {
-                    type: 'tool',
-                    iconArray: [
-                      {
-                        iconComponent: (
-                          <TouchableOpacity
-                            onPress={handlerAddNote
-                              //navigation.navigate('AddCard')
-                            }>
-                            <Text style={styles.toolbarButton}>
-                              <IconMc
-                                name="library-plus"
-                                color="#fe650e"
-                                size={30}
-                              />
-                            </Text>
-                          </TouchableOpacity>
-                        ),
-                      },
-                    ],
-                  },
-                ]}
-                selectedTag={selectedTag}
-                selectedStyles={selectedStyles}
-                onStyleKeyPress={onStyleKeyPress}
+                selectedValue={notePad}
+                onValueChange={(itemValue, itemIndex) => {
+                  setNotePad(itemValue);
+                }}>
+                {getListTag()}
+              </Picker>
+            </ContainerTag>
+          </Spacing>
+        </Spacing>
+
+        <Spacing ml="20" mr="20">
+          <Title onChangeText={value => setTitle(value)}>{title}</Title>
+        </Spacing>
+
+        <KeyboardAvoidingView
+          enabled
+          keyboardVerticalOffset={0}
+          style={{
+            flex: 1,
+            backgroundColor: '#fff',
+            flexDirection: 'column',
+            justifyContent: 'flex-end',
+          }}>
+          <View
+            style={{flex: 1}}
+            onTouchStart={() => {
+              editor && editor.blur();
+            }}>
+            <View style={styles.main} onTouchStart={e => e.stopPropagation()}>
+              <CNEditor
+                ref={input => (editor = input)}
+                onSelectedTagChanged={onSelectedTagChanged}
+                onSelectedStyleChanged={onSelectedStyleChanged}
+                onValueChanged={onValueChanged}
+                style={{backgroundColor: '#fff'}}
+                styleList={defaultStyles}
+                initialHtml={noteContent}
               />
             </View>
-          </KeyboardAvoidingView>
-        </Container>
-      </>
-    );
+          </View>
+
+          <View
+            style={{
+              minHeight: 35,
+            }}>
+            <CNToolbar
+              style={{
+                height: 45,
+              }}
+              iconSetContainerStyle={{
+                flexGrow: 1,
+                justifyContent: 'space-evenly',
+                alignItems: 'center',
+              }}
+              size={30}
+              iconSet={[
+                {
+                  type: 'tool',
+                  iconArray: [
+                    {
+                      toolTypeText: 'bold',
+                      buttonTypes: 'style',
+                      iconComponent: (
+                        <Text style={styles.toolbarButton}>
+                          <IconMi name="format-bold" size={30} />
+                        </Text>
+                      ),
+                    },
+                  ],
+                },
+                {
+                  type: 'tool',
+                  iconArray: [
+                    {
+                      toolTypeText: 'italic',
+                      buttonTypes: 'tag',
+                      iconComponent: (
+                        <Text style={styles.toolbarButton}>
+                          <IconMi name="format-italic" size={30} />
+                        </Text>
+                      ),
+                    },
+                  ],
+                },
+                {
+                  type: 'tool',
+                  iconArray: [
+                    {
+                      toolTypeText: 'ul',
+                      buttonTypes: 'tag',
+                      iconComponent: (
+                        <Text style={styles.toolbarButton}>
+                          <IconMi name="format-list-bulleted" size={30} />
+                        </Text>
+                      ),
+                    },
+                  ],
+                },
+                {
+                  type: 'tool',
+                  iconArray: [
+                    {
+                      toolTypeText: 'ol',
+                      buttonTypes: 'tag',
+                      iconComponent: (
+                        <Text style={styles.toolbarButton}>
+                          <IconMi name="format-list-numbered" size={30} />
+                        </Text>
+                      ),
+                    },
+                  ],
+                },
+
+                {
+                  type: 'tool',
+                  iconArray: [
+                    {
+                      iconComponent: (
+                        <TouchableOpacity
+                          onPress={() => navigation.navigate('AddCard')}>
+                          <Text style={styles.toolbarButton}>
+                            <IconMc
+                              name="library-plus"
+                              color="#fe650e"
+                              size={30}
+                            />
+                          </Text>
+                        </TouchableOpacity>
+                      ),
+                    },
+                  ],
+                },
+                {
+                  type: 'tool',
+                  iconArray: [
+                    {
+                      iconComponent: (
+                        <TouchableOpacity onPress={handlerAddNote}>
+                          <Text style={styles.toolbarButton}>
+                            <IconMc name="check" color="#fe650e" size={30} />
+                          </Text>
+                        </TouchableOpacity>
+                      ),
+                    },
+                  ],
+                },
+              ]}
+              selectedTag={selectedTag}
+              selectedStyles={selectedStyles}
+              onStyleKeyPress={onStyleKeyPress}
+            />
+          </View>
+        </KeyboardAvoidingView>
+      </Container>
+    </>
+  );
 }
 var styles = StyleSheet.create({
   main: {

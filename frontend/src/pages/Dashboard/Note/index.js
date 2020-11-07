@@ -18,10 +18,13 @@ import PropTypes from 'prop-types';
 import IconMi from 'react-native-vector-icons/MaterialIcons';
 import IconMc from 'react-native-vector-icons/MaterialCommunityIcons';
 import {Container, Title, ContainerTag, TagInput} from './styles';
-import {useDispatch, useSelector} from "react-redux";
-import {getNotePads, updateNote} from "~/store/modules/notepad/actions";
-import {withTheme} from "styled-components";
-import { Messenger , NotePad as NotePadConstantsBusiness} from '~constants/ConstantsBusiness'
+import {useDispatch, useSelector} from 'react-redux';
+import {getNotePads, updateNote} from '~/store/modules/notepad/actions';
+import {withTheme} from 'styled-components';
+import {
+  Messenger,
+  NotePad as NotePadConstantsBusiness,
+} from '~constants/ConstantsBusiness';
 
 const defaultStyles = getDefaultStyles();
 
@@ -54,12 +57,13 @@ var styles = StyleSheet.create({
 });
 
 function Note({navigation, ...props}) {
+  let editor = null;
 
-  let editor = null
-
-  const note = props.route.params
+  const note = props.route.params;
   const notePads = useSelector(state => state.notepad.data);
-  const notePad = useSelector(state => state.notepad.data.find( e => e.Id == note.IdNotePad));
+  const notePad = useSelector(state =>
+    state.notepad.data.find(e => e.Id == note.IdNotePad),
+  );
 
   const dispatch = useDispatch();
 
@@ -71,149 +75,142 @@ function Note({navigation, ...props}) {
 
   //#region EDITOR TOOL OPTIONS
 
-  const editorOptions = [{
-        type: 'tool',
-        iconArray: [
-          {
-            toolTypeText: 'bold',
-            buttonTypes: 'style',
-            iconComponent: (
+  const editorOptions = [
+    {
+      type: 'tool',
+      iconArray: [
+        {
+          toolTypeText: 'bold',
+          buttonTypes: 'style',
+          iconComponent: (
+            <Text style={styles.toolbarButton}>
+              <IconMi name="format-bold" size={30} />
+            </Text>
+          ),
+        },
+      ],
+    },
+    {
+      type: 'tool',
+      iconArray: [
+        {
+          toolTypeText: 'italic',
+          buttonTypes: 'tag',
+          iconComponent: (
+            <Text style={styles.toolbarButton}>
+              <IconMi name="format-italic" size={30} />
+            </Text>
+          ),
+        },
+      ],
+    },
+    {
+      type: 'tool',
+      iconArray: [
+        {
+          toolTypeText: 'ul',
+          buttonTypes: 'tag',
+          iconComponent: (
+            <Text style={styles.toolbarButton}>
+              <IconMi name="format-list-bulleted" size={30} />
+            </Text>
+          ),
+        },
+      ],
+    },
+    {
+      type: 'tool',
+      iconArray: [
+        {
+          toolTypeText: 'ol',
+          buttonTypes: 'tag',
+          iconComponent: (
+            <Text style={styles.toolbarButton}>
+              <IconMi name="format-list-numbered" size={30} />
+            </Text>
+          ),
+        },
+      ],
+    },
+    {
+      type: 'tool',
+      iconArray: [
+        {
+          iconComponent: (
+            <TouchableOpacity onPress={() => handlerUpdateNote()}>
               <Text style={styles.toolbarButton}>
-                <IconMi name="format-bold" size={30} />
+                <IconMc name="content-save" color="#fe650e" size={30} />
               </Text>
-            ),
-          },
-        ],
-      },
-        {
-          type: 'tool',
-          iconArray: [
-            {
-              toolTypeText: 'italic',
-              buttonTypes: 'tag',
-              iconComponent: (
-                <Text style={styles.toolbarButton}>
-                  <IconMi name="format-italic" size={30} />
-                </Text>
-              ),
-            },
-          ],
+            </TouchableOpacity>
+          ),
         },
-        {
-          type: 'tool',
-          iconArray: [
-            {
-              toolTypeText: 'ul',
-              buttonTypes: 'tag',
-              iconComponent: (
-                <Text style={styles.toolbarButton}>
-                  <IconMi name="format-list-bulleted" size={30} />
-                </Text>
-              ),
-            },
-          ],
-        },
-        {
-          type: 'tool',
-          iconArray: [
-            {
-              toolTypeText: 'ol',
-              buttonTypes: 'tag',
-              iconComponent: (
-                <Text style={styles.toolbarButton}>
-                  <IconMi name="format-list-numbered" size={30} />
-                </Text>
-              ),
-            },
-          ],
-        },
-        {
-          type: 'tool',
-          iconArray: [
-            {
-              iconComponent: (
-                <TouchableOpacity
-                  onPress={ () => handlerUpdateNote()}>
-                  <Text style={styles.toolbarButton}>
-                    <IconMc
-                      name="content-save"
-                      color="#fe650e"
-                      size={30}
-                    />
-                  </Text>
-                </TouchableOpacity>
-              ),
-            },
-          ],
-        },
-      ];
+      ],
+    },
+  ];
 
   //#endregion
 
   const onSelectedTagChanged = async () => {
-    
-    let value = await editor.getHtml()
-    note.Content = value
+    let value = await editor.getHtml();
+    note.Content = value;
 
-    if(note.processTitleEmpty(value) === title) {
-
+    if (note.processTitleEmpty(value) === title) {
     }
 
-    if(note.IsEmptyTitle) {
-
-      setTitle(note.Title)
+    if (note.IsEmptyTitle) {
+      setTitle(note.Title);
     }
-  }
+  };
 
   const onSelectedTitleChanged = title => {
+    if (note.IsEmptyTitle) {
+      note.IsEmptyTitle = false;
+      setTitle('');
 
-    if(note.IsEmptyTitle) {
-      
-      note.IsEmptyTitle = false
-      setTitle('')
-      
-      return
+      return;
     }
 
-    setTitle(title)
-    return
-  }
+    setTitle(title);
+    return;
+  };
 
   const getListTag = () => {
+    let selectValues = [];
 
-
-    let selectValues = []
-
-    if(notePads != null && Array.isArray(notePads)) {
+    if (notePads != null && Array.isArray(notePads)) {
       selectValues = [
-        { id : '' , name : NotePadConstantsBusiness.defaultNotePadName } 
-        , ...notePads.filter( e => e.Id !== '' ).map( e => { return{ id : e.Id , name : e.Name} }) 
-      ]
+        {id: '', name: NotePadConstantsBusiness.defaultNotePadName},
+        ...notePads
+          .filter(e => e.Id !== '')
+          .map(e => {
+            return {id: e.Id, name: e.Name};
+          }),
+      ];
     }
 
-    return selectValues.map( note => {
-      return <Picker.Item label={note.name} value={note.id} />
-    })
-  }
+    return selectValues.map(note => {
+      return <Picker.Item label={note.name} value={note.id} />;
+    });
+  };
 
   const handlerUpdateNote = async () => {
-    let value = await editor.getHtml()
+    let value = await editor.getHtml();
 
     note.Content = value;
     note.Title = title;
     note.IsEmptyTitle = false;
     note.IdNotePad = notePadSelected;
 
-    console.log('Note', note)
+    console.log('Note', note);
 
-    if(note.Content === '') {
-      Alert.alert(Messenger.MSG000, Messenger.MSG028)
-      return
+    if (note.Content === '') {
+      Alert.alert(Messenger.MSG000, Messenger.MSG028);
+      return;
     }
 
-    dispatch(updateNote(note))
-    dispatch(getNotePads())
-  }
+    dispatch(updateNote(note));
+    dispatch(getNotePads());
+  };
 
   const onStyleKeyPress = toolType => {
     editor.applyToolbar(toolType);
@@ -222,36 +219,33 @@ function Note({navigation, ...props}) {
   function renderHead() {
     return (
       <Spacing mb="20">
-      <Spacing position="absolute" top="5" right="30" width="75">
-        <ContainerTag>
+        <Spacing position="absolute" top="5" right="30" width="75">
+          <ContainerTag>
+            <IconMc name="tag" size={20} color="#fe650e" />
 
-          <IconMc name="tag" size={20} color="#fe650e" />
-
-          <Picker
-            style={{
-              height: 50,
-              width: '100%',
-            }}
+            <Picker
+              style={{
+                height: 50,
+                width: '100%',
+              }}
               selectedValue={notePadSelected}
-              onValueChange={(itemValue, itemIndex) => { setNotePadSelected(itemValue) }
-            }>
-
-            {getListTag()}
-
-          </Picker>
-
-        </ContainerTag>
+              onValueChange={(itemValue, itemIndex) => {
+                setNotePadSelected(itemValue);
+              }}>
+              {getListTag()}
+            </Picker>
+          </ContainerTag>
+        </Spacing>
       </Spacing>
-    </Spacing>
-    )
+    );
   }
 
   function renderTitle() {
-    return(
+    return (
       <Spacing ml="20" mr="20">
         <Title onChangeText={onSelectedTitleChanged}>{title}</Title>
       </Spacing>
-    )
+    );
   }
 
   function renderToolbar() {
@@ -276,15 +270,14 @@ function Note({navigation, ...props}) {
           onStyleKeyPress={onStyleKeyPress}
         />
       </View>
-    )
+    );
   }
 
   return (
     <>
       <Container>
-
-        { renderHead() }
-        { renderTitle() }
+        {renderHead()}
+        {renderTitle()}
 
         <KeyboardAvoidingView
           enabled
@@ -295,14 +288,12 @@ function Note({navigation, ...props}) {
             flexDirection: 'column',
             justifyContent: 'flex-end',
           }}>
-
           <View
             style={{flex: 1}}
             onTouchStart={() => {
               editor && editor.blur();
             }}>
             <View style={styles.main} onTouchStart={e => e.stopPropagation()}>
-
               <CNEditor
                 ref={input => (editor = input)}
                 onSelectedTagChanged={onSelectedTagChanged}
@@ -310,13 +301,11 @@ function Note({navigation, ...props}) {
                 style={{backgroundColor: '#fff'}}
                 styleList={defaultStyles}
                 initialHtml={content}
-                
               />
             </View>
           </View>
 
           {renderToolbar()}
-
         </KeyboardAvoidingView>
       </Container>
     </>

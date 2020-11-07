@@ -13,6 +13,10 @@ export const Box = styled.View`
   ${({CustomHeight}) =>
     CustomHeight ? `height: ${CustomHeight};` : ``}
   max-height: 180px;
+  min-height: 110px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   border-radius: 12px;
   background: ${props => props.theme.backgroundbox};
 `;

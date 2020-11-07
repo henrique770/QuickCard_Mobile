@@ -6,14 +6,13 @@ import {createStackNavigator} from '@react-navigation/stack';
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 
-import { firstAccess } from '~/store/modules/auth/actions';
+import {firstAccess} from '~/store/modules/auth/actions';
 
 import IconMc from 'react-native-vector-icons/MaterialCommunityIcons';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 import Intro from '~/components/Intro';
 import Dashboard from './pages/Dashboard';
-
 
 import AddDeck from './pages/Decks/AddDeck';
 import AddCard from './pages/Decks/AddCard';
@@ -27,7 +26,7 @@ import NotePadNotes from './pages/Dashboard/NotePadNotes';
 import Card from './pages/Decks/Card';
 
 import EditCard from './pages/Decks/EditCard';
-import EditNotePad from "./pages/Dashboard/EditNotePad";
+import EditNotePad from './pages/Dashboard/EditNotePad';
 
 import SignIn from './pages/Auth/SignIn';
 import SignUp from './pages/Auth/SignUp';
@@ -37,7 +36,7 @@ import Profile from './pages/Profile';
 import Pomodoro from './pages/Pomodoro';
 
 import CustomDrawerContent from '~/components/CustomDrawerContent';
-import {getDecks} from "~/store/modules/deck/actions";
+import {getDecks} from '~/store/modules/deck/actions';
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -61,7 +60,6 @@ function StackNotes() {
         component={Dashboard}
       />
 
-
       <Stack.Screen
         name="Note"
         component={Note}
@@ -79,6 +77,14 @@ function StackNotes() {
           headerTintColor: '#f93b10',
         }}
       />
+      <Stack.Screen
+        name="AddCard"
+        component={AddCard}
+        options={{
+          title: 'Adicionar Cartão',
+          headerTintColor: '#fff',
+        }}
+      />
 
       <Stack.Screen
         name="EditNotePad"
@@ -88,7 +94,6 @@ function StackNotes() {
           headerTintColor: '#ffffff',
         }}
       />
-
     </Stack.Navigator>
   );
 }
@@ -214,10 +219,9 @@ function StackNotePad() {
         component={EditNotePad}
         options={{
           title: 'Editar Bloco Anotação',
-          headerTintColor: '#f93b10',
+          headerTintColor: '#fff',
         }}
       />
-
     </Stack.Navigator>
   );
 }
@@ -288,116 +292,119 @@ function StackPomodoro() {
 }
 
 export default function createRouter(isSigned = false, isConnected = false) {
-
   const dispatch = useDispatch();
-  const [ isFirstAccess, setFirstAccess] = useState(useSelector( state => state.auth.firstAccess));
+  const [isFirstAccess, setFirstAccess] = useState(
+    useSelector(state => state.auth.firstAccess),
+  );
 
-    let renderProfile = () => {
-      if (!isSigned)
-        return <></>
+  let renderProfile = () => {
+      if (!isSigned) return <></>;
 
       return (
         <Drawer.Screen
           name="Perfil"
           options={{
             drawerIcon: () => (
-              <Icon color={'#fe650e'} size={20} name={'user-circle-o'}/>
+              <Icon color={'#fe650e'} size={20} name={'user-circle-o'} />
             ),
           }}
           component={StackProfile}
-        />)
-    }
-
-      , renderCreateProfile = () => {
-
+        />
+      );
+    },
+    renderCreateProfile = () => {
       if (isSigned && !isConnected) {
-        return <></>
+        return <></>;
       }
 
-      return <>
-        <Drawer.Screen
-          name="Criar perfil"
-          options={{
-            drawerIcon: () => (
-              <Icon color={'#fe650e'} size={20} name={'user-circle-o'}/>
-            ),
-          }}
-          component={SignUp}
-        />
-      </>
-    }
-
-    return !isSigned ? (
-      <Stack.Navigator headerMode="none">
-        <Stack.Screen name="SignIn" component={SignIn}/>
-        <Stack.Screen name="SignUp" component={SignUp}/>
-      </Stack.Navigator>
-    ) : ( <>
-        {isFirstAccess ? (
-          <Intro onDone={() => {
-              dispatch(firstAccess());
-              setFirstAccess(false);
-            }
-          }/>
-        ) : (
-          <Drawer.Navigator
-            drawerStyle={{
-              backgroundColor: '#fff',
-              width: 301,
+      return (
+        <>
+          <Drawer.Screen
+            name="Criar perfil"
+            options={{
+              drawerIcon: () => (
+                <Icon color={'#fe650e'} size={20} name={'user-circle-o'} />
+              ),
             }}
-            drawerContent={props => <CustomDrawerContent {...props} />}>
-            <Drawer.Screen
-              name="Baralhos"
-              options={{
-                drawerIcon: () => (
-                  <IconMc color={'#fe650e'} size={20} name={'cards'}/>
-                ),
-              }}
-              component={StackDecks}
-            />
-            <Drawer.Screen
-              name="Todas as notas"
-              options={{
-                drawerIcon: () => (
-                  <IconMc color={'#fe650e'} size={20} name={'file'}/>
-                ),
-              }}
-              component={StackNotes}
-            />
-            <Drawer.Screen
-              name="Blocos de notas"
-              options={{
-                drawerIcon: () => (
-                  <IconMc color={'#fe650e'} size={20} name={'book-multiple'}/>
-                ),
-              }}
-              component={StackNotePad}
-            />
+            component={SignUp}
+          />
+        </>
+      );
+    };
 
-            <Drawer.Screen
-              name="Pomodoro"
-              options={{
-                drawerIcon: () => (
-                  <IconMc color={'#fe650e'} size={20} name={'timer'}/>
-                ),
-              }}
-              component={StackPomodoro}
-            />
+  return !isSigned ? (
+    <Stack.Navigator headerMode="none">
+      <Stack.Screen name="SignIn" component={SignIn} />
+      <Stack.Screen name="SignUp" component={SignUp} />
+    </Stack.Navigator>
+  ) : (
+    <>
+      {isFirstAccess ? (
+        <Intro
+          onDone={() => {
+            dispatch(firstAccess());
+            setFirstAccess(false);
+          }}
+        />
+      ) : (
+        <Drawer.Navigator
+          drawerStyle={{
+            backgroundColor: '#fff',
+            width: 301,
+          }}
+          drawerContent={props => <CustomDrawerContent {...props} />}>
+          <Drawer.Screen
+            name="Baralhos"
+            options={{
+              drawerIcon: () => (
+                <IconMc color={'#fe650e'} size={20} name={'cards'} />
+              ),
+            }}
+            component={StackDecks}
+          />
+          <Drawer.Screen
+            name="Todas as notas"
+            options={{
+              drawerIcon: () => (
+                <IconMc color={'#fe650e'} size={20} name={'file'} />
+              ),
+            }}
+            component={StackNotes}
+          />
+          <Drawer.Screen
+            name="Blocos de notas"
+            options={{
+              drawerIcon: () => (
+                <IconMc color={'#fe650e'} size={20} name={'book-multiple'} />
+              ),
+            }}
+            component={StackNotePad}
+          />
 
-            <Drawer.Screen
-              name="Estatísticas"
-              options={{
-                drawerIcon: () => (
-                  <IconMc color={'#fe650e'} size={20} name={'chart-bar'}/>
-                ),
-              }}
-              component={StackCharts}
-            />
+          <Drawer.Screen
+            name="Pomodoro"
+            options={{
+              drawerIcon: () => (
+                <IconMc color={'#fe650e'} size={20} name={'timer'} />
+              ),
+            }}
+            component={StackPomodoro}
+          />
 
-            {renderProfile()}
-            {renderCreateProfile()}
+          <Drawer.Screen
+            name="Estatísticas"
+            options={{
+              drawerIcon: () => (
+                <IconMc color={'#fe650e'} size={20} name={'chart-bar'} />
+              ),
+            }}
+            component={StackCharts}
+          />
 
-            {/*
+          {renderProfile()}
+          {renderCreateProfile()}
+
+          {/*
         <Drawer.Screen
           name="Perfil"
           options={{
@@ -408,8 +415,8 @@ export default function createRouter(isSigned = false, isConnected = false) {
           component={StackProfile}
         />
         */}
-          </Drawer.Navigator>
-        )}
-      </>
-    )
-  }
+        </Drawer.Navigator>
+      )}
+    </>
+  );
+}

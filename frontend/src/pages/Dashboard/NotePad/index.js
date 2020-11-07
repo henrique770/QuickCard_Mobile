@@ -12,6 +12,7 @@ import * as S from '~/styles/global';
 import {getNotePads, updateNotePad} from '~/store/modules/notepad/actions';
 import Swipeable from 'react-native-swipeable-row';
 import IconMc from 'react-native-vector-icons/MaterialCommunityIcons';
+import IconAnt from 'react-native-vector-icons/AntDesign';
 import Empty from '~/components/Empty';
 
 const Text = Typography;
@@ -33,8 +34,8 @@ function NotePad({navigation, ...props}) {
           flex: 1,
           backgroundColor: 'transparent',
           borderRadius: 0,
-          right: 10,
-          justifyContent: 'center',
+          right: 15,
+          justifyContent: 'space-between',
         }}>
         <TouchableOpacity
           onPress={() =>
@@ -54,16 +55,16 @@ function NotePad({navigation, ...props}) {
             ])
           }>
           <Text>
-            <IconMc name="trash-can" color="#fff" size={30} />
+            <IconAnt name="close" color="#fff" size={30} />
           </Text>
         </TouchableOpacity>
 
-        <Spacing mt="6" />
+        {/* <Spacing mt="6" /> */}
 
         <TouchableOpacity
           onPress={() => navigation.navigate('EditNotePad', item)}>
           <Text>
-            <IconMc name="trash-can" color="#fff" size={30} />
+            <IconAnt name="edit" color="#fff" size={30} />
           </Text>
         </TouchableOpacity>
       </S.Box>,
